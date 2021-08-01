@@ -29,6 +29,7 @@ const createWindow = () => {
     // mainWindow.webContents.openDevTools()
 }
 
+//for creating icon at bottom right of the screen hint-hint *future feature*
 /*const createTray = () => {
     const icon = path.join(__dirname, "assets/appicon.ico");
     const nImage = nativeImage.createFromPath(icon);
