@@ -29,6 +29,32 @@ const createWindow = () => {
     // mainWindow.webContents.openDevTools()
 }
 
+//label printing:
+/*const Dymo = require("dymojs");
+const dymo = new Dymo();
+const fs = require("fs");
+
+const label = {
+    PART_NUMBER: 16103169,
+    DESCRIPTION: "Female Banking Plug",
+    PROJECT_INFO: "101456 - 16100A",
+}
+
+fs.readFile("./src/xml-template.xml", function (err, data) {
+    if (err) return console.log(`Error occured: ${err}`);
+    let tempXML = data.toString();
+    for (const key in label) {
+        let regex = new RegExp(key, "g");
+        tempXML = tempXML.toString().replace(regex, label[key]);
+    }
+    //console.log(tempXML)
+    try {
+        dymo.print("DYMO LabelWriter Wireless", tempXML);
+    } catch (err) {
+        console.warn(err)
+    }
+});*/
+
 //for creating icon at bottom right of the screen hint-hint *future feature*
 /*const createTray = () => {
     const icon = path.join(__dirname, "assets/appicon.ico");

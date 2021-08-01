@@ -1,0 +1,537 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DesktopLabel Version="1">
+  <DYMOLabel Version="3">
+    <Description>DYMO Label</Description>
+    <Orientation>Portrait</Orientation>
+    <LabelName>S0722540 multipurpose</LabelName>
+    <InitialLength>0</InitialLength>
+    <BorderStyle>SolidLine</BorderStyle>
+    <DYMORect>
+      <DYMOPoint>
+        <X>0.03999997</X>
+        <Y>0.06</Y>
+      </DYMOPoint>
+      <Size>
+        <Width>2.17</Width>
+        <Height>1.13</Height>
+      </Size>
+    </DYMORect>
+    <BorderColor>
+      <SolidColorBrush>
+        <Color A="1" R="0" G="0" B="0"></Color>
+      </SolidColorBrush>
+    </BorderColor>
+    <BorderThickness>1</BorderThickness>
+    <Show_Border>False</Show_Border>
+    <DynamicLayoutManager>
+      <RotationBehavior>ClearObjects</RotationBehavior>
+      <LabelObjects>
+        <LineObject>
+          <Name>ILineObject0</Name>
+          <Brushes>
+            <BackgroundBrush>
+              <SolidColorBrush>
+                <Color A="0" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </BackgroundBrush>
+            <BorderBrush>
+              <SolidColorBrush>
+                <Color A="1" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </BorderBrush>
+            <StrokeBrush>
+              <SolidColorBrush>
+                <Color A="1" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </StrokeBrush>
+            <FillBrush>
+              <SolidColorBrush>
+                <Color A="0" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </FillBrush>
+          </Brushes>
+          <Rotation>Rotation0</Rotation>
+          <OutlineThickness>1</OutlineThickness>
+          <IsOutlined>False</IsOutlined>
+          <BorderStyle>SolidLine</BorderStyle>
+          <Margin>
+            <DYMOThickness Left="0" Top="0" Right="0" Bottom="0" />
+          </Margin>
+          <StrokeWidth>1</StrokeWidth>
+          <DashPattern>SolidLine</DashPattern>
+          <LineType>Horizontal</LineType>
+          <ObjectLayout>
+            <DYMOPoint>
+              <X>0.1623458</X>
+              <Y>0.5947352</Y>
+            </DYMOPoint>
+            <Size>
+              <Width>1.417044</Width>
+              <Height>0.07010794</Height>
+            </Size>
+          </ObjectLayout>
+        </LineObject>
+        <LineObject>
+          <Name>ILineObject1</Name>
+          <Brushes>
+            <BackgroundBrush>
+              <SolidColorBrush>
+                <Color A="0" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </BackgroundBrush>
+            <BorderBrush>
+              <SolidColorBrush>
+                <Color A="1" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </BorderBrush>
+            <StrokeBrush>
+              <SolidColorBrush>
+                <Color A="1" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </StrokeBrush>
+            <FillBrush>
+              <SolidColorBrush>
+                <Color A="0" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </FillBrush>
+          </Brushes>
+          <Rotation>Rotation0</Rotation>
+          <OutlineThickness>1</OutlineThickness>
+          <IsOutlined>False</IsOutlined>
+          <BorderStyle>SolidLine</BorderStyle>
+          <Margin>
+            <DYMOThickness Left="0" Top="0" Right="0" Bottom="0" />
+          </Margin>
+          <StrokeWidth>1</StrokeWidth>
+          <DashPattern>SolidLine</DashPattern>
+          <LineType>Vertical</LineType>
+          <ObjectLayout>
+            <DYMOPoint>
+              <X>1.518743</X>
+              <Y>0.156103</Y>
+            </DYMOPoint>
+            <Size>
+              <Width>0.1181101</Width>
+              <Height>1.004841</Height>
+            </Size>
+          </ObjectLayout>
+        </LineObject>
+        <TextObject>
+          <Name>ITextObject0</Name>
+          <Brushes>
+            <BackgroundBrush>
+              <SolidColorBrush>
+                <Color A="0" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </BackgroundBrush>
+            <BorderBrush>
+              <SolidColorBrush>
+                <Color A="1" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </BorderBrush>
+            <StrokeBrush>
+              <SolidColorBrush>
+                <Color A="1" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </StrokeBrush>
+            <FillBrush>
+              <SolidColorBrush>
+                <Color A="0" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </FillBrush>
+          </Brushes>
+          <Rotation>Rotation0</Rotation>
+          <OutlineThickness>1</OutlineThickness>
+          <IsOutlined>False</IsOutlined>
+          <BorderStyle>SolidLine</BorderStyle>
+          <Margin>
+            <DYMOThickness Left="0" Top="0" Right="0" Bottom="0" />
+          </Margin>
+          <HorizontalAlignment>Center</HorizontalAlignment>
+          <VerticalAlignment>Middle</VerticalAlignment>
+          <FitMode>None</FitMode>
+          <IsVertical>False</IsVertical>
+          <FormattedText>
+            <FitMode>None</FitMode>
+            <HorizontalAlignment>Center</HorizontalAlignment>
+            <VerticalAlignment>Middle</VerticalAlignment>
+            <IsVertical>False</IsVertical>
+            <LineTextSpan>
+              <TextSpan>
+                <Text>PART_NUMBER</Text>
+                <FontInfo>
+                  <FontName>Arial</FontName>
+                  <FontSize>20</FontSize>
+                  <IsBold>False</IsBold>
+                  <IsItalic>False</IsItalic>
+                  <IsUnderline>False</IsUnderline>
+                  <FontBrush>
+                    <SolidColorBrush>
+                      <Color A="1" R="0" G="0" B="0"></Color>
+                    </SolidColorBrush>
+                  </FontBrush>
+                </FontInfo>
+              </TextSpan>
+            </LineTextSpan>
+          </FormattedText>
+          <ObjectLayout>
+            <DYMOPoint>
+              <X>0.2349812</X>
+              <Y>0.1366969</Y>
+            </DYMOPoint>
+            <Size>
+              <Width>1.271774</Width>
+              <Height>0.3255354</Height>
+            </Size>
+          </ObjectLayout>
+        </TextObject>
+        <TextObject>
+          <Name>ITextObject1</Name>
+          <Brushes>
+            <BackgroundBrush>
+              <SolidColorBrush>
+                <Color A="0" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </BackgroundBrush>
+            <BorderBrush>
+              <SolidColorBrush>
+                <Color A="1" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </BorderBrush>
+            <StrokeBrush>
+              <SolidColorBrush>
+                <Color A="1" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </StrokeBrush>
+            <FillBrush>
+              <SolidColorBrush>
+                <Color A="0" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </FillBrush>
+          </Brushes>
+          <Rotation>Rotation0</Rotation>
+          <OutlineThickness>1</OutlineThickness>
+          <IsOutlined>False</IsOutlined>
+          <BorderStyle>SolidLine</BorderStyle>
+          <Margin>
+            <DYMOThickness Left="0" Top="0" Right="0" Bottom="0" />
+          </Margin>
+          <HorizontalAlignment>Left</HorizontalAlignment>
+          <VerticalAlignment>Middle</VerticalAlignment>
+          <FitMode>None</FitMode>
+          <IsVertical>False</IsVertical>
+          <FormattedText>
+            <FitMode>None</FitMode>
+            <HorizontalAlignment>Left</HorizontalAlignment>
+            <VerticalAlignment>Middle</VerticalAlignment>
+            <IsVertical>False</IsVertical>
+            <LineTextSpan>
+              <TextSpan>
+                <Text>DESCRIPTION</Text>
+                <FontInfo>
+                  <FontName>Arial</FontName>
+                  <FontSize>6</FontSize>
+                  <IsBold>False</IsBold>
+                  <IsItalic>False</IsItalic>
+                  <IsUnderline>False</IsUnderline>
+                  <FontBrush>
+                    <SolidColorBrush>
+                      <Color A="1" R="0" G="0" B="0"></Color>
+                    </SolidColorBrush>
+                  </FontBrush>
+                </FontInfo>
+              </TextSpan>
+            </LineTextSpan>
+          </FormattedText>
+          <ObjectLayout>
+            <DYMOPoint>
+              <X>0.168729</X>
+              <Y>0.4622324</Y>
+            </DYMOPoint>
+            <Size>
+              <Width>1.404278</Width>
+              <Height>0.1627676</Height>
+            </Size>
+          </ObjectLayout>
+        </TextObject>
+        <ImageObject>
+          <Name>IImageObject0</Name>
+          <Brushes>
+            <BackgroundBrush>
+              <SolidColorBrush>
+                <Color A="0" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </BackgroundBrush>
+            <BorderBrush>
+              <SolidColorBrush>
+                <Color A="1" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </BorderBrush>
+            <StrokeBrush>
+              <SolidColorBrush>
+                <Color A="1" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </StrokeBrush>
+            <FillBrush>
+              <SolidColorBrush>
+                <Color A="0" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </FillBrush>
+          </Brushes>
+          <Rotation>Rotation0</Rotation>
+          <OutlineThickness>1</OutlineThickness>
+          <IsOutlined>False</IsOutlined>
+          <BorderStyle>SolidLine</BorderStyle>
+          <Margin>
+            <DYMOThickness Left="0" Top="0" Right="0" Bottom="0" />
+          </Margin>
+          <Data>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</Data>
+          <ScaleMode>Uniform</ScaleMode>
+          <HorizontalAlignment>Center</HorizontalAlignment>
+          <VerticalAlignment>Middle</VerticalAlignment>
+          <ObjectLayout>
+            <DYMOPoint>
+              <X>1.626909</X>
+              <Y>0.8133449</Y>
+            </DYMOPoint>
+            <Size>
+              <Width>0.5869156</Width>
+              <Height>0.1627009</Height>
+            </Size>
+          </ObjectLayout>
+        </ImageObject>
+        <QRCodeObject>
+          <Name>IQRCodeObject0</Name>
+          <Brushes>
+            <BackgroundBrush>
+              <SolidColorBrush>
+                <Color A="1" R="1" G="1" B="1"></Color>
+              </SolidColorBrush>
+            </BackgroundBrush>
+            <BorderBrush>
+              <SolidColorBrush>
+                <Color A="1" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </BorderBrush>
+            <StrokeBrush>
+              <SolidColorBrush>
+                <Color A="1" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </StrokeBrush>
+            <FillBrush>
+              <SolidColorBrush>
+                <Color A="1" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </FillBrush>
+          </Brushes>
+          <Rotation>Rotation0</Rotation>
+          <OutlineThickness>1</OutlineThickness>
+          <IsOutlined>False</IsOutlined>
+          <BorderStyle>SolidLine</BorderStyle>
+          <Margin>
+            <DYMOThickness Left="0" Top="0" Right="0" Bottom="0" />
+          </Margin>
+          <BarcodeFormat>QRCode</BarcodeFormat>
+          <Data>
+            <DataString>PART_NUMBER</DataString>
+          </Data>
+          <HorizontalAlignment>Center</HorizontalAlignment>
+          <VerticalAlignment>Middle</VerticalAlignment>
+          <Size>AutoFit</Size>
+          <EQRCodeType>QRCodeText</EQRCodeType>
+          <TextDataHolder>
+            <Value>PART_NUMBER</Value>
+          </TextDataHolder>
+          <ObjectLayout>
+            <DYMOPoint>
+              <X>1.626909</X>
+              <Y>0.2738876</Y>
+            </DYMOPoint>
+            <Size>
+              <Width>0.5601091</Width>
+              <Height>0.5394572</Height>
+            </Size>
+          </ObjectLayout>
+        </QRCodeObject>
+        <TextObject>
+          <Name>ITextObject2</Name>
+          <Brushes>
+            <BackgroundBrush>
+              <SolidColorBrush>
+                <Color A="0" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </BackgroundBrush>
+            <BorderBrush>
+              <SolidColorBrush>
+                <Color A="1" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </BorderBrush>
+            <StrokeBrush>
+              <SolidColorBrush>
+                <Color A="1" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </StrokeBrush>
+            <FillBrush>
+              <SolidColorBrush>
+                <Color A="0" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </FillBrush>
+          </Brushes>
+          <Rotation>Rotation0</Rotation>
+          <OutlineThickness>1</OutlineThickness>
+          <IsOutlined>False</IsOutlined>
+          <BorderStyle>SolidLine</BorderStyle>
+          <Margin>
+            <DYMOThickness Left="0" Top="0" Right="0" Bottom="0" />
+          </Margin>
+          <HorizontalAlignment>Center</HorizontalAlignment>
+          <VerticalAlignment>Middle</VerticalAlignment>
+          <FitMode>None</FitMode>
+          <IsVertical>False</IsVertical>
+          <FormattedText>
+            <FitMode>None</FitMode>
+            <HorizontalAlignment>Center</HorizontalAlignment>
+            <VerticalAlignment>Middle</VerticalAlignment>
+            <IsVertical>False</IsVertical>
+            <LineTextSpan>
+              <TextSpan>
+                <Text>PROJECT_INFO</Text>
+                <FontInfo>
+                  <FontName>Arial</FontName>
+                  <FontSize>10</FontSize>
+                  <IsBold>False</IsBold>
+                  <IsItalic>False</IsItalic>
+                  <IsUnderline>False</IsUnderline>
+                  <FontBrush>
+                    <SolidColorBrush>
+                      <Color A="1" R="0" G="0" B="0"></Color>
+                    </SolidColorBrush>
+                  </FontBrush>
+                </FontInfo>
+              </TextSpan>
+            </LineTextSpan>
+          </FormattedText>
+          <ObjectLayout>
+            <DYMOPoint>
+              <X>0.1655371</X>
+              <Y>0.6953102</Y>
+            </DYMOPoint>
+            <Size>
+              <Width>1.410662</Width>
+              <Height>0.2089972</Height>
+            </Size>
+          </ObjectLayout>
+        </TextObject>
+        <DateTimeObject>
+          <Name>IDateTimeObject0</Name>
+          <Brushes>
+            <BackgroundBrush>
+              <SolidColorBrush>
+                <Color A="0" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </BackgroundBrush>
+            <BorderBrush>
+              <SolidColorBrush>
+                <Color A="1" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </BorderBrush>
+            <StrokeBrush>
+              <SolidColorBrush>
+                <Color A="1" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </StrokeBrush>
+            <FillBrush>
+              <SolidColorBrush>
+                <Color A="0" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </FillBrush>
+          </Brushes>
+          <Rotation>Rotation0</Rotation>
+          <OutlineThickness>1</OutlineThickness>
+          <IsOutlined>False</IsOutlined>
+          <BorderStyle>SolidLine</BorderStyle>
+          <Margin>
+            <DYMOThickness Left="0" Top="0" Right="0" Bottom="0" />
+          </Margin>
+          <HorizontalAlignment>Center</HorizontalAlignment>
+          <VerticalAlignment>Middle</VerticalAlignment>
+          <FitMode>None</FitMode>
+          <IsVertical>False</IsVertical>
+          <FormattedText>
+            <FitMode>None</FitMode>
+            <HorizontalAlignment>Center</HorizontalAlignment>
+            <VerticalAlignment>Middle</VerticalAlignment>
+            <IsVertical>False</IsVertical>
+            <LineTextSpan>
+              <TextSpan>
+                <Text />
+                <FontInfo>
+                  <FontName>Arial</FontName>
+                  <FontSize>6</FontSize>
+                  <IsBold>False</IsBold>
+                  <IsItalic>True</IsItalic>
+                  <IsUnderline>False</IsUnderline>
+                  <FontBrush>
+                    <SolidColorBrush>
+                      <Color A="1" R="0" G="0" B="0"></Color>
+                    </SolidColorBrush>
+                  </FontBrush>
+                </FontInfo>
+              </TextSpan>
+              <FixedTextSpan>
+                <Text>DATE</Text>
+                <FontInfo>
+                  <FontName>Arial</FontName>
+                  <FontSize>6</FontSize>
+                  <IsBold>False</IsBold>
+                  <IsItalic>True</IsItalic>
+                  <IsUnderline>False</IsUnderline>
+                  <FontBrush>
+                    <SolidColorBrush>
+                      <Color A="1" R="0" G="0" B="0"></Color>
+                    </SolidColorBrush>
+                  </FontBrush>
+                </FontInfo>
+              </FixedTextSpan>
+              <TextSpan>
+                <Text />
+                <FontInfo>
+                  <FontName>Arial</FontName>
+                  <FontSize>6</FontSize>
+                  <IsBold>False</IsBold>
+                  <IsItalic>True</IsItalic>
+                  <IsUnderline>False</IsUnderline>
+                  <FontBrush>
+                    <SolidColorBrush>
+                      <Color A="1" R="0" G="0" B="0"></Color>
+                    </SolidColorBrush>
+                  </FontBrush>
+                </FontInfo>
+              </TextSpan>
+            </LineTextSpan>
+          </FormattedText>
+          <Prefix />
+          <Postfix />
+          <Format>LongSystemDate</Format>
+          <Use24HourTime>False</Use24HourTime>
+          <TimeFormat>Date</TimeFormat>
+          <ObjectLayout>
+            <DYMOPoint>
+              <X>0.1782997</X>
+              <Y>1.035944</Y>
+            </DYMOPoint>
+            <Size>
+              <Width>1.401091</Width>
+              <Height>0.1250001</Height>
+            </Size>
+          </ObjectLayout>
+        </DateTimeObject>
+      </LabelObjects>
+    </DynamicLayoutManager>
+  </DYMOLabel>
+  <LabelApplication>Blank</LabelApplication>
+  <DataTable>
+    <Columns></Columns>
+    <Rows></Rows>
+  </DataTable>
+</DesktopLabel>
