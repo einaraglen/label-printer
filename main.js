@@ -151,7 +151,10 @@ ipcMain.on("print-label", async (event, arg) => {
         printer.print("DYMO LabelWriter Wireless", arg);
         //give label time to print
         //await new Promise(resolve => setTimeout(resolve, 2000));
-        event.sender.send("print-response", arg);
+        event.sender.send("print-response", {
+            status: true,
+            message: "Print Success!",
+        });
     } catch (err) {
         console.log(err)
         event.sender.send("print-response", {
