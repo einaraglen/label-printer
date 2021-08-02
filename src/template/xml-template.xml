@@ -149,20 +149,20 @@
           </Margin>
           <HorizontalAlignment>Center</HorizontalAlignment>
           <VerticalAlignment>Middle</VerticalAlignment>
-          <FitMode>None</FitMode>
+          <FitMode>AlwaysFit</FitMode>
           <IsVertical>False</IsVertical>
           <FormattedText>
-            <FitMode>None</FitMode>
+            <FitMode>AlwaysFit</FitMode>
             <HorizontalAlignment>Center</HorizontalAlignment>
             <VerticalAlignment>Middle</VerticalAlignment>
             <IsVertical>False</IsVertical>
             <LineTextSpan>
               <TextSpan>
-                <Text>PART_NUMBER</Text>
+                <Text>PartNo</Text>
                 <FontInfo>
                   <FontName>Arial</FontName>
-                  <FontSize>20</FontSize>
-                  <IsBold>False</IsBold>
+                  <FontSize>19.5</FontSize>
+                  <IsBold>True</IsBold>
                   <IsItalic>False</IsItalic>
                   <IsUnderline>False</IsUnderline>
                   <FontBrush>
@@ -176,11 +176,11 @@
           </FormattedText>
           <ObjectLayout>
             <DYMOPoint>
-              <X>0.2349812</X>
+              <X>0.162345</X>
               <Y>0.1366969</Y>
             </DYMOPoint>
             <Size>
-              <Width>1.271774</Width>
+              <Width>1.391999</Width>
               <Height>0.3255354</Height>
             </Size>
           </ObjectLayout>
@@ -227,7 +227,7 @@
             <IsVertical>False</IsVertical>
             <LineTextSpan>
               <TextSpan>
-                <Text>DESCRIPTION</Text>
+                <Text>PartDescription</Text>
                 <FontInfo>
                   <FontName>Arial</FontName>
                   <FontSize>6</FontSize>
@@ -333,14 +333,14 @@
           </Margin>
           <BarcodeFormat>QRCode</BarcodeFormat>
           <Data>
-            <DataString>PART_NUMBER</DataString>
+            <DataString>PartNo</DataString>
           </Data>
           <HorizontalAlignment>Center</HorizontalAlignment>
           <VerticalAlignment>Middle</VerticalAlignment>
           <Size>AutoFit</Size>
           <EQRCodeType>QRCodeText</EQRCodeType>
           <TextDataHolder>
-            <Value>PART_NUMBER</Value>
+            <Value>PartNo</Value>
           </TextDataHolder>
           <ObjectLayout>
             <DYMOPoint>
@@ -384,21 +384,21 @@
           <Margin>
             <DYMOThickness Left="0" Top="0" Right="0" Bottom="0" />
           </Margin>
-          <HorizontalAlignment>Center</HorizontalAlignment>
+          <HorizontalAlignment>Left</HorizontalAlignment>
           <VerticalAlignment>Middle</VerticalAlignment>
           <FitMode>None</FitMode>
           <IsVertical>False</IsVertical>
           <FormattedText>
             <FitMode>None</FitMode>
-            <HorizontalAlignment>Center</HorizontalAlignment>
+            <HorizontalAlignment>Left</HorizontalAlignment>
             <VerticalAlignment>Middle</VerticalAlignment>
             <IsVertical>False</IsVertical>
             <LineTextSpan>
               <TextSpan>
-                <Text>PROJECT_INFO</Text>
+                <Text>ProjectID</Text>
                 <FontInfo>
                   <FontName>Arial</FontName>
-                  <FontSize>10</FontSize>
+                  <FontSize>6</FontSize>
                   <IsBold>False</IsBold>
                   <IsItalic>False</IsItalic>
                   <IsUnderline>False</IsUnderline>
@@ -413,12 +413,12 @@
           </FormattedText>
           <ObjectLayout>
             <DYMOPoint>
-              <X>0.1655371</X>
-              <Y>0.6953102</Y>
+              <X>0.1623449</X>
+              <Y>0.625</Y>
             </DYMOPoint>
             <Size>
-              <Width>1.410662</Width>
-              <Height>0.2089972</Height>
+              <Width>0.7027819</Width>
+              <Height>0.2089971</Height>
             </Size>
           </ObjectLayout>
         </TextObject>
@@ -479,7 +479,7 @@
                 </FontInfo>
               </TextSpan>
               <FixedTextSpan>
-                <Text>DATE</Text>
+                <Text></Text>
                 <FontInfo>
                   <FontName>Arial</FontName>
                   <FontSize>6</FontSize>
@@ -526,6 +526,144 @@
             </Size>
           </ObjectLayout>
         </DateTimeObject>
+        <TextObject>
+          <Name>ITextObject3</Name>
+          <Brushes>
+            <BackgroundBrush>
+              <SolidColorBrush>
+                <Color A="0" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </BackgroundBrush>
+            <BorderBrush>
+              <SolidColorBrush>
+                <Color A="1" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </BorderBrush>
+            <StrokeBrush>
+              <SolidColorBrush>
+                <Color A="1" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </StrokeBrush>
+            <FillBrush>
+              <SolidColorBrush>
+                <Color A="0" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </FillBrush>
+          </Brushes>
+          <Rotation>Rotation0</Rotation>
+          <OutlineThickness>1</OutlineThickness>
+          <IsOutlined>False</IsOutlined>
+          <BorderStyle>SolidLine</BorderStyle>
+          <Margin>
+            <DYMOThickness Left="0" Top="0" Right="0" Bottom="0" />
+          </Margin>
+          <HorizontalAlignment>Center</HorizontalAlignment>
+          <VerticalAlignment>Middle</VerticalAlignment>
+          <FitMode>None</FitMode>
+          <IsVertical>False</IsVertical>
+          <FormattedText>
+            <FitMode>None</FitMode>
+            <HorizontalAlignment>Center</HorizontalAlignment>
+            <VerticalAlignment>Middle</VerticalAlignment>
+            <IsVertical>False</IsVertical>
+            <LineTextSpan>
+              <TextSpan>
+                <Text>OnHandQty</Text>
+                <FontInfo>
+                  <FontName>Arial</FontName>
+                  <FontSize>10</FontSize>
+                  <IsBold>True</IsBold>
+                  <IsItalic>False</IsItalic>
+                  <IsUnderline>False</IsUnderline>
+                  <FontBrush>
+                    <SolidColorBrush>
+                      <Color A="1" R="0" G="0" B="0"></Color>
+                    </SolidColorBrush>
+                  </FontBrush>
+                </FontInfo>
+              </TextSpan>
+            </LineTextSpan>
+          </FormattedText>
+          <ObjectLayout>
+            <DYMOPoint>
+              <X>0.1663051</X>
+              <Y>0.8339972</Y>
+            </DYMOPoint>
+            <Size>
+              <Width>1.409126</Width>
+              <Height>0.1707361</Height>
+            </Size>
+          </ObjectLayout>
+        </TextObject>
+        <TextObject>
+          <Name>ITextObject4</Name>
+          <Brushes>
+            <BackgroundBrush>
+              <SolidColorBrush>
+                <Color A="0" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </BackgroundBrush>
+            <BorderBrush>
+              <SolidColorBrush>
+                <Color A="1" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </BorderBrush>
+            <StrokeBrush>
+              <SolidColorBrush>
+                <Color A="1" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </StrokeBrush>
+            <FillBrush>
+              <SolidColorBrush>
+                <Color A="0" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </FillBrush>
+          </Brushes>
+          <Rotation>Rotation0</Rotation>
+          <OutlineThickness>1</OutlineThickness>
+          <IsOutlined>False</IsOutlined>
+          <BorderStyle>SolidLine</BorderStyle>
+          <Margin>
+            <DYMOThickness Left="0" Top="0" Right="0" Bottom="0" />
+          </Margin>
+          <HorizontalAlignment>Left</HorizontalAlignment>
+          <VerticalAlignment>Middle</VerticalAlignment>
+          <FitMode>None</FitMode>
+          <IsVertical>False</IsVertical>
+          <FormattedText>
+            <FitMode>None</FitMode>
+            <HorizontalAlignment>Left</HorizontalAlignment>
+            <VerticalAlignment>Middle</VerticalAlignment>
+            <IsVertical>False</IsVertical>
+            <LineTextSpan>
+              <TextSpan>
+                <Text>SubProjectID</Text>
+                <FontInfo>
+                  <FontName>Arial</FontName>
+                  <FontSize>6</FontSize>
+                  <IsBold>False</IsBold>
+                  <IsItalic>False</IsItalic>
+                  <IsUnderline>False</IsUnderline>
+                  <FontBrush>
+                    <SolidColorBrush>
+                      <Color A="1" R="0" G="0" B="0"></Color>
+                    </SolidColorBrush>
+                  </FontBrush>
+                </FontInfo>
+              </TextSpan>
+            </LineTextSpan>
+          </FormattedText>
+          <ObjectLayout>
+            <DYMOPoint>
+              <X>0.875457</X>
+              <Y>0.6250001</Y>
+            </DYMOPoint>
+            <Size>
+              <Width>0.6788872</Width>
+              <Height>0.2089971</Height>
+            </Size>
+          </ObjectLayout>
+        </TextObject>
       </LabelObjects>
     </DynamicLayoutManager>
   </DYMOLabel>

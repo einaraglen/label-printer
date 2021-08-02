@@ -1,0 +1,65 @@
+<Table xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.w3.org/2001/XMLSchema" xsi:schemaLocation="http://www.w3.org/2001/XMLSchema file://C://Users//einar.aglen//AppData//Local//Temp//InventoryPartInStock%20210802-145050.xsd">
+<Row>
+<Site>SE</Site>
+<PartNo>16802294</PartNo>
+<PartDescription>Fuse - 1250V / 800A DC</PartDescription>
+<ConfigurationID>*</ConfigurationID>
+<LocationNo>HQ-F-02-06</LocationNo>
+<LotBatchNo>*</LotBatchNo>
+<SerialNo>*</SerialNo>
+<OnHandQty>6</OnHandQty>
+<ReservedQty>0</ReservedQty>
+<Warehouse>HQ</Warehouse>
+<ActivityID/>
+<ProjectID/>
+<SubProjectID/>
+<ActivitySequence>0</ActivitySequence>
+<Bay>F</Bay>
+<Row>02</Row>
+<Tier>06</Tier>
+<Bin> -</Bin>
+<ConditionCode/>
+<ConditionCodeDescription/>
+<RevNo>1</RevNo>
+<WDRNo>*</WDRNo>
+<RotablePartPoolID/>
+<OnHandCatchQty/>
+<UnifiedOnHandQty>6</UnifiedOnHandQty>
+<UnifiedCatchOnHandQty/>
+<UnifiedReservedQty>0</UnifiedReservedQty>
+<InTransitQty>0</InTransitQty>
+<CatchQtyinTransit/>
+<UnifiedQtyinTransit>0</UnifiedQtyinTransit>
+<UnifiedCatchQtyinTransit/>
+<AvailableQty>6</AvailableQty>
+<UoM>Each</UoM>
+<CatchUoM/>
+<UnifiedUoM>Each</UnifiedUoM>
+<UnifiedCatchUoM/>
+<Frozen>N</Frozen>
+<LastActivityDate>2021-06-15T11:31:49</LastActivityDate>
+<LatestCount>2021-01-07</LatestCount>
+<LocationType>Picking</LocationType>
+<ReceiptDate>2021-06-15T11:31:42</ReceiptDate>
+<AvailabilityControlID/>
+<AvailabilityControlDescription/>
+<AvgUnitTransitCost>0</AvgUnitTransitCost>
+<CountVariance>-9</CountVariance>
+<ExpirationDate/>
+<UnitCost>1 080,00</UnitCost>
+<TotalInventoryValue>6 480,00</TotalInventoryValue>
+<BaseCurr>NOK</BaseCurr>
+<Ownership>Company Owned</Ownership>
+<Owner/>
+<OwnerName/>
+<PartAcquisitionValue/>
+<TotalAcquisitionValue/>
+<AcquisitionCurrency/>
+<ProgramID/>
+<ProgramDescription/>
+<ProjectName/>
+<SubProjectDescription/>
+<ActivityDescription/>
+<Remote>FALSE</Remote>
+</Row>
+</Table>

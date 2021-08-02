@@ -1,20 +1,28 @@
-// Modules to control application life and create native browser window
-const { app, BrowserWindow, nativeImage, Tray } = require("electron");
+const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
+const Dymo = require("dymojs");
+const printer = new Dymo();
 
-let tray, window;
-let closed = true;
+require("@electron/remote/main").initialize();
+
+let window;
 
 const createWindow = () => {
     // Create the browser window.
     window = new BrowserWindow({
         width: 420,
-        height: 570,
+        height: 200,
         fullscreenable: false,
+        frame: false,
         resizable: false,
         transparent: false,
         webPreferences: {
             preload: path.join(__dirname, "preload.js"),
+            nodeIntegration: true,
+            enableRemoteModule: true,
+            contextIsolation: false,
+            nodeIntegrationInWorker: true,
+            nodeIntegrationInSubFrames: true,
         },
     });
 
@@ -25,64 +33,34 @@ const createWindow = () => {
     // and load the index.html of the app.
     window.loadURL("http://localhost:3000");
 
-    // Open the DevTools.
-    // mainWindow.webContents.openDevTools()
-}
+    window.webContents.openDevTools();
+};
 
-//label printing:
-/*const Dymo = require("dymojs");
-const dymo = new Dymo();
-const fs = require("fs");
-
-const label = {
-    PART_NUMBER: 16103169,
-    DESCRIPTION: "Female Banking Plug",
-    PROJECT_INFO: "101456 - 16100A",
-}
-
-fs.readFile("./src/xml-template.xml", function (err, data) {
-    if (err) return console.log(`Error occured: ${err}`);
-    let tempXML = data.toString();
-    for (const key in label) {
-        let regex = new RegExp(key, "g");
-        tempXML = tempXML.toString().replace(regex, label[key]);
-    }
-    //console.log(tempXML)
+//print method that renderer can acces via ipcRenderer
+ipcMain.on("print-label", (event, arg) => {
     try {
-        dymo.print("DYMO LabelWriter Wireless", tempXML);
+        console.log(arg)
+        printer.print("DYMO LabelWriter Wireless", arg.replace(" ", ""));
+        event.sender.send("print-response", {
+            status: true,
+            message: "Print Success!",
+        });
     } catch (err) {
-        console.warn(err)
+        event.sender.send("print-response", {
+            status: false,
+            message: err,
+        });
     }
-});*/
+});
 
-//for creating icon at bottom right of the screen hint-hint *future feature*
-/*const createTray = () => {
-    const icon = path.join(__dirname, "assets/appicon.ico");
-    const nImage = nativeImage.createFromPath(icon);
-    tray = new Tray(nImage);
-    tray.on("click", (event) => toggleWindow());
-}*/
-
-
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
+//MAC OS STUFF
 app.whenReady().then(() => {
     createWindow();
-
     app.on("activate", () => {
-        // On macOS it's common to re-create a window in the app when the
-        // dock icon is clicked and there are no other windows open.
         if (BrowserWindow.getAllWindows().length === 0) createWindow();
     });
 });
 
-// Quit when all windows are closed, except on macOS. There, it's common
-// for applications and their menu bar to stay active until the user quits
-// explicitly with Cmd + Q.
 app.on("window-all-closed", () => {
     if (process.platform !== "darwin") app.quit();
 });
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
