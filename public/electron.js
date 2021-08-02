@@ -1,11 +1,15 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
+const fs = require("fs");
 const path = require("path");
 const Dymo = require("dymojs");
 const printer = new Dymo();
 
+const isDev = require("electron-is-dev");
+
 require("@electron/remote/main").initialize();
 
 let window;
+const files = [];
 
 const createWindow = () => {
     // Create the browser window.
@@ -13,7 +17,7 @@ const createWindow = () => {
         width: 420,
         height: 200,
         fullscreenable: false,
-        frame: false,
+        //frame: false,
         resizable: false,
         transparent: false,
         webPreferences: {
@@ -31,7 +35,11 @@ const createWindow = () => {
     });
 
     // and load the index.html of the app.
-    window.loadURL("http://localhost:3000");
+    window.loadURL(
+        isDev
+            ? "http://localhost:3000"
+            : `file://${path.join(__dirname, "../build/index.html")}`
+    );
 
     window.webContents.openDevTools();
 };
@@ -42,18 +50,27 @@ ipcMain.on("print-label", async (event, arg) => {
     try {
         printer.print("DYMO LabelWriter Wireless", arg);
         //give label time to print
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        await new Promise((resolve) => setTimeout(resolve, 2000));
         event.sender.send("print-response", {
             status: true,
             message: "Print Success!",
         });
     } catch (err) {
-        console.log(err)
+        console.log(err);
         event.sender.send("print-response", {
             status: false,
             message: err,
         });
     }
+});
+
+ipcMain.on("get-file", (event, arg) => {
+    event.sender.send("file-response", files);
+});
+
+//when OS deos "open file with <THIS_APP>"
+app.on("open-file", (event, path) => {
+    files.push(path);
 });
 
 //MAC OS STUFF

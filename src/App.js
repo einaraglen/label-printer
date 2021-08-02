@@ -8,6 +8,7 @@ const parser = window.require("fast-xml-parser");
 const { ipcRenderer } = window.require('electron');
 
 const App = () => {
+    const [text, setText] = React.useState("");
     //here we define what we want to extract from the IFS XML
     const keyValues = ["PartNo", "PartDescription", "SubProjectID", "ProjectID", "OnHandQty"]
     //makes it so we can get our data async
@@ -41,18 +42,28 @@ const App = () => {
             });
             //listen for response from main process
             ipcRenderer.on('print-response', (event, arg) => {
-                console.log(arg); // prints "Hello World!"
+                console.log(arg);
             });
             //try print
             ipcRenderer.send('print-label', template);
+            template = rawTemplate.toString();
         });
     };
 
+    const test = () => {
+        ipcRenderer.on('file-response', (event, arg) => {
+            console.log(arg)
+        });
+        //try print
+        ipcRenderer.send('get-file');
+    }
+
     return (
         <div className="App-header">
-            <Button onClick={print} color="primary" variant="outlined">
+            <Button onClick={test} color="primary" variant="outlined">
                 Print
             </Button>
+            <p>{text}</p>
         </div>
     );
 };

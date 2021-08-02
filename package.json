@@ -1,92 +1,55 @@
 {
-  "name": "label-printer",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@electron/remote": "^1.2.1",
-    "@material-ui/core": "^4.12.3",
-    "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^11.1.0",
-    "@testing-library/user-event": "^12.1.10",
-    "concurrently": "^6.2.0",
-    "dymojs": "^1.2.0",
-    "electron": "^13.1.7",
-    "fast-xml-parser": "^3.19.0",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-scripts": "4.0.3",
-    "wait-on": "^6.0.0",
-    "web-vitals": "^1.0.1"
-  },
-  "main": "main.js",
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "electron-react": "concurrently \"npm start\" \"wait-on http://localhost:3000 && electron .\""
-  },
-  "build": {
-    "productName": "LabelPrinter",
-    "appId": "com.seaonics.einaraglen",
-    "directories": {
-      "output": "build"
+    "name": "label-printer",
+    "version": "0.1.0",
+    "private": true,
+    "dependencies": {
+        "@electron/remote": "^1.2.1",
+        "@material-ui/core": "^4.12.3",
+        "@testing-library/jest-dom": "^5.11.4",
+        "@testing-library/react": "^11.1.0",
+        "@testing-library/user-event": "^12.1.10",
+        "concurrently": "^6.2.0",
+        "dymojs": "^1.2.0",
+        "electron-is-dev": "^2.0.0",
+        "fast-xml-parser": "^3.19.0",
+        "react": "^17.0.2",
+        "react-dom": "^17.0.2",
+        "react-scripts": "4.0.3",
+        "wait-on": "^6.0.0",
+        "web-vitals": "^1.0.1"
     },
-    "files": [
-      "dist/electron/**/*"
-    ],
-    "dmg": {
-      "contents": [
-        {
-          "x": 410,
-          "y": 150,
-          "type": "link",
-          "path": "/Applications"
-        },
-        {
-          "x": 130,
-          "y": 150,
-          "type": "file"
-        }
-      ]
+    "main": "public/electron.js",
+    "homepage": "./",
+    "scripts": {
+        "start": "react-scripts start",
+        "build": "react-scripts build",
+        "test": "react-scripts test",
+        "eject": "react-scripts eject",
+        "electron-react": "concurrently \"npm start\" \"wait-on http://localhost:3000 && electron .\"",
+        "electron:build": "yarn build && electron-builder"
     },
-    "mac": {
-      "icon": "build/icons/icon.icns",
-      "category": "public.app-category.printing",
-      "fileAssociations": [
-        {
-          "ext": [
-            "xml",
-            "XML"
-          ],
-          "description": "Image files",
-          "role": "Viewer"
-        }
-      ]
+    "build": {
+        "appId": "com.seaonics.label-printer"
     },
-    "win": {
-      "icon": "build/icons/icon.ico"
+    "eslintConfig": {
+        "extends": [
+            "react-app",
+            "react-app/jest"
+        ]
     },
-    "linux": {
-      "icon": "build/icons"
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    },
+    "devDependencies": {
+        "electron": "^13.1.7"
     }
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  }
 }
