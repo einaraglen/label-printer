@@ -9,7 +9,20 @@ const isDev = require("electron-is-dev");
 require("@electron/remote/main").initialize();
 
 let window;
-const files = [];
+
+const gotTheLock = app.requestSingleInstanceLock();
+
+if (!gotTheLock) {
+    app.quit();
+} else {
+    app.on("second-instance", (event, commandLine, workingDirectory) => {
+        // Someone tried to run a second instance, we should focus our window.
+        if (window) {
+            if (window.isMinimized()) window.restore();
+            window.focus();
+        }
+    });
+}
 
 const createWindow = () => {
     // Create the browser window.
@@ -48,9 +61,9 @@ const createWindow = () => {
 ipcMain.on("print-label", async (event, arg) => {
     //
     try {
-        printer.print("DYMO LabelWriter Wireless", arg);
+        printer.print("DYMO LabelWriter 450", arg);
         //give label time to print
-        await new Promise((resolve) => setTimeout(resolve, 2000));
+        //await new Promise((resolve) => setTimeout(resolve, 2000));
         event.sender.send("print-response", {
             status: true,
             message: "Print Success!",
@@ -64,23 +77,29 @@ ipcMain.on("print-label", async (event, arg) => {
     }
 });
 
-ipcMain.on("get-file", (event, arg) => {
-    event.sender.send("file-response", files);
-});
+let files = [];
 
 //when OS deos "open file with <THIS_APP>"
 app.on("open-file", (event, path) => {
+    //file = path;
     files.push(path);
 });
 
-//MAC OS STUFF
+//when ready
 app.whenReady().then(() => {
     createWindow();
+
+    ipcMain.handle("get-file", (event, arg) => {
+        // do stuff
+        return files[0];
+    });
+
     app.on("activate", () => {
         if (BrowserWindow.getAllWindows().length === 0) createWindow();
     });
 });
 
+//MAC OS STUFF
 app.on("window-all-closed", () => {
     if (process.platform !== "darwin") app.quit();
 });
