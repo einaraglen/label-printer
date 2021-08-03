@@ -1,15 +1,36 @@
-.App {
-  text-align: center;
-  overflow: hidden;
-}
-
-.App-header {
-  background-color: #22303C;
-  min-height: 100vh;
+.main {
+  padding: 1rem;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  align-items: flex-start;
+  background-color: #22303C;
+  min-height: 100vh;
   font-size: calc(10px + 2vmin);
   color: white;
+}
+
+.template-picker {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.preview {
+  height: 8rem;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: .5rem;
+}
+
+.print {
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }

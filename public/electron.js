@@ -30,8 +30,8 @@ if (!gotTheLock) {
 //build our renderer
 const createWindow = () => {
     window = new BrowserWindow({
-        width: 420,
-        height: 200,
+        width: 550,
+        height: 300,
         fullscreenable: false,
         //frame: false,
         resizable: false,
@@ -62,7 +62,14 @@ const createWindow = () => {
     window.webContents.openDevTools();
 };
 
-//print method that renderer can acces via ipcRenderer
+ipcMain.handle("image-preview", (event, arg) => {
+    // returns imageData as base64 encoded png.
+    return printer.renderLabel(arg).then(imageData => {
+        return imageData;
+    });
+})
+
+//print method that renderer can acces vi   a ipcRenderer
 ipcMain.handle("print-label", async (event, arg) => {
     //
     try {
@@ -78,9 +85,15 @@ ipcMain.handle("get-template", async (event, arg) => {
     return store.get("template");
 });
 
+//set template variable in electron-store
 ipcMain.handle("set-template", async (event, arg) => {
     store.set("template", arg);
     return { status: true, message: "Template set!"}
+});
+
+//quit app when done
+ipcMain.handle("complete", async (event, arg) => {
+    app.quit();
 });
 
 //when ready
