@@ -1,11 +1,10 @@
 .App {
   text-align: center;
-  background-color: #282c34;
   overflow: hidden;
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #22303C;
   min-height: 100vh;
   display: flex;
   flex-direction: column;

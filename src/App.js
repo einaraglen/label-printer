@@ -1,6 +1,7 @@
 import React from "react";
 import "./App.css";
 import { Button } from "@material-ui/core";
+import FolderOpenIcon from "@material-ui/icons/FolderOpen";
 
 //we can now amazingly access awsome shit in our render!
 const fs = window.require("fs");
@@ -9,6 +10,9 @@ const { ipcRenderer } = window.require("electron");
 
 const App = () => {
     const [text, setText] = React.useState("Path Here");
+    const [templatePath, setTemplatePath] = React.useState(
+        "./src/template/xml-template.xml"
+    );
     //here we define what we want to extract from the IFS XML
     const keyValues = [
         "PartNo",
@@ -17,6 +21,15 @@ const App = () => {
         "ProjectID",
         "Quantity",
     ];
+
+    React.useEffect(() => {
+        const getTemplate = async () => {
+            let result = await ipcRenderer.invoke("get-template");
+            setTemplatePath(result);
+        };
+        getTemplate();
+    }, []);
+
     //makes it so we can get our data async
     const readFile = async (path) => {
         return new Promise((resolve, reject) => {
@@ -29,44 +42,72 @@ const App = () => {
 
     const print = async () => {
         //setup template XML
-        let rawTemplate = await readFile("./src/template/xml-template.xml");
+        //TODO: find a wait to select template file and store it
+        if (!templatePath) return setText("Please select a Template");
+        let rawTemplate = await readFile(templatePath);
         let template = rawTemplate.toString();
-        //get the data rows
-        let rawData = await readFile("./src/test/test2.xml");
-        let data = [];
-        //convert XML into JSON
+        //get data from opened file
+        const result = await ipcRenderer.invoke("get-file");
+        console.log(result);
+        //exits methode if file is absent
+        if (result.length === 0) return setText("App was not opened with file");
+        let rawData = await readFile(result);
         let json = parser.parse(rawData.toString());
         //extract the rows (this can be either a single object or an array!)
         let toBePrinted = json.Table.Row;
-        //return row(s)
-        data = !toBePrinted.length ? [toBePrinted] : [...toBePrinted];
-        //console.log(data)
+        let data = !toBePrinted.length ? [toBePrinted] : [...toBePrinted];
         //start print process
         for (let i = 0; i < data.length; i++) {
             let current = data[i];
-            keyValues.forEach((key) => {
-                let regex = new RegExp(key, "g");
-                template = template.toString().replace(regex, current[key]);
-            });
-            //listen for response from main process
-            ipcRenderer.on("print-response", (event, arg) => {
-                console.log(arg);
-            });
+            for (let j = 0; j < keyValues.length; j++) {
+                let regex = new RegExp(keyValues[j], "g");
+                template = template
+                    .toString()
+                    .replace(regex, current[keyValues[j]]);
+            }
             //try print
-            ipcRenderer.send("print-label", template);
+            let printResult = await ipcRenderer.invoke("print-label", template);
+            console.log(printResult);
             await new Promise((resolve) => setTimeout(resolve, 2000));
             template = rawTemplate.toString();
         }
     };
 
-    const test = async () => {
-        const result = await ipcRenderer.invoke("get-file");
-        setText(result)
+    const handleInputChange = async (event) => {
+        let result = await ipcRenderer.invoke("set-template", event.target.files[0].path);
+        setText(result.message);
+        if (result) setTemplatePath(event.target.files[0].path);
     };
 
     return (
         <div className="App-header">
-            <Button onClick={test} color="primary" variant="outlined">
+            <div>
+                <input
+                    id="file-button"
+                    style={{ display: "none" }}
+                    accept="xml"
+                    type="file"
+                    name="upload_file"
+                    onChange={handleInputChange}
+                />
+                <label
+                    style={{
+                        gridArea: "button",
+                        width: "7rem",
+                        margin: "auto",
+                    }}
+                    htmlFor="file-button"
+                >
+                    <Button
+                        component="span"
+                        variant="outlined"
+                        color="primary"
+                        startIcon={<FolderOpenIcon />}
+                    >
+                    </Button>
+                </label>
+            </div>
+            <Button onClick={print} color="primary" variant="outlined">
                 Print
             </Button>
             <p>{text}</p>

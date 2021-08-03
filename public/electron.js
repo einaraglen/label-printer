@@ -3,15 +3,18 @@ const fs = require("fs");
 const path = require("path");
 const Dymo = require("dymojs");
 const printer = new Dymo();
+const Store = require("electron-store");
+const store = new Store();
 
 const isDev = require("electron-is-dev");
+const devEnv = /electron/.test(process.argv[0]);
 
 require("@electron/remote/main").initialize();
 
 let window;
 
+//check if already open
 const gotTheLock = app.requestSingleInstanceLock();
-
 if (!gotTheLock) {
     app.quit();
 } else {
@@ -24,8 +27,8 @@ if (!gotTheLock) {
     });
 }
 
+//build our renderer
 const createWindow = () => {
-    // Create the browser window.
     window = new BrowserWindow({
         width: 420,
         height: 200,
@@ -43,6 +46,8 @@ const createWindow = () => {
         },
     });
 
+    window.removeMenu();
+
     window.on("close", () => {
         window = null;
     });
@@ -58,41 +63,46 @@ const createWindow = () => {
 };
 
 //print method that renderer can acces via ipcRenderer
-ipcMain.on("print-label", async (event, arg) => {
+ipcMain.handle("print-label", async (event, arg) => {
     //
     try {
-        printer.print("DYMO LabelWriter 450", arg);
-        //give label time to print
-        //await new Promise((resolve) => setTimeout(resolve, 2000));
-        event.sender.send("print-response", {
-            status: true,
-            message: "Print Success!",
-        });
+        printer.print("DYMO LabelWriter Wireless", arg);
+        return { status: true, message: "Success!"};
     } catch (err) {
-        console.log(err);
-        event.sender.send("print-response", {
-            status: false,
-            message: err,
-        });
+        return { status: false, messsage: err};
     }
 });
 
-let files = [];
+//returns our stored path to template file || default is null
+ipcMain.handle("get-template", async (event, arg) => {
+    return store.get("template");
+});
 
-//when OS deos "open file with <THIS_APP>"
-app.on("open-file", (event, path) => {
-    //file = path;
-    files.push(path);
+ipcMain.handle("set-template", async (event, arg) => {
+    store.set("template", arg);
+    return { status: true, message: "Template set!"}
 });
 
 //when ready
 app.whenReady().then(() => {
-    createWindow();
+    if (
+        process.platform.startsWith("win") &&
+        !devEnv &&
+        process.argv.length >= 2
+    ) {
+        //if app is opened with file
+        const filePath = process.argv[1];
+        ipcMain.handle("get-file", (event, arg) => {
+            return filePath;
+        });
+    } else {
+        //opened default method
+        ipcMain.handle("get-file", (event, arg) => {
+            return "";
+        });
+    }
 
-    ipcMain.handle("get-file", (event, arg) => {
-        // do stuff
-        return files[0];
-    });
+    createWindow();
 
     app.on("activate", () => {
         if (BrowserWindow.getAllWindows().length === 0) createWindow();
