@@ -6,6 +6,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow: hidden; 
+  background-color: #19212c;
+
 }
 
 .main {
@@ -14,10 +16,17 @@ body {
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  background-color: #22303C;
   min-height: 100vh;
   font-size: calc(10px + 2vmin);
   color: white;
+}
+
+.main-load {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
 }
 
 .template-picker {

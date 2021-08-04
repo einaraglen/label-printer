@@ -395,7 +395,7 @@
             <IsVertical>False</IsVertical>
             <LineTextSpan>
               <TextSpan>
-                <Text>ProjectID</Text>
+                <Text>LineInfo</Text>
                 <FontInfo>
                   <FontName>Arial</FontName>
                   <FontSize>6</FontSize>
@@ -417,8 +417,8 @@
               <Y>0.625</Y>
             </DYMOPoint>
             <Size>
-              <Width>0.7027819</Width>
-              <Height>0.2089971</Height>
+              <Width>1.418278</Width>
+              <Height>0.2089972</Height>
             </Size>
           </ObjectLayout>
         </TextObject>
@@ -479,7 +479,7 @@
                 </FontInfo>
               </TextSpan>
               <FixedTextSpan>
-                <Text>Monday, August 02, 2021</Text>
+                <Text>Wednesday, August 04, 2021</Text>
                 <FontInfo>
                   <FontName>Arial</FontName>
                   <FontSize>6</FontSize>
@@ -592,75 +592,6 @@
             <Size>
               <Width>1.409126</Width>
               <Height>0.1707361</Height>
-            </Size>
-          </ObjectLayout>
-        </TextObject>
-        <TextObject>
-          <Name>ITextObject4</Name>
-          <Brushes>
-            <BackgroundBrush>
-              <SolidColorBrush>
-                <Color A="0" R="0" G="0" B="0"></Color>
-              </SolidColorBrush>
-            </BackgroundBrush>
-            <BorderBrush>
-              <SolidColorBrush>
-                <Color A="1" R="0" G="0" B="0"></Color>
-              </SolidColorBrush>
-            </BorderBrush>
-            <StrokeBrush>
-              <SolidColorBrush>
-                <Color A="1" R="0" G="0" B="0"></Color>
-              </SolidColorBrush>
-            </StrokeBrush>
-            <FillBrush>
-              <SolidColorBrush>
-                <Color A="0" R="0" G="0" B="0"></Color>
-              </SolidColorBrush>
-            </FillBrush>
-          </Brushes>
-          <Rotation>Rotation0</Rotation>
-          <OutlineThickness>1</OutlineThickness>
-          <IsOutlined>False</IsOutlined>
-          <BorderStyle>SolidLine</BorderStyle>
-          <Margin>
-            <DYMOThickness Left="0" Top="0" Right="0" Bottom="0" />
-          </Margin>
-          <HorizontalAlignment>Left</HorizontalAlignment>
-          <VerticalAlignment>Middle</VerticalAlignment>
-          <FitMode>None</FitMode>
-          <IsVertical>False</IsVertical>
-          <FormattedText>
-            <FitMode>None</FitMode>
-            <HorizontalAlignment>Left</HorizontalAlignment>
-            <VerticalAlignment>Middle</VerticalAlignment>
-            <IsVertical>False</IsVertical>
-            <LineTextSpan>
-              <TextSpan>
-                <Text>SubProjectID</Text>
-                <FontInfo>
-                  <FontName>Arial</FontName>
-                  <FontSize>6</FontSize>
-                  <IsBold>False</IsBold>
-                  <IsItalic>False</IsItalic>
-                  <IsUnderline>False</IsUnderline>
-                  <FontBrush>
-                    <SolidColorBrush>
-                      <Color A="1" R="0" G="0" B="0"></Color>
-                    </SolidColorBrush>
-                  </FontBrush>
-                </FontInfo>
-              </TextSpan>
-            </LineTextSpan>
-          </FormattedText>
-          <ObjectLayout>
-            <DYMOPoint>
-              <X>0.875457</X>
-              <Y>0.6250001</Y>
-            </DYMOPoint>
-            <Size>
-              <Width>0.6788872</Width>
-              <Height>0.2089971</Height>
             </Size>
           </ObjectLayout>
         </TextObject>
