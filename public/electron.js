@@ -73,7 +73,7 @@ ipcMain.handle("image-preview", (event, arg) => {
 ipcMain.handle("print-label", async (event, arg) => {
     //
     try {
-        printer.print("DYMO LabelWriter Wireless", arg);
+        printer.print("DYMO LabelWriter 450", arg);
         return { status: true, message: "Success!"};
     } catch (err) {
         return { status: false, messsage: err};
