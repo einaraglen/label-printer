@@ -73,7 +73,7 @@ ipcMain.handle("image-preview", (event, arg) => {
 ipcMain.handle("print-label", async (event, arg) => {
     //
     try {
-        printer.print("DYMO LabelWriter 450", arg);
+        printer.print(store.get("printer"), arg);
         return { status: true, message: "Success!"};
     } catch (err) {
         return { status: false, messsage: err};
@@ -94,6 +94,22 @@ ipcMain.handle("set-template", async (event, arg) => {
 //quit app when done
 ipcMain.handle("complete", async (event, arg) => {
     app.quit();
+});
+
+//returns printers connected to computer
+ipcMain.handle("get-printers", async (event, arg) => {
+    return window.webContents.getPrinters();
+});
+
+//returns printer stored in electron-store
+ipcMain.handle("get-printer", async (event, arg) => {
+    return store.get("printer");
+});
+
+//sets which printer we should use
+ipcMain.handle("set-printer", async (event, arg) => {
+    store.set("printer", arg);
+    return { status: true, message: "Template set!"}
 });
 
 //when ready
