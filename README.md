@@ -20,7 +20,7 @@ After choosing a temlpate file and reopening the program from IFS, you will se y
 
 ![alt text](https://res.cloudinary.com/sushi-panel-images/image/upload/v1628178379/readme/printer_ifpdiw.png "Select printer")
 
-Then you can select which printer to use, since the program is based on the DYMO JavaScript framework [`dymojs`](https://www.google.com) you should select your DYMO printer
+Then you can select which printer to use, since the program is based on the DYMO JavaScript framework [`dymojs`](https://github.com/dsandor/dymojs) you should select your DYMO printer
 
 ![alt text](https://res.cloudinary.com/sushi-panel-images/image/upload/v1628178606/readme/printing_aypfku.png "Select printer")
 
