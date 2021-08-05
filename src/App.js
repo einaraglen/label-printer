@@ -163,7 +163,7 @@ const App = () => {
     //makes it so we can get our data async
     const readFile = async (path) => {
         return new Promise((resolve, reject) => {
-            fs.readFile(path, "utf8", function (err, data) {
+            fs.readFile(path, "utf8", (err, data) => {
                 if (err) reject(err);
                 resolve(data);
             });
