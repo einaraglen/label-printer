@@ -143,8 +143,9 @@ const App = () => {
     const handleLineInfo = (currentProperty, fileName, current) => {
         let lineInfo = "";
         for (let i = 0; i < currentProperty.length; i++) {
-            lineInfo += handleLine(currentProperty[i], fileName, current);
-            lineInfo += i === currentProperty.length - 1 ? "" : " - ";
+            let currentLine = handleLine(currentProperty[i], fileName, current);
+            lineInfo += currentLine;
+            lineInfo += (i === currentProperty.length - 1 || currentLine.length === 0) ? "" : " - ";
         }
         return lineInfo;
     };
@@ -155,7 +156,7 @@ const App = () => {
         if (currentPropertyOf === "CustomersPONo")
             return `PO ${current[currentPropertyOf]}`;
         if (currentPropertyOf === "ProjectID")
-            return `P-${current[currentPropertyOf]}`;
+            return current[currentPropertyOf].length !== 0 ? `P-${current[currentPropertyOf]}` : "";
         return current[currentPropertyOf];
     };
 
