@@ -71,7 +71,6 @@ ipcMain.handle("image-preview", (event, arg) => {
 
 //print method that renderer can acces vi   a ipcRenderer
 ipcMain.handle("print-label", async (event, arg) => {
-    //
     try {
         printer.print(store.get("printer"), arg);
         return { status: true, message: "Success!"};
