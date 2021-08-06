@@ -1,12 +1,13 @@
 import React from "react";
 import "./App.css";
-import { Button } from "@material-ui/core";
+import { Button, ThemeProvider } from "@material-ui/core";
 import FolderOpenIcon from "@material-ui/icons/FolderOpen";
 import CheckIcon from "@material-ui/icons/Check";
 import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 import Tooltip from "@material-ui/core/Tooltip";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { MenuItem, FormControl, Select } from "@material-ui/core/";
+import { Context } from "context/State";
 
 //we can now amazingly access awsome shit in our render!
 const fs = window.require("fs");
@@ -22,6 +23,9 @@ const App = () => {
     const [isLoading, setIsLoading] = React.useState(false);
     const [printers, setPrinters] = React.useState([]);
     const [printer, setPrinter] = React.useState("");
+
+    const state = React.useContext(Context);
+    console.log(state)
 
     const config = {
         CustomerOrder: {
@@ -63,9 +67,9 @@ const App = () => {
 
         const loadData = async () => {
             let printers = await ipcRenderer.invoke("get-printers");
-            setPrinters(printers)
+            setPrinters(printers);
             let printer = await ipcRenderer.invoke("get-printer");
-            setPrinter(printer)
+            setPrinter(printer);
             //we chill for a bit to make sure we get the template path
             await new Promise((resolve) => setTimeout(resolve, 1000));
             //make sure we have a template
@@ -77,26 +81,16 @@ const App = () => {
             const fileName = path.parse(result).base.toString().split(" ")[0];
             let currentConfig = {};
             for (const property in confRef.current)
-                if (fileName.indexOf(property) > -1)
-                    currentConfig = confRef.current[property];
+                if (fileName.indexOf(property) > -1) currentConfig = confRef.current[property];
             const rawData = await readFile(result);
             const data = parser.parse(rawData);
             const rows = data.Table.Row;
             let currentData = !rows.length ? [rows] : [...rows];
             //build print data for dymo printer
             let labelXML = templateXML.toString();
-            let currentLabels = buildLabels(
-                currentData,
-                currentConfig,
-                labelXML,
-                templateXML,
-                fileName
-            );
+            let currentLabels = buildLabels(currentData, currentConfig, labelXML, templateXML, fileName);
             //preview first label
-            let preview = await ipcRenderer.invoke(
-                "image-preview",
-                currentLabels[0]
-            );
+            let preview = await ipcRenderer.invoke("image-preview", currentLabels[0]);
             setImagePreview(preview.replace(/"/g, ""));
             setLabels([...currentLabels]);
         };
@@ -105,13 +99,7 @@ const App = () => {
         loadData();
     }, []);
 
-    const buildLabels = (
-        currentData,
-        currentConfig,
-        labelXML,
-        templateXML,
-        fileName
-    ) => {
+    const buildLabels = (currentData, currentConfig, labelXML, templateXML, fileName) => {
         let currentLabels = [];
         for (let i = 0; i < currentData.length; i++) {
             let current = currentData[i];
@@ -121,16 +109,10 @@ const App = () => {
                 //handle "LineInfo"
                 if (property === "LineInfo") {
                     //TODO: handle shit and return the string
-                    let lineInfo = handleLineInfo(
-                        currentProperty,
-                        fileName,
-                        current
-                    );
+                    let lineInfo = handleLineInfo(currentProperty, fileName, current);
                     labelXML = labelXML.toString().replace(regex, lineInfo);
                 } else {
-                    labelXML = labelXML
-                        .toString()
-                        .replace(regex, current[currentConfig[property]]);
+                    labelXML = labelXML.toString().replace(regex, current[currentConfig[property]]);
                 }
             }
             currentLabels.push(labelXML);
@@ -145,16 +127,14 @@ const App = () => {
         for (let i = 0; i < currentProperty.length; i++) {
             let currentLine = handleLine(currentProperty[i], fileName, current);
             lineInfo += currentLine;
-            lineInfo += (i === currentProperty.length - 1 || currentLine.length === 0) ? "" : " - ";
+            lineInfo += i === currentProperty.length - 1 || currentLine.length === 0 ? "" : " - ";
         }
         return lineInfo;
     };
 
     const handleLine = (currentPropertyOf, fileName, current) => {
-        if (currentPropertyOf === "PurchaseOrder")
-            return `PO ${fileName.replace("PurchaseOrder", "")}`;
-        if (currentPropertyOf === "CustomersPONo")
-            return `PO ${current[currentPropertyOf]}`;
+        if (currentPropertyOf === "PurchaseOrder") return `PO ${fileName.replace("PurchaseOrder", "")}`;
+        if (currentPropertyOf === "CustomersPONo") return `PO ${current[currentPropertyOf]}`;
         if (currentPropertyOf === "ProjectID")
             return current[currentPropertyOf].length !== 0 ? `P-${current[currentPropertyOf]}` : "";
         return current[currentPropertyOf];
@@ -184,16 +164,10 @@ const App = () => {
         for (let i = 0; i < labels.length; i++) {
             let currentLabel = labels[i].replace(/(\r\n|\n|\r)/gm, "");
             //set current preview
-            let preview = await ipcRenderer.invoke(
-                "image-preview",
-                currentLabel
-            );
+            let preview = await ipcRenderer.invoke("image-preview", currentLabel);
             setImagePreview(preview.replace(/"/g, ""));
             setText(`Printing Label ${i + 1} of ${labels.length}`);
-            let printResult = await ipcRenderer.invoke(
-                "print-label",
-                currentLabel
-            );
+            let printResult = await ipcRenderer.invoke("print-label", currentLabel);
             console.log(printResult);
             await new Promise((resolve) => setTimeout(resolve, 2000));
         }
@@ -205,92 +179,84 @@ const App = () => {
     };
 
     const handleInputChange = async (event) => {
-        let result = await ipcRenderer.invoke(
-            "set-template",
-            event.target.files[0].path
-        );
+        let result = await ipcRenderer.invoke("set-template", event.target.files[0].path);
         if (result) setTemplatePath(event.target.files[0].path);
     };
 
     const handleFormEvent = async (event) => {
         await ipcRenderer.invoke("set-printer", event.target.value);
-        setPrinter(event.target.value)
+        setPrinter(event.target.value);
     };
 
     return (
-        <div className="main">
-            <div className="template-picker">
-                <input
-                    id="file-button"
-                    style={{ display: "none" }}
-                    accept=".xml"
-                    type="file"
-                    name="upload_file"
-                    onChange={handleInputChange}
-                />
-                <label htmlFor="file-button">
-                    <Button
-                        component="span"
-                        variant="outlined"
-                        color="primary"
-                        startIcon={<FolderOpenIcon />}
-                        style={{ marginRight: ".4rem" }}
-                    >
-                        Template
-                    </Button>
-                </label>
-                {!isTemplateGood() ? (
-                    <Tooltip title="Check Template file" placement="bottom">
-                        <ErrorOutlineIcon color="secondary" />
-                    </Tooltip>
-                ) : (
-                    <Tooltip title="Template Working" placement="bottom">
-                        <CheckIcon color="primary" />
-                    </Tooltip>
-                )}
-                <FormControl
+        <ThemeProvider theme={state.theme}>
+            <div className="main">
+                <div className="template-picker">
+                    <input
+                        id="file-button"
+                        style={{ display: "none" }}
+                        accept=".xml"
+                        type="file"
+                        name="upload_file"
+                        onChange={handleInputChange}
+                    />
+                    <label htmlFor="file-button">
+                        <Button
+                            component="span"
+                            variant="outlined"
+                            color="primary"
+                            startIcon={<FolderOpenIcon />}
+                            style={{ marginRight: ".4rem" }}
+                        >
+                            Template
+                        </Button>
+                    </label>
+                    {!isTemplateGood() ? (
+                        <Tooltip title="Check Template file" placement="bottom">
+                            <ErrorOutlineIcon color="secondary" />
+                        </Tooltip>
+                    ) : (
+                        <Tooltip title="Template Working" placement="bottom">
+                            <CheckIcon color="primary" />
+                        </Tooltip>
+                    )}
+                    <FormControl
                         style={{ width: "100%", marginLeft: "5rem" }}
                         size="small"
                         variant="filled"
                         elevation={1}
                     >
-                        <Select
-                            onChange={handleFormEvent}
-                            name="printer"
-                            value={printer}
-                        >
+                        <Select onChange={handleFormEvent} name="printer" value={printer}>
                             {printers.map((printer) => (
-                                <MenuItem
-                                    key={printer.name}
-                                    value={printer.name}
-                                >
+                                <MenuItem key={printer.name} value={printer.name}>
                                     {printer.name}
                                 </MenuItem>
                             ))}
                         </Select>
                     </FormControl>
+                </div>
+                <div className="preview">
+                    {!imagePreview ? null : (
+                        <img
+                            style={{ height: "8rem" }}
+                            alt="label preview"
+                            src={`data:image/png;base64,${imagePreview}`}
+                        />
+                    )}
+                </div>
+                <div className="print">
+                    <Button
+                        onClick={!isTemplateGood() || isLoading ? null : print}
+                        color={!isTemplateGood() ? "secondary" : "primary"}
+                        variant="outlined"
+                        style={{ width: "20rem" }}
+                        endIcon={isLoading ? <CircularProgress size={20} /> : null}
+                    >
+                        {text}
+                    </Button>
+                </div>
             </div>
-            <div className="preview">
-                {!imagePreview ? null : (
-                    <img
-                        style={{ height: "8rem" }}
-                        alt="label preview"
-                        src={`data:image/png;base64,${imagePreview}`}
-                    />
-                )}
-            </div>
-            <div className="print">
-                <Button
-                    onClick={(!isTemplateGood() || isLoading) ? null : print}
-                    color={!isTemplateGood() ? "secondary" : "primary"}
-                    variant="outlined"
-                    style={{ width: "20rem" }}
-                    endIcon={isLoading ? <CircularProgress size={20} /> : null}
-                >
-                    {text}
-                </Button>
-            </div>
-        </div>
+        </ThemeProvider>
     );
 };
 
