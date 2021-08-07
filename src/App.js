@@ -25,7 +25,6 @@ const App = () => {
     const [printer, setPrinter] = React.useState("");
 
     const state = React.useContext(Context);
-    console.log(state)
 
     const config = {
         CustomerOrder: {
