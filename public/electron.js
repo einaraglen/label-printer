@@ -31,7 +31,7 @@ if (!gotTheLock) {
 const createWindow = () => {
     window = new BrowserWindow({
         width: 550,
-        height: 300,
+        height: 320,
         fullscreenable: false,
         //frame: false,
         resizable: false,
@@ -59,7 +59,8 @@ const createWindow = () => {
             : `file://${path.join(__dirname, "../build/index.html")}`
     );
 
-    window.webContents.openDevTools();
+    //for debugging
+   window.webContents.openDevTools();
 };
 
 ipcMain.handle("image-preview", (event, arg) => {
