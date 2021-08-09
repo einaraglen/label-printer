@@ -2,7 +2,7 @@ import React from "react";
 import { Button } from "@material-ui/core";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { Context } from "context/State";
-import { AutoRotatingCarousel } from "material-auto-rotating-carousel";
+import Carousel from "react-material-ui-carousel";
 
 //we can now amazingly access awsome shit in our render!
 const fs = window.require("fs");
@@ -145,12 +145,7 @@ const PrintView = () => {
         setIsLoading(true);
         for (let i = 0; i < labels.length; i++) {
             let currentLabel = labels[i].replace(/(\r\n|\n|\r)/gm, "");
-            //set current preview
-            let preview = await ipcRenderer.invoke(
-                "image-preview",
-                currentLabel
-            );
-            //setImagePreview(preview.replace(/"/g, ""));
+            setImagePreview(images[i]);
             state.method.setButtonText(
                 `Printing Label ${i + 1} of ${labels.length}`
             );
@@ -170,15 +165,46 @@ const PrintView = () => {
     return (
         <>
             <div className="preview">
-                {/*<AutoRotatingCarousel open >
-                    {/*images.map((image) => (
-                        <img
-                            style={{ height: "8rem" }}
-                            alt="label preview"
-                            src={`data:image/png;base64,${image}`}
-                        />
-                    ))}
-                </AutoRotatingCarousel>*/}
+                {isLoading ? (
+                    <img
+                        style={{ height: "8rem" }}
+                        alt="label preview"
+                        src={`data:image/png;base64,${
+                            !imagePreview ? images[0] : imagePreview
+                        }`}
+                    />
+                ) : (
+                    <Carousel
+                        autoPlay={false}
+                        animation="slide"
+                        navButtonsAlwaysVisible
+                        indicatorContainerProps={{
+                            style: {
+                                marginTop: '0px'
+                            }
+                    
+                        }}
+                        navButtonsWrapperProps={{
+                            next: {
+                                right: -200
+                            },
+                            prev: {
+                                left: -100
+                            }
+                        }}
+                    >
+                        {images.map((image) => (
+                            <div className="image-wrapper">
+                                <img
+                                    key={image}
+                                    style={{ height: "8rem"}}
+                                    alt="label preview"
+                                    src={`data:image/png;base64,${image}`}
+                                />
+                            </div>
+                        ))}
+                    </Carousel>
+                )}
             </div>
             <div className="print">
                 <Button

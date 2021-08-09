@@ -1,6 +1,6 @@
 {
     "name": "label-printer",
-    "version": "0.1.6",
+    "version": "0.1.7",
     "private": true,
     "dependencies": {
         "@electron/remote": "^1.2.1",
@@ -19,8 +19,10 @@
         "material-auto-rotating-carousel": "^3.0.2",
         "react": "^17.0.2",
         "react-dom": "^17.0.2",
+        "react-material-ui-carousel": "^2.2.7",
         "react-router-dom": "^5.2.0",
         "react-scripts": "^4.0.3",
+        "react-swipeable-views": "^0.14.0",
         "reactstrap": "^8.9.0",
         "wait-on": "^6.0.0",
         "web-vitals": "^1.0.1",

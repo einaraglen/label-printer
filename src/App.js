@@ -23,7 +23,6 @@ const { ipcRenderer } = window.require("electron");
 
 const App = () => {
     const [printers, setPrinters] = React.useState([]);
-    const [isLoading, setIsLoading] = React.useState(true);
     const [settingsOpen, setSettingsOpen] = React.useState(false);
 
     const state = React.useContext(Context);
@@ -47,7 +46,6 @@ const App = () => {
 
         getTemplate();
         loadPrinters();
-        setIsLoading(false);
     }, []);
 
     //makes it so we can get our data async

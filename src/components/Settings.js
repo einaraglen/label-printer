@@ -5,14 +5,20 @@ const Settings = () => {
         <div className="settings">
             <table>
                 <tr>
-                    <td>Jill</td>
-                    <td>Smith</td>
-                    <td>50</td>
+                    <td>PartNo</td>
+                    <td>SalePartNo</td>
                 </tr>
                 <tr>
-                    <td>Jill</td>
+                    <td>Description</td>
                     <td>Smith</td>
-                    <td>50</td>
+                </tr>
+                <tr>
+                    <td>LineInfo</td>
+                    <td>LineInfo</td>
+                </tr>
+                <tr>
+                    <td>Quantity</td>
+                    <td>OnHandQty</td>
                 </tr>
             </table>
         </div>
