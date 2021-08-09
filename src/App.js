@@ -152,7 +152,7 @@ const App = () => {
                     </AccordionDetails>
                 </Accordion>
                 <PrintView />
-                <div className="bottom">
+                <div className="bottom unselectable">
                     <div>Created by Einar Aglen</div>
                     <div>{`Version ${packageJson.version}`}</div>
                 </div>

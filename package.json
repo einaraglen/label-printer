@@ -1,6 +1,6 @@
 {
     "name": "label-printer",
-    "version": "0.1.7",
+    "version": "0.2.0",
     "private": true,
     "dependencies": {
         "@electron/remote": "^1.2.1",

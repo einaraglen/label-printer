@@ -2,7 +2,7 @@ import React from "react";
 import { Button } from "@material-ui/core";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { Context } from "context/State";
-import Carousel from "react-material-ui-carousel";
+import LabelCarousel from "./LabelCarousel";
 
 //we can now amazingly access awsome shit in our render!
 const fs = window.require("fs");
@@ -12,7 +12,7 @@ const path = window.require("path");
 
 const PrintView = () => {
     const [images, setImages] = React.useState([]);
-    const [imagePreview, setImagePreview] = React.useState(null);
+    const [printIndex, setPrintIndex] = React.useState(null);
     const [isLoading, setIsLoading] = React.useState(false);
     const [labels, setLabels] = React.useState([]);
 
@@ -145,11 +145,11 @@ const PrintView = () => {
         setIsLoading(true);
         for (let i = 0; i < labels.length; i++) {
             let currentLabel = labels[i].replace(/(\r\n|\n|\r)/gm, "");
-            setImagePreview(images[i]);
+            setPrintIndex(i);
             state.method.setButtonText(
                 `Printing Label ${i + 1} of ${labels.length}`
             );
-            let printResult = await ipcRenderer.invoke(
+            await ipcRenderer.invoke(
                 "print-label",
                 currentLabel
             );
@@ -157,7 +157,7 @@ const PrintView = () => {
         }
         //complete print with close
         state.method.setButtonText("Print Complete");
-        setIsLoading(false);
+        //setIsLoading(false);
         await new Promise((resolve) => setTimeout(resolve, 2000));
         await ipcRenderer.invoke("complete");
     };
@@ -165,46 +165,11 @@ const PrintView = () => {
     return (
         <>
             <div className="preview">
-                {isLoading ? (
-                    <img
-                        style={{ height: "8rem" }}
-                        alt="label preview"
-                        src={`data:image/png;base64,${
-                            !imagePreview ? images[0] : imagePreview
-                        }`}
-                    />
-                ) : (
-                    <Carousel
-                        autoPlay={false}
-                        animation="slide"
-                        navButtonsAlwaysVisible
-                        indicatorContainerProps={{
-                            style: {
-                                marginTop: '0px'
-                            }
-                    
-                        }}
-                        navButtonsWrapperProps={{
-                            next: {
-                                right: -200
-                            },
-                            prev: {
-                                left: -100
-                            }
-                        }}
-                    >
-                        {images.map((image) => (
-                            <div className="image-wrapper">
-                                <img
-                                    key={image}
-                                    style={{ height: "8rem"}}
-                                    alt="label preview"
-                                    src={`data:image/png;base64,${image}`}
-                                />
-                            </div>
-                        ))}
-                    </Carousel>
-                )}
+                <LabelCarousel
+                    images={images}
+                    isPrinting={isLoading}
+                    index={printIndex}
+                />
             </div>
             <div className="print">
                 <Button

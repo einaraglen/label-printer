@@ -67,6 +67,15 @@ body {
   margin-bottom: .3rem;
 }
 
+.image-wrapper {
+  width: 90vw;
+  height: 8rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .preview img {
   box-shadow: 0px 3px 15px rgba(0,0,0,0.6);
 }
@@ -106,10 +115,13 @@ body {
   align-items: center;
   font-size: 0.7rem;
   opacity: .4;
+}
+
   /*https://stackoverflow.com/questions/924916/is-there-a-way-to-make-a-div-unselectable*/
+.unselectable {
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -o-user-select: none;
   user-select: none;
-        -moz-user-select: none;
-        -khtml-user-select: none;
-        -webkit-user-select: none;
-        -o-user-select: none;
 }
