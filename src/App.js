@@ -112,9 +112,9 @@ const App = () => {
                                 />
                                 <label htmlFor="file-button">
                                     <Button
-                                        style={{ marginRight: ".4rem" }}
+                                        style={{ marginRight: "0rem" }}
                                         component="span"
-                                        variant="outlined"
+                                        variant="text"
                                         color="primary"
                                         startIcon={<FolderOpenIcon />}
                                     >
