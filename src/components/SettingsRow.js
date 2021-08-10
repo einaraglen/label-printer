@@ -97,7 +97,7 @@ const SettingsRow = ({ currentConfig, property, setProperty }) => {
                             key={option}
                             selected={index === selectedIndex}
                             onClick={(event) =>
-                                handleMenuItemClick(event, index, currentConfig[property])
+                                handleMenuItemClick(event, index, property)
                             }
                         >
                             {option}

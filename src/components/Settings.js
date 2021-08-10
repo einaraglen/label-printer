@@ -19,6 +19,7 @@ const Settings = () => {
     React.useEffect(() => {
         const getConfig = async () => {
             let result = await ipcRenderer.invoke("get-config");
+            console.log(result);
             //for clean startup
             if (!result)
                 await ipcRenderer.invoke("set-config", {

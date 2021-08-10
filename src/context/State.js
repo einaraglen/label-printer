@@ -41,8 +41,14 @@ const State = ({ children }) => {
                 },
                 expanded: {},
             },
+            MuiButtonBase: {
+                root: {
+                    curson: "default",
+                }
+            },
             MuiAccordionSummary: {
                 root: {
+                    curson: "default",
                     backgroundColor: "hsl(215, 28%, 14%)",
                     borderBottom: "1px solid rgba(0, 0, 0, .2)",
                     marginBottom: -1,
@@ -52,6 +58,7 @@ const State = ({ children }) => {
                     },
                 },
                 content: {
+                    curson: "default",
                     margin: "7px 0",
                     "&$expanded": {
                         margin: "7px 0",

@@ -102,7 +102,7 @@ const App = () => {
             <div className="main">
                 <Accordion square expanded={settingsOpen}>
                     <AccordionSummary>
-                        <div className="tools">
+                        <div className="tools unselectable" unselectable="on"> 
                             <div className="template-picker">
                                 <input
                                     id="file-button"
