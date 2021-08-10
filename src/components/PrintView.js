@@ -10,7 +10,7 @@ const parser = window.require("fast-xml-parser");
 const { ipcRenderer } = window.require("electron");
 const path = window.require("path");
 
-const PrintView = () => {
+const PrintView = ({ startprint }) => {
     const [images, setImages] = React.useState([]);
     const [printIndex, setPrintIndex] = React.useState(null);
     const [isLoading, setIsLoading] = React.useState(false);
@@ -29,11 +29,14 @@ const PrintView = () => {
 
         const loadData = async () => {
             let result = await ipcRenderer.invoke("get-file");
+            let config = await ipcRenderer.invoke("get-config");
+
             //for testing
             result = !result ? `./src/test/${paths[2]}` : result;
+            stateRef.current.method.setCurrentPath(result);
             const fileName = path.parse(result).base.toString().split(" ")[0];
             let currentConfig = getCurrentConfig(
-                stateRef.current.value.config,
+                config,
                 fileName
             );
             const rawData = await readFile(result);
@@ -143,6 +146,7 @@ const PrintView = () => {
 
     const print = async () => {
         setIsLoading(true);
+        startprint();
         for (let i = 0; i < labels.length; i++) {
             let currentLabel = labels[i].replace(/(\r\n|\n|\r)/gm, "");
             setPrintIndex(i);

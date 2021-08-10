@@ -24,6 +24,7 @@ const { ipcRenderer } = window.require("electron");
 const App = () => {
     const [printers, setPrinters] = React.useState([]);
     const [settingsOpen, setSettingsOpen] = React.useState(false);
+    const [isPrinting, setIsPrinting] = React.useState(false);
 
     const state = React.useContext(Context);
     const stateRef = React.useRef(state);
@@ -63,7 +64,7 @@ const App = () => {
             let tempPath = await ipcRenderer.invoke("get-template");
             if (!fs.existsSync(tempPath)) return false;
             let xml = await readFile(tempPath);
-            if (!checkConfigKeys(xml)) return false;
+            if (!await checkConfigKeys(xml)) return false;
             return true;
         } catch (err) {
             state.method.setButtonText("Please check Template");
@@ -71,9 +72,10 @@ const App = () => {
         return false;
     };
 
-    const checkConfigKeys = (xml) => {
+    const checkConfigKeys = async (xml) => {
         //checks if the template choosen has the right key values
-        for (const key in state.value.config[Object.keys(state.value.config)[0]]) {
+        let config = await ipcRenderer.invoke("get-config");
+        for (const key in config[Object.keys(config)[0]]) {
             if (xml.indexOf(key) === -1) return false;
         }
         return true;
@@ -112,6 +114,7 @@ const App = () => {
                                 />
                                 <label htmlFor="file-button">
                                     <Button
+                                    disabled={isPrinting}
                                         style={{ marginRight: "0rem" }}
                                         component="span"
                                         variant="text"
@@ -140,7 +143,7 @@ const App = () => {
                                     ))}
                                 </Select>
                             </FormControl>
-                            <IconButton onClick={toggleSettings} size="medium" color="primary" variant="outlined">
+                            <IconButton disabled={isPrinting} onClick={toggleSettings} size="medium" color="primary" variant="outlined">
                                 <Tooltip title={settingsOpen ? "Close Settings" : "Open Settings"} placement="bottom">
                                     {settingsOpen ? <CloseIcon /> : <SettingsIcon />}
                                 </Tooltip>
@@ -151,7 +154,7 @@ const App = () => {
                         <Settings />
                     </AccordionDetails>
                 </Accordion>
-                <PrintView />
+                <PrintView startPrint={() => setIsPrinting(true)}/>
                 <div className="bottom unselectable">
                     <div>Created by Einar Aglen</div>
                     <div>{`Version ${packageJson.version}`}</div>

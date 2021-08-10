@@ -91,6 +91,17 @@ ipcMain.handle("set-template", async (event, arg) => {
     return { status: true, message: "Template set!"}
 });
 
+//get config used to select data
+ipcMain.handle("get-config", async (event, arg) => {
+    return store.get("config", arg);
+});
+
+//set config used to select data
+ipcMain.handle("set-config", async (event, arg) => {
+    store.set("config", arg);
+    return { status: true, config: arg}
+});
+
 //quit app when done
 ipcMain.handle("complete", async (event, arg) => {
     app.quit();

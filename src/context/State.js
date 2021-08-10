@@ -13,6 +13,16 @@ const State = ({ children }) => {
     //style overriding Material UI components
     const theme = createTheme({
         overrides: {
+            MuiTypography: {
+                colorTextSecondary: {
+                    color: "#29b6f6",
+                },
+            },
+            MuiAccordionDetails: {
+                root: {
+                    padding: "0px"
+                }
+            },
             MuiAccordion: {
                 root: {
                     color: "hsl(0, 0%, 86%)",
@@ -57,7 +67,17 @@ const State = ({ children }) => {
                     boxShadow: "0px 3px 15px rgba(0,0,0,0.2)",
                 },
             },
+            MuiList: {
+                padding: {
+                    paddingTop: "0px",
+                    paddingBottom: "0px"
+                }
+            },
             MuiListItem: {
+                root: {
+                    paddingTop: "0px",
+                    paddingBottom: "0px"
+                },
                 button: {
                     "&:hover": {
                         backgroundColor: "	hsl(215, 28%, 24%)",
@@ -67,6 +87,9 @@ const State = ({ children }) => {
             MuiListItemText: {
                 root: {
                     color: "hsl(0, 0%, 86%)",
+                },
+                secondary: {
+                    color: "#29b6f6",
                 },
             },
             MuiFormLabel: {
@@ -112,50 +135,30 @@ const State = ({ children }) => {
             },
         },
     });
-    //Initiate states here
-    const [config, setConfig] = React.useState({
-        CustomerOrder: {
-            PartNo: "SalesPartNo",
-            PartDescription: "Description",
-            LineInfo: ["CustomersPONo", "ProjectID"],
-            Quantity: "SalesQty",
-        },
-        InventoryPartInStock: {
-            PartNo: "PartNo",
-            PartDescription: "PartDescription",
-            LineInfo: ["ProjectID", "SubProjectID"],
-            Quantity: "OnHandQty",
-        },
-        PurchaseOrder: {
-            PartNo: "PartNo",
-            PartDescription: "PartDescription",
-            LineInfo: ["PurchaseOrder", "ProjectID", "SubProjectID"],
-            Quantity: "Quantity",
-        },
-    });
 
     const [template, setTemplate] = React.useState("");
     const [printer, setPrinter] = React.useState("");
     const [isTemplateGood, setIsTemplateGood] = React.useState(true);
     const [buttonText, setButtonText] = React.useState("Print");
+    const [currentPath, setCurrentPath] = React.useState("");
 
     //this will be accessable from all the components that import Context variablex
     state = {
         theme: theme,
         value: {
-            config: config,
             template: template,
             printer: printer,
             isTemplateGood: isTemplateGood,
             buttonText: buttonText,
+            currentPath: currentPath,
         },
         method: {
-            setConfig,
             setTemplate,
             setPrinter,
             isTemplateGood,
             setIsTemplateGood,
             setButtonText,
+            setCurrentPath,
         },
     };
 
