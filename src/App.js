@@ -135,7 +135,7 @@ const App = () => {
                                 )}
                             </div>
                             <FormControl style={{width: "14rem"}} size="small" variant="filled" elevation={1}>
-                                <Select onChange={handleFormEvent} name="printer" value={state.value.printer}>
+                                <Select disabled={isPrinting} onChange={handleFormEvent} name="printer" value={state.value.printer}>
                                     {printers.map((printer) => (
                                         <MenuItem key={printer.name} value={printer.name}>
                                             {printer.name}

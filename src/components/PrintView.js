@@ -10,7 +10,7 @@ const parser = window.require("fast-xml-parser");
 const { ipcRenderer } = window.require("electron");
 const path = window.require("path");
 
-const PrintView = ({ startprint }) => {
+const PrintView = ({ startPrint }) => {
     const [images, setImages] = React.useState([]);
     const [printIndex, setPrintIndex] = React.useState(null);
     const [isLoading, setIsLoading] = React.useState(false);
@@ -146,7 +146,7 @@ const PrintView = ({ startprint }) => {
 
     const print = async () => {
         setIsLoading(true);
-        startprint();
+        startPrint();
         for (let i = 0; i < labels.length; i++) {
             let currentLabel = labels[i].replace(/(\r\n|\n|\r)/gm, "");
             setPrintIndex(i);
