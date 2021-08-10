@@ -19,7 +19,6 @@ const Settings = () => {
     React.useEffect(() => {
         const getConfig = async () => {
             let result = await ipcRenderer.invoke("get-config");
-            console.log(result);
             //for clean startup
             if (!result)
                 await ipcRenderer.invoke("set-config", {
@@ -69,8 +68,8 @@ const Settings = () => {
 
     //set new config in electron-store and in render memory
     const setNewConfig = async (newConfig) => {
-        console.log(newConfig)
-        setCurrentConfig(newConfig)
+        console.log(newConfig);
+        setCurrentConfig(newConfig);
         /*let result = await ipcRenderer.invoke("set-config", {
             ...config,
             [Object.keys(config)[selectedIndex]]: newConfig,
@@ -119,13 +118,15 @@ const Settings = () => {
                 </MenuItem>
             </Menu>
             <table>
-                {Object.keys(currentConfig).map((property) => (
-                    <SettingsRow
-                        currentConfig={currentConfig}
-                        property={property}
-                        setProperty={setNewConfig}
-                    />
-                ))}
+                <tbody>
+                    {Object.keys(currentConfig).map((property) => (
+                        <SettingsRow
+                            currentConfig={currentConfig}
+                            property={property}
+                            setProperty={setNewConfig}
+                        />
+                    ))}
+                </tbody>
             </table>
             <Button
                 style={{ width: "12rem", margin: "auto" }}

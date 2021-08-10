@@ -19,67 +19,20 @@ const PrintView = ({ startPrint }) => {
     const state = React.useContext(Context);
     const stateRef = React.useRef(state);
 
-    React.useEffect(() => {
-        //test paths
-        const paths = [
-            "CustomerOrderS16112 210804-110500.xml",
-            "InventoryPartInStock 210802-155209.xml",
-            "PurchaseOrder629195 210803-141357.xml",
-        ];
-
-        const loadData = async () => {
-            let result = await ipcRenderer.invoke("get-file");
-            let config = await ipcRenderer.invoke("get-config");
-
-            //for testing
-            result = !result ? `./src/test/${paths[2]}` : result;
-            stateRef.current.method.setCurrentPath(result);
-            const fileName = path.parse(result).base.toString().split(" ")[0];
-            let currentConfig = getCurrentConfig(
-                config,
-                fileName
-            );
-            const rawData = await readFile(result);
-            const data = parser.parse(rawData);
-            const rows = data.Table.Row;
-            let currentData = !rows.length ? [rows] : [...rows];
-            let tempPath = await ipcRenderer.invoke("get-template");
-            //build print data for dymo printer
-            let currentLabels = buildLabels(
-                currentData,
-                currentConfig,
-                await readFile(tempPath),
-                fileName
-            );
-            //preview first label
-            if (!currentLabels) return;
-            setImages(await getImages(currentLabels));
-            setLabels([...currentLabels]);
-        };
-
-        loadData();
+    const handleLineInfo = React.useCallback((currentProperty, fileName, current) => {
+        let lineInfo = "";
+        for (let i = 0; i < currentProperty.length; i++) {
+            let currentLine = handleLine(currentProperty[i], fileName, current);
+            lineInfo += currentLine;
+            lineInfo +=
+                i === currentProperty.length - 1 || currentLine.length === 0
+                    ? ""
+                    : " - ";
+        }
+        return lineInfo;
     }, []);
 
-    //has to be called async
-    const getImages = async (currentLabels) => {
-        let images = [];
-        if (!currentLabels) return [];
-        for (let i = 0; i < currentLabels.length; i++) {
-            let preview = await ipcRenderer.invoke(
-                "image-preview",
-                currentLabels[i]
-            );
-            images.push(preview.replace(/"/g, ""));
-        }
-        return images;
-    };
-
-    const getCurrentConfig = (config, fileName) => {
-        for (const property in config)
-            if (fileName.indexOf(property) > -1) return config[property];
-    };
-
-    const buildLabels = (currentData, currentConfig, templateXML, fileName) => {
+    const buildLabels = React.useCallback((currentData, currentConfig, templateXML, fileName) => {
         let currentLabels = [];
         let labelXML = templateXML.toString();
         for (let i = 0; i < currentData.length; i++) {
@@ -107,19 +60,67 @@ const PrintView = ({ startPrint }) => {
             labelXML = templateXML.toString();
         }
         return [...currentLabels];
+    }, [handleLineInfo]);
+
+    React.useEffect(() => {
+        //test paths
+        const paths = [
+            "CustomerOrderS16112 210804-110500.xml",
+            "InventoryPartInStock 210802-155209.xml",
+            "PurchaseOrder629195 210803-141357.xml",
+        ];
+
+        const loadData = async () => {
+            let result = await ipcRenderer.invoke("get-file");
+            let config = await ipcRenderer.invoke("get-config");
+
+            //for testing
+            result = !result ? `./src/test/${paths[2]}` : result;
+            stateRef.current.method.setCurrentPath(result);
+            const fileName = path.parse(result).base.toString().split(" ")[0];
+            let currentConfig = getCurrentConfig(
+                config,
+                fileName
+            );
+            const rawData = await readFile(result);
+            const data = parser.parse(rawData);
+            const rows = data.Table.Row;
+            let currentData = !rows.length ? [rows] : [...rows];
+            let tempPath = await ipcRenderer.invoke("get-template");
+            if (!tempPath) return;
+            //build print data for dymo printer
+            let currentLabels = buildLabels(
+                currentData,
+                currentConfig,
+                await readFile(tempPath),
+                fileName
+            );
+            //preview first label
+            if (!currentLabels) return;
+            setImages(await getImages(currentLabels));
+            setLabels([...currentLabels]);
+        };
+
+        loadData();
+    }, [buildLabels]);
+
+    //has to be called async
+    const getImages = async (currentLabels) => {
+        let images = [];
+        if (!currentLabels) return [];
+        for (let i = 0; i < currentLabels.length; i++) {
+            let preview = await ipcRenderer.invoke(
+                "image-preview",
+                currentLabels[i]
+            );
+            images.push(preview.replace(/"/g, ""));
+        }
+        return images;
     };
 
-    const handleLineInfo = (currentProperty, fileName, current) => {
-        let lineInfo = "";
-        for (let i = 0; i < currentProperty.length; i++) {
-            let currentLine = handleLine(currentProperty[i], fileName, current);
-            lineInfo += currentLine;
-            lineInfo +=
-                i === currentProperty.length - 1 || currentLine.length === 0
-                    ? ""
-                    : " - ";
-        }
-        return lineInfo;
+    const getCurrentConfig = (config, fileName) => {
+        for (const property in config)
+            if (fileName.indexOf(property) > -1) return config[property];
     };
 
     const handleLine = (currentPropertyOf, fileName, current) => {
