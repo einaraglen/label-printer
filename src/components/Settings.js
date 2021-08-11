@@ -68,15 +68,9 @@ const Settings = () => {
 
     //set new config in electron-store and in render memory
     const setNewConfig = async (newConfig) => {
+        //TODO: recognize changes and promt to save
         console.log(newConfig);
         setCurrentConfig(newConfig);
-        /*let result = await ipcRenderer.invoke("set-config", {
-            ...config,
-            [Object.keys(config)[selectedIndex]]: newConfig,
-        });
-        if (!result.status) return;
-        //console.log(result)
-        setConfig(result.config);*/
     };
 
     return (
