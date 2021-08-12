@@ -104,14 +104,14 @@
           </Margin>
           <BarcodeFormat>QRCode</BarcodeFormat>
           <Data>
-            <DataString>PartNo</DataString>
+            <DataString>LineNo</DataString>
           </Data>
           <HorizontalAlignment>Center</HorizontalAlignment>
           <VerticalAlignment>Middle</VerticalAlignment>
           <Size>AutoFit</Size>
           <EQRCodeType>QRCodeText</EQRCodeType>
           <TextDataHolder>
-            <Value>PartNo</Value>
+            <Value>LineNo</Value>
           </TextDataHolder>
           <ObjectLayout>
             <DYMOPoint>

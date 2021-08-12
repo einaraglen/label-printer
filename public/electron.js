@@ -59,7 +59,7 @@ const createWindow = () => {
     );
 
     //for debugging
-   window.webContents.openDevTools();
+   //window.webContents.openDevTools();
 };
 
 ipcMain.handle("image-preview", (event, arg) => {
