@@ -373,7 +373,7 @@
             <IsVertical>False</IsVertical>
             <LineTextSpan>
               <TextSpan>
-                <Text>LineQuantity pcs</Text>
+                <Text>LineQuantity</Text>
                 <FontInfo>
                   <FontName>Segoe UI</FontName>
                   <FontSize>20</FontSize>
