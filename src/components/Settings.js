@@ -3,20 +3,22 @@ import { Button } from "@material-ui/core";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-import MenuItem from "@material-ui/core/MenuItem";
-import Menu from "@material-ui/core/Menu";
-import AddIcon from "@material-ui/icons/Add";
 import SettingsRow from "./SettingsRow";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const { ipcRenderer } = window.require("electron");
+const path = window.require("path");
 
-const Settings = () => {
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const [selectedIndex, setSelectedIndex] = React.useState(0);
+const Settings = ({ settingsOpen }) => {
     const [config, setConfig] = React.useState({});
+    const [properties, setProperties] = React.useState([]);
     const [currentConfig, setCurrentConfig] = React.useState({});
+    const [isLoading, setIsLoading] = React.useState(true);
+    const [indexOfConfig, setIndexOfConfig] = React.useState(0);
+
 
     React.useEffect(() => {
+        let isMounted = true;
         const getConfig = async () => {
             let result = await ipcRenderer.invoke("get-config");
             //for clean startup
@@ -45,90 +47,88 @@ const Settings = () => {
                         LineQuantity: "Quantity",
                     },
                 });
-            result = await ipcRenderer.invoke("get-config");
+
+            //test paths
+            const paths = [
+                "CustomerOrderS16112 210804-110500.xml",
+                "InventoryPartInStock 210802-155209.xml",
+                "PurchaseOrder629195 210803-141357.xml",
+                "InventoryPartInStock 210812-124414.xml",
+            ];
+            let filePath = await ipcRenderer.invoke("get-file");
+            filePath = !filePath ? `./src/test/${paths[2]}` : filePath;
+            const fileName = path.parse(filePath).base.toString().split(" ")[0];
+            let index = getIndexOfConfig(result, fileName);
+            console.log(index)
+            //pure evil ...
+            let configName = Object.keys(result)[index];
+            let configObject = result[configName];
+            let currentProperty = Object.keys(configObject);
+
+            //async guard
+            if (!isMounted) return;
+            setIndexOfConfig(index);
+            setProperties([...currentProperty]);
             setConfig(result);
+            setCurrentConfig({
+                ...result[configName]
+            });
         };
         getConfig();
+        setIsLoading(false);
+        return () => {
+            isMounted = false;
+        };
     }, []);
 
-    const handleClickListItem = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleMenuItemClick = (event, index) => {
-        setAnchorEl(null);
-        if (index === -1) return console.log("Add");
-        setSelectedIndex(index);
-        setCurrentConfig(config[Object.keys(config)[index]]);
-    };
-
-    const handleClose = () => {
-        setAnchorEl(null);
+    const getIndexOfConfig = (config, fileName) => {
+        for (let i = 0; i < Object.keys(config).length; i++) {
+            if (fileName.indexOf(Object.keys(config)[i]) > -1)
+                return i;
+        }
+        return 0;
     };
 
     //set new config in electron-store and in render memory
     const setNewConfig = async (newConfig) => {
         //TODO: recognize changes and promt to save
-        console.log(newConfig);
+        //console.log(newConfig === config[Object.keys(config)[indexOfConfig]]);
         setCurrentConfig(newConfig);
     };
 
     return (
         <div className="settings">
-            <List component="nav">
-                <ListItem
-                    button
-                    aria-haspopup="true"
-                    aria-controls="config-menu"
-                    onClick={handleClickListItem}
-                >
-                    <ListItemText
-                        primary="Selected Config"
-                        secondary={Object.keys(config)[selectedIndex]}
-                    />
-                </ListItem>
-            </List>
-            <Menu
-                id="config-menu"
-                anchorEl={anchorEl}
-                keepMounted
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-            >
-                {Object.keys(config).map((option, index) => (
-                    <MenuItem
-                        key={option}
-                        selected={index === selectedIndex}
-                        onClick={(event) => handleMenuItemClick(event, index)}
+            {!settingsOpen ? null : (
+                <div>
+                    <List component="nav">
+                        <ListItem button aria-controls="config-menu">
+                            <ListItemText
+                                primary="Selected Config"
+                                secondary={Object.keys(config)[indexOfConfig]}
+                            />
+                        </ListItem>
+                    </List>
+                    <table>
+                        <tbody>
+                            {properties.map((property) => (
+                                <SettingsRow
+                                    key={property}
+                                    currentConfig={currentConfig}
+                                    property={property}
+                                    setProperty={setNewConfig}
+                                />
+                            ))}
+                        </tbody>
+                    </table>
+                    <Button
+                        style={{ width: "12rem", margin: "auto" }}
+                        color="primary"
+                        variant="outlined"
                     >
-                        {option}
-                    </MenuItem>
-                ))}
-                <MenuItem onClick={(event) => handleMenuItemClick(event, -1)}>
-                    Add
-                    <AddIcon
-                        style={{ marginLeft: ".2rem", color: "#8bc34a" }}
-                    />
-                </MenuItem>
-            </Menu>
-            <table>
-                <tbody>
-                    {Object.keys(currentConfig).map((property) => (
-                        <SettingsRow
-                            currentConfig={currentConfig}
-                            property={property}
-                            setProperty={setNewConfig}
-                        />
-                    ))}
-                </tbody>
-            </table>
-            <Button
-                style={{ width: "12rem", margin: "auto" }}
-                color="primary"
-                variant="outlined"
-            >
-                Save
-            </Button>
+                        Save
+                    </Button>
+                </div>
+            )}
         </div>
     );
 };

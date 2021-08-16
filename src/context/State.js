@@ -13,6 +13,11 @@ const State = ({ children }) => {
     //style overriding Material UI components
     const theme = createTheme({
         overrides: {
+            MuiCheckbox: {
+                root: {
+                    color: "#0288d1"
+                }
+            },
             MuiTypography: {
                 colorTextSecondary: {
                     color: "#29b6f6",

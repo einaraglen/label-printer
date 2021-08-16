@@ -191,7 +191,7 @@ const App = () => {
                         </div>
                     </AccordionSummary>
                     <AccordionDetails>
-                        <Settings />
+                        <Settings settingsOpen={settingsOpen} />
                     </AccordionDetails>
                 </Accordion>
                 <PrintView startPrint={() => setIsPrinting(true)} />

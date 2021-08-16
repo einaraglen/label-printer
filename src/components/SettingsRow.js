@@ -5,6 +5,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import { Context } from "context/State";
+import LineInfoPicker from "./LineInfoPicker";
 
 //we can now amazingly access awsome shit in our render!
 const fs = window.require("fs");
@@ -16,15 +17,27 @@ const SettingsRow = ({ currentConfig, property, setProperty }) => {
     const [options, setOptions] = React.useState([]);
 
     const state = React.useContext(Context);
-    const stateRef = React.useRef(state);
 
     React.useEffect(() => {
+        let isMounted = true;
         const getOptions = async () => {
-            const rawData = await readFile(stateRef.current.value.currentPath);
+            const rawData = await readFile(state.value.currentPath);
             const data = parser.parse(rawData);
-            setOptions(Object.keys(data.Table.Row[0]));
+            let rows = data.Table.Row;
+            let currentData = !rows.length ? [rows] : [...rows];
+
+            //async guard
+            if (!isMounted) return;
+            setOptions(Object.keys(currentData[0]));
+            setSelectedIndex(
+                Object.keys(currentData[0]).indexOf(currentConfig[property])
+            );
         };
+
         getOptions();
+        return () => {
+            isMounted = false;
+        };
     }, []);
 
     const handleClickListItem = (event) => {
@@ -37,7 +50,7 @@ const SettingsRow = ({ currentConfig, property, setProperty }) => {
         setSelectedIndex(index);
         setProperty({
             ...currentConfig,
-            [property]: options[index]
+            [property]: options[index],
         });
     };
 
@@ -46,6 +59,7 @@ const SettingsRow = ({ currentConfig, property, setProperty }) => {
     };
 
     const buildLineInfo = (lineInfo) => {
+        if (!lineInfo) return;
         let lineInfoString = "";
         for (let i = 0; i < lineInfo.length; i++) {
             lineInfoString += lineInfo[i];
@@ -53,6 +67,14 @@ const SettingsRow = ({ currentConfig, property, setProperty }) => {
         }
         return lineInfoString;
     };
+
+    const setLineInfo = (lineInfo) => {
+        //we send the new list upwards
+        setProperty({
+            ...currentConfig,
+            [property]: lineInfo
+        });
+    }   
 
     //makes it so we can get our data async
     const readFile = async (path) => {
@@ -68,42 +90,53 @@ const SettingsRow = ({ currentConfig, property, setProperty }) => {
         <tr key={property}>
             <td style={{ width: "30%", textAlign: "center" }}>{property}</td>
             <td>
-                <List component="nav">
-                    <ListItem
-                        style={{ height: "4rem" }}
-                        button
-                        aria-haspopup="true"
-                        aria-controls="line-menu"
-                        onClick={handleClickListItem}
-                    >
-                        <ListItemText
-                            primary={
-                                property === "LineInfo"
-                                    ? buildLineInfo(currentConfig[property])
-                                    : currentConfig[property]
-                            }
-                        />
-                    </ListItem>
-                </List>
-                <Menu
-                    id="config-menu"
-                    anchorEl={anchorEl}
-                    keepMounted
-                    open={Boolean(anchorEl)}
-                    onClose={handleClose}
-                >
-                    {options.map((option, index) => (
-                        <MenuItem
-                            key={option}
-                            selected={index === selectedIndex}
-                            onClick={(event) =>
-                                handleMenuItemClick(event, index, property)
-                            }
+                {property === "LineInfo" ? (
+                    <LineInfoPicker
+                        options={options}
+                        text={buildLineInfo(currentConfig[property])}
+                        currentPicked={currentConfig[property]}
+                        setLineInfo={(lineInfo) => setLineInfo(lineInfo)}
+                    />
+                ) : (
+                    <>
+                        <List component="nav">
+                            <ListItem
+                                style={{ height: "4rem" }}
+                                button
+                                aria-haspopup="true"
+                                aria-controls="line-menu"
+                                onClick={handleClickListItem}
+                            >
+                                <ListItemText
+                                    primary={currentConfig[property]}
+                                />
+                            </ListItem>
+                        </List>
+                        <Menu
+                            id="config-menu"
+                            anchorEl={anchorEl}
+                            keepMounted
+                            open={Boolean(anchorEl)}
+                            onClose={handleClose}
                         >
-                            {option}
-                        </MenuItem>
-                    ))}
-                </Menu>
+                            {options.map((option, index) => (
+                                <MenuItem
+                                    key={option}
+                                    selected={index === selectedIndex}
+                                    onClick={(event) =>
+                                        handleMenuItemClick(
+                                            event,
+                                            index,
+                                            property
+                                        )
+                                    }
+                                >
+                                    {option}
+                                </MenuItem>
+                            ))}
+                        </Menu>
+                    </>
+                )}
             </td>
         </tr>
     );

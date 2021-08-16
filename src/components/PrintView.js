@@ -45,31 +45,36 @@ const PrintView = ({ startPrint }) => {
         []
     );
 
-    const handleProperty = (
-        singles,
-        property,
-        fileName,
-        current,
-        labelXML,
-        currentConfig
-    ) => {
-        const regex = new RegExp(property, "g");
-        const currentProperty = currentConfig[property];
-        //handle "LineInfo"
-        if (property === "LineInfo") {
-            //TODO: handle shit and return the string
-            let lineInfo = handleLineInfo(currentProperty, fileName, current);
-            return labelXML.toString().replace(regex, lineInfo);
-        }
-        if (property === "LineQuantity") {
+    const handleProperty = React.useCallback(
+        (singles, property, fileName, current, labelXML, currentConfig) => {
+            const regex = new RegExp(property, "g");
+            const currentProperty = currentConfig[property];
+            //handle "LineInfo"
+            if (property === "LineInfo") {
+                //TODO: handle shit and return the string
+                let lineInfo = handleLineInfo(
+                    currentProperty,
+                    fileName,
+                    current
+                );
+                return labelXML.toString().replace(regex, lineInfo);
+            }
+            if (property === "LineQuantity") {
+                return labelXML
+                    .toString()
+                    .replace(
+                        regex,
+                        !singles
+                            ? `${current[currentConfig[property]]} pcs`
+                            : "1 pcs"
+                    );
+            }
             return labelXML
                 .toString()
-                .replace(regex, !singles ? `${current[currentConfig[property]]} pcs` : "1 pcs");
-        }
-        return labelXML
-            .toString()
-            .replace(regex, current[currentConfig[property]]);
-    };
+                .replace(regex, current[currentConfig[property]]);
+        },
+        [handleLineInfo]
+    );
 
     const buildLabels = React.useCallback(
         (singles, currentData, currentConfig, templateXML, fileName) => {
@@ -96,10 +101,11 @@ const PrintView = ({ startPrint }) => {
             }
             return [...currentLabels];
         },
-        [handleLineInfo]
+        [handleProperty]
     );
 
     React.useEffect(() => {
+        let isMounted = true;
         //test paths
         const paths = [
             "CustomerOrderS16112 210804-110500.xml",
@@ -113,7 +119,7 @@ const PrintView = ({ startPrint }) => {
             let config = await ipcRenderer.invoke("get-config");
 
             //for testing
-            result = !result ? `./src/test/${paths[3]}` : result;
+            result = !result ? `./src/test/${paths[2]}` : result;
             stateRef.current.method.setCurrentPath(result);
             const fileName = path.parse(result).base.toString().split(" ")[0];
             let currentConfig = getCurrentConfig(config, fileName);
@@ -135,12 +141,17 @@ const PrintView = ({ startPrint }) => {
             );
             //preview first label
             if (!currentLabels) return;
+            //async guard
+            if (!isMounted) return;
             setImages(await getImages(currentLabels));
             setLabels([...currentLabels]);
         };
 
         loadData();
-    }, [buildLabels, singles]);
+        return () => {
+            isMounted = false;
+        };
+    }, [buildLabels, singles, state.value.config]);
 
     //has to be called async
     const getImages = async (currentLabels) => {

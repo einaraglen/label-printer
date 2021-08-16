@@ -1,0 +1,502 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DesktopLabel Version="1">
+  <DYMOLabel Version="3">
+    <Description>DYMO Label</Description>
+    <Orientation>Portrait</Orientation>
+    <LabelName>S0722540 multipurpose</LabelName>
+    <InitialLength>0</InitialLength>
+    <BorderStyle>SolidLine</BorderStyle>
+    <DYMORect>
+      <DYMOPoint>
+        <X>0.03999997</X>
+        <Y>0.06</Y>
+      </DYMOPoint>
+      <Size>
+        <Width>2.17</Width>
+        <Height>1.13</Height>
+      </Size>
+    </DYMORect>
+    <BorderColor>
+      <SolidColorBrush>
+        <Color A="1" R="0" G="0" B="0"></Color>
+      </SolidColorBrush>
+    </BorderColor>
+    <BorderThickness>1</BorderThickness>
+    <Show_Border>False</Show_Border>
+    <DynamicLayoutManager>
+      <RotationBehavior>ClearObjects</RotationBehavior>
+      <LabelObjects>
+        <TextObject>
+          <Name>ITextObject1</Name>
+          <Brushes>
+            <BackgroundBrush>
+              <SolidColorBrush>
+                <Color A="0" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </BackgroundBrush>
+            <BorderBrush>
+              <SolidColorBrush>
+                <Color A="1" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </BorderBrush>
+            <StrokeBrush>
+              <SolidColorBrush>
+                <Color A="1" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </StrokeBrush>
+            <FillBrush>
+              <SolidColorBrush>
+                <Color A="0" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </FillBrush>
+          </Brushes>
+          <Rotation>Rotation0</Rotation>
+          <OutlineThickness>1</OutlineThickness>
+          <IsOutlined>False</IsOutlined>
+          <BorderStyle>SolidLine</BorderStyle>
+          <Margin>
+            <DYMOThickness Left="0" Top="0" Right="0" Bottom="0" />
+          </Margin>
+          <HorizontalAlignment>Center</HorizontalAlignment>
+          <VerticalAlignment>Middle</VerticalAlignment>
+          <FitMode>AlwaysFit</FitMode>
+          <IsVertical>False</IsVertical>
+          <FormattedText>
+            <FitMode>AlwaysFit</FitMode>
+            <HorizontalAlignment>Center</HorizontalAlignment>
+            <VerticalAlignment>Middle</VerticalAlignment>
+            <IsVertical>False</IsVertical>
+            <LineTextSpan>
+              <TextSpan>
+                <Text>LineNo</Text>
+                <FontInfo>
+                  <FontName>Arial</FontName>
+                  <FontSize>19.4</FontSize>
+                  <IsBold>False</IsBold>
+                  <IsItalic>False</IsItalic>
+                  <IsUnderline>False</IsUnderline>
+                  <FontBrush>
+                    <SolidColorBrush>
+                      <Color A="1" R="0" G="0" B="0"></Color>
+                    </SolidColorBrush>
+                  </FontBrush>
+                </FontInfo>
+              </TextSpan>
+            </LineTextSpan>
+          </FormattedText>
+          <ObjectLayout>
+            <DYMOPoint>
+              <X>0.03999991</X>
+              <Y>0.1426965</Y>
+            </DYMOPoint>
+            <Size>
+              <Width>1.504744</Width>
+              <Height>0.3249384</Height>
+            </Size>
+          </ObjectLayout>
+        </TextObject>
+        <ImageObject>
+          <Name>IImageObject0</Name>
+          <Brushes>
+            <BackgroundBrush>
+              <SolidColorBrush>
+                <Color A="0" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </BackgroundBrush>
+            <BorderBrush>
+              <SolidColorBrush>
+                <Color A="1" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </BorderBrush>
+            <StrokeBrush>
+              <SolidColorBrush>
+                <Color A="1" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </StrokeBrush>
+            <FillBrush>
+              <SolidColorBrush>
+                <Color A="0" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </FillBrush>
+          </Brushes>
+          <Rotation>Rotation0</Rotation>
+          <OutlineThickness>1</OutlineThickness>
+          <IsOutlined>False</IsOutlined>
+          <BorderStyle>SolidLine</BorderStyle>
+          <Margin>
+            <DYMOThickness Left="0" Top="0" Right="0" Bottom="0" />
+          </Margin>
+          <Data>/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCABoAf0DASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD9U6KKKACiiigAorD8QeOvDfhMZ1zxDpWjD11C9ig/9DYVh2vxz+G99MsNt8QfCtxKxwI4tatmYn0AD09QO4oqCzvbfULdZ7WeK5gb7skLh1P0IqekAUUVTvtYsNMZVvL62tGYZVZ5VQke2TQBcorK/wCEr0T/AKDGn/8AgUn+NH/CV6J/0GNP/wDApP8AGgDVorK/4SvRP+gxp/8A4FJ/jR/wleif9BjT/wDwKT/GgDVorK/4SvRP+gxp/wD4FJ/jVux1Sz1NXazu4LtUOGMEiuB9cGgC1RRRQAUUVn3PiLSrOdobjU7OCZfvRyXCKw78gmgDQoqjZ65p2pTGK01C1upQNxSGZXbHrgHpzV6gAooooAKKKKACiqWra5p2gWjXWp39rp1svWa7mWJB/wACYgVycfx2+Gs0whj+IfhWSUnAjXW7YsT6Y30AdzRUFnfW+o26XFpPFdW7jKywuHVvoRwanoAKKKKACisyXxNo8EjxyarYxyISrI1ygKkdQRng1Ja6/pl/MIbbUbS4mbkRxTqzHHsDQBfooooAKKKo3mvabp83k3Wo2ttLjPlzTqjY9cE0AXqKyv8AhK9E/wCgxp//AIFJ/jWnHIk0ayRsrxsAyspyCD0INADqK53xd8RvCfw/+yf8JR4o0bw39r3/AGf+19QhtfO2bd+zzGG7G5c46bh61zv/AA0b8J/+ioeDP/CgtP8A45TswPRKKxfCvjXw9470+S/8Na9pniGxjlMD3WlXkd1EsgAYoWjYgMAynHXDD1rapAFFFFABRXO+IviP4T8ISCPXfFGi6LIeiajqENufydhVbRfix4H8STCHSPGXh/VZenl2WqQTN+SuaYHV0UUUgCiiigAoorG1/wAZ+H/Cse/W9d03R0xndqF5HAP/AB8igDZorhrf47fDW6mEUHxD8KzSscBI9btmYn0wHrsLHUbTVLdbiyuobuBuksEgdT+IOKALNFFFABRRRQAUUUUAFFFFABRRRQBxfxe+L3hr4I+CbvxR4pvPsthCdkccY3S3MpBKxRr/ABMcH2ABJIAJr8q/jp+3x8S/i9fT2+l6lN4L8O5Kx6fo8zRzOv8A01nGGY46gbV/2e9X/wDgod8arr4mfHW/8PW9y50DwqzafBADhWuR/wAfEhH97f8AJ9Ix6mvlyON5pFjjVndiFVVGSSegArqhBJXZlKQs00lzM8s0jSyuxZ3cksxPUknqaZX2/wDB/wD4Jd+KPF2i22q+NvEMfhEXCCRNLgtvtN0qkcCQllWNvb5iO+DkD0bUf+CTOhSQkWHxE1G3mxw1xpscq5+gkX+dV7SPcXKz89/CPjrxF4B1RdR8Na5qGhXy/wDLfT7l4WPsdpGR7Hivtj9nP/gppquk3NvovxXjOrae7BF8Q2cKrcQZ4zNEoAkUf3lAYAdHJryL45fsA/Er4M6dPrFvFB4v0CBWkmvNJDGWBB1aSEjcBjkldwAHJFd5+xD+w7L8UJrPx348s3g8HxsJLDTJQVbVCDw7DtB/6H/u8lScWrsavc/T7R9XsvEGlWep6bdQ32n3kSz291buHjljYAqykdQQQa/Nv/grF/yUDwH/ANguf/0aK/Sy3t4rO3iggiSGCJQkccahVRQMAADoAO1fmn/wVi/5KB4D/wCwXP8A+jRWNP4i5bHwjRRX178Fv+CdWu/Gf4Y6F4ztPGWn6bb6rG8iWs1pI7x7ZHjwSGweUz+NdTko7mVrnyFRX3n/AMOm/Ev/AEUDSv8AwAl/+Ko/4dN+Jf8AooGlf+AEv/xVR7SPcfKz4Mr9KP8Agkz/AMid8Qv+v+1/9FyVxX/DpvxL/wBFA0r/AMAJf/iq+o/2Of2XdR/Zi0TxLY6hrtrrjatcQzo9tA0QjCKykHcTnO6onKLjZFRTufRFFFFcxoZ/iDXbPwvoOpazqMog0/T7aS7uJT0SONSzH8ADX4K/EjxxefErx94g8U6gT9r1e+lvGUnOwOxKoPZRhR7AV+pP/BSb4qf8IH8Am0C2m8vUvFVyLFQpwwtkxJOw9jhEPtLX5JV00lpcyl2PXf2T/ip/wp34+eE/EE03k6a1yLLUCThfs037t2b2XIf6oK/cGv54a/bX9jv4qf8AC3v2e/CusTTedqdpB/ZmoEnLefBhCze7rsk/4HSqrqOL6HtNFFFc5oV7+/ttLsbi9vbiK0s7eNpZriZwiRooyzMx4AABJJr84v2mv+ClWp6je3Xh/wCEzf2dp8bGOXxJNEGmuMcHyEYEIn+0w3HPAXHO3/wU9/aCurFrD4U6LdNDHPCt9rbRnBdScwwE+ny+Yw7/ALv3B/OuuinDqzOUuiNTxJ4q1nxjqsup69qt7rOoynL3V/O00jf8CYk1l17x+zt+xv47/aLjbUdMSDRfDUchjfWdR3CN2B+ZYkAzIR3xhR0LA8V9K3X/AASUddNzbfE1XvwM7ZdF2xMfTInJA98H6Vq5RWhPK2fDHgX4l+Kvhjqy6l4U8QahoN4Dy9lOyK/s6/dcezAiv0R/ZP8A+Cilv46vrDwj8TPI03XJyIbXXowI7a6c8BZl6ROT0YfIScYXjPwz8eP2b/Gv7O+uw2HiqyjNrc5+x6pZsZLW5A6hWIBDDPKsAe+MEGvLqHFTQXaP6HqK+Tf+Cd37Qd18Xvhbc+HNcumufEXhcxwGeQ5e4tGBELsT1ZdrIT6KpPLV9ZVxtcrsa7n4Q/tCf8l8+JX/AGM2p/8ApVJXO+A/G+r/AA38Y6R4n0K5Npq2l3C3EEnbI6qw7qwypHcEjvXRftCf8l8+JX/Yzan/AOlUlef13LYxP3i+B/xe0j45/DTR/F+jsEjvI9txa7sta3C8SRN7qeh7gqehFd5X5B/sE/tK/wDCj/iWND1q68vwd4ikSC6aRvktLjpFcew52uf7pBP3BX699eRXHOPKzVO6Fr8j/wDgpl/yc5cf9gi0/k9frhX5H/8ABTL/AJOcuP8AsEWn8nqqXxClsfKNfvL8Cv8AkiPw9/7F3Tv/AEmjr8Gq/eX4Ff8AJEfh7/2Lunf+k0daVdkTHc+Kf+CuH/NKf+4t/wC2dfnhX6H/APBXD/mlP/cW/wDbOvzwq6fwoUtz9U/+CVf/ACb34h/7Gm4/9JLSvsuvjT/glX/yb34h/wCxpuP/AEktK+xL28g02znu7qVYLaCNpZZXOFRFGSx9gAa5p/EzVbHAfHT49eFf2ffBr6/4nuWy5Mdnp9vg3F5Jj7kak9u7HgDr1AP5YfHP9uj4mfGa9u7eDVZvCfhuQlY9I0iUxkp6SzDDyEjqMhf9kVxv7TXx21H9oL4rap4iuZZF0qN2ttJs24Fvaqx2DH95vvMfVj2AA8ttraa8uIre3ieeeVxHHFGpZnYnAUAckk9q6IQUdWZuVyNmLsWYlmJySeppK+1/hT/wS78aeLtIt9S8YeILXwYJ1Drp62xvLpQe0gDoqH23MR3APFbHxA/4JS+JNJ0qa68IeM7PxDdxqWGn39mbJpMD7qyB3Use27aPUiq547XFys+c/g7+1r8TfgleQHRPEVxe6VHgNo2qu1xZsv8AdCE5j+qFTX6n/sx/tUeGf2lfDck2nj+y/EdkinUdFmbLxZ43xt/HGT/F1HAIGRn8XfEHh/UvCutXuj6xZTadqllK0Nxa3CFZInBwQRXRfCH4paz8GfiFo/i3Qpmju7CYNJDuIS5hJ/eQv6qy5HtwRyAaUoKS0BSaP3srl/iV8SvD3wj8G3/ifxPfrp+k2a5Z8bnkY8LGi9WdjwAP0AJq54I8Yad8QPB+jeJdIkMum6taR3kDMMNtdQQGHZhnBHYg1+YP/BSz41XXjX4wDwPaXLjQvDCKJIVOElvXXc7n12qyoM9CHx96uaMeZ2NW7Iwfj3/wUH+InxWvriz8N3s/gfw0GZYoNNlKXcy9jLOPmBI/hTA5wd2M18v3d5Pf3MtxczSXFxKxaSWZyzuT1JJ5JqGvtD4I/wDBMzxb8QtBtNc8X63H4MtLpBLDYC2NxeFCMgupZVjyOcEkjuAa6vdgjHWR8X1r+GPF2ueCtUTUvD+sX2iX6fdudPuHgk+m5SDj2r9Eb7/gkz4fkhxZ/EPUoJv70+nRyL+Qdf518/fGr/gnb8SvhTp8+raV9n8baPCC0smlIy3USj+JoDyR/uF8c5wOaSnFj5Wd5+zz/wAFMPEXhm6h0n4oRv4k0hmCrrFtGqXtsOmXVQFlUfg3U5bpX6UeGvEul+MdAsNb0S+h1LSb6JZ7a6t2ykiHoR/UHkEEHmvyu/Yq/Ynu/jZfW/i/xfBNZeA7eTMUJykmqup5RT1EQIwzjryq85K/q3pum2mj6fbWNjbRWdlbRrDBbwIEjiRRhVVRwAAAABWFTlvoXG/U+TvjJ+058a/hJ4ssbC4+GehSaZrWttpGhXTaqC92WkKwl1Vv3ZZdpO7AGab8Vv2v/iD8A/DXg7UfiB4C0zTrzWNWuLe6s7O/88x2cawHzY2UkFz5kg2n+6PWul/bK8I674q174KSaLo2oatHp/jO0urxrG1eYW0Kuu6SQqDsQd2OBVH9sn4a3/xJ+I3wNtU8PXuvaFFr0i6x9ntXmhgtnMCsZmUEIpUNycdD6UK2l0PUs/tTftpad8CdF8ISeHbaz8Tal4jVb2COSZliWxK/LNlefmJAX1w/pX05X5s/GT9hXXfht8J9VurK41L4ja8+pWVjpMVnZSzzWGmo8rlNq7jySmSAFG3jqa/SapklZWBX6hRRRUFBRRRQB+AfxGvp9U+IXii8umL3Nxql1NKzdS7TMSfzJr0b9jPT9L1T9qH4dwax5Zs/7R8xRJ90zJG7wD6+asePfFVf2tfh7c/DP9ojxvpM0ZSCbUZNQtGxhWgnYypj1wH2n3Q15XpmpXei6laahYXElnfWkqT29xCxV4pFYMrqR0IIBB9q7t0YdT+hSivzl+E//BVS40/S4LL4ieFpNSuYlVTquiOqPLgYy8LkLuPUlWAz0UV7l4e/4KVfBTWtv2zUNY0Et1/tDTHbH18kyVyOEl0NeZH1PTYo0hjSONFjjQBVRRgKB0AHpXnngX9oz4Y/EqaODw3440bUbuQ4Sz+0iK4c+0Um1z+VejVJQV+Z/wDwVi/5KB4D/wCwXP8A+jRX6YV+Z/8AwVi/5KB4D/7Bc/8A6NFaU/iJlsfCNftL+wr/AMmn/D7/AK9rj/0qmr8Wq/SP9l39uf4V/Cn4C+EvCmv3upRavpsMqXCQWDyIC08jjDDrwwraom1oRHc++6K+WP8Ah5T8E/8AoI6x/wCCx/8AGj/h5T8E/wDoI6x/4LH/AMa5+WXY0uj6nor518C/t6/Cb4i+MNJ8M6NfapJquqXC21ss2nuiFz0yx6Cvoqpaa3GFFFcr8VPHtp8Lvhx4j8WXu0waRYy3WxjjzHVfkj+rNtUe7UgPyz/4KOfFT/hYH7Ql1o1tN5mmeFoF01ApypnPzzt9QxEZ/wCuVfM2gaHe+Jtd07R9OhNxqGoXMdpbQjq8kjBUX8SRTda1e78QaxfapfzNcX19PJc3EzdXkdizMfqSTX09/wAE3vhf/wAJ5+0Jb61cQ+Zp3he2bUHLDKmdv3cC/XLM4/65V2/DEw3Z8t31jPpl9cWd1E0F1byNFLE4wyOpIZT7gg190f8ABK34qf2T4z8S/D+7mxb6tANSslY8CeL5ZFA9WjIP0hrx39v34Y/8K2/aT1+SCLytO8QKutW+BxmUkTD6+ashx6MK8k+DvxEufhN8UvDHi613F9Jvo55ETrJFnbKn/Aoy6/8AAqH70R7M/eyiq2m6hbavp9rfWcy3FpdRLPDMhyrowDKw9iCDVmuI2Pw5/au8VP4y/aQ+ImpNIZVGsT2kbE5zHAfJTHttjFed+FtBm8VeJtI0W34uNSvIbOPAz80jhB+prR+Jlx9r+JHiufOfN1a7f85nNdR+zFa/bP2jPhlHjOPEdhJ/3zOjf0ru2Rh1P248HeE9N8B+FdJ8O6Pbi20vS7aO1t4x2RFABPqT1J7kk1s0UVwm55J+1b8M7P4rfALxjo9zbia5hsZb+wYD5o7qFDJGVPbJG0/7LsO9fh5X9C99ai9sbi3b7s0bRn8QRX89LKUYqwwQcEV00tmZzPqv/gmn4sfw/wDtNWmm+YVi1zTLqyZM8MyKJwfr+5P5n1r9cq/Fj9hi5+y/tXfD584zdTx/99W0q/1r9p6ir8Q47H4Q/tCf8l8+JX/Yzan/AOlUlef16B+0J/yXz4lf9jNqf/pVJXL+DvDcvjHxdoegQzLbzarfQWKTSAlUaWRUDEDsC2a6VsZGPX6w/wDBPH9pb/ha/wAPz4K1278zxV4bhVY3kbL3lkMKj+7Jwje2w8ljX5aeLPCuqeB/E2p+H9atXstV024e2uYH6q6nB+o7gjgggjrWv8KfiZrHwe+IGjeLtCl2X+mzCTy2JCTRnh4n/wBllJU/XI5AqZR5kUnZn741+R//AAUy/wCTnLj/ALBFp/J6/UX4W/ErR/i94B0bxboM3m6dqUAlVWI3xP0eJ8dGVgVPuK/Lr/gpl/yc5cf9gi0/k9YU/iLlsfKNfvL8Cv8AkiPw9/7F3Tv/AEmjr8Gq/eX4Ff8AJEfh7/2Lunf+k0dXV2RMdz4p/wCCuH/NKf8AuLf+2dfnhX6H/wDBXD/mlP8A3Fv/AGzr88Kun8KFLc/VP/glX/yb34h/7Gm4/wDSS0r179tPxU/g/wDZe+IF9HIY5ZrAWClTg/6RIkBx+EhryH/glX/yb34h/wCxpuP/AEktK6z/AIKQXHk/sr64n/Pa+sk/8jK3/stYP4zT7J+QFfXv/BMv4a2fjT47XevahALiDwzYG7gVhlRdOwjjYj2UysPRlU9q+Qq/Q/8A4JJWfHxRuiP+gZEp/wDAon+ldE/hZnHc/Q+iiiuI2Phr/goN+yT4h+LXiDQPF/gHQjquuNG1lqsEU0UReNRmGUl2UEjLIeScbPSvkP8A4YN+O/8A0T+4/wDBhaf/AB6v2horVVHFWJcUz56/YX8IeOfh78C4fC/jzR5dGv8AS7+dLKKSaOUtavtkBzGzD/WPKME9AK/Kf9oW+n1L49fEa4uWLTN4i1AHPYC4cAfgAB+Ffu7X4vft0fD25+Hv7THi9ZIytprE/wDbNrJjAkWfLOR9JfMX/gNXTd5MmWxxf7Nen6Xqv7QHw9tNZ8s6bNrlosqy/cf94u1W9i20fjX7q1/PLb3EtpcRzwSPDNGwdJI2KsrA5BBHQg96+8vg3/wVL1PQ9JttM+Inh19eeBFQaxpUix3EmOMyRN8rMf7yso9u9VUi5aoUWkfpRRXyn4e/4KXfBbWtv2y71vQc9f7Q01nx/wB+Wkr17wP+018K/iNNHB4f8d6NeXUhAjtZbj7PO5PZY5drH8BXPytdDS6PS4okgjWONFjjUYVVGAB6AU+iipGFFFFABRRRQAUUUUAFFFFAHzp+2L+yTZ/tK+G7a60+eHTPGelIy2N5MD5U8ZOTBKQCdueQwB2knggmvyb+JPwj8YfCHWn0vxdoF5otyGKo88Z8qbH8Ucg+WQe6k1+99UtW0XT/ABBYyWWqWFtqVnJ9+3u4Vljb6qwINaxqOOhLjc/nuor9rvEn7E3wR8VO73fw+022dud2mvLZAH2WF1H6V5d4m/4Je/CbWI5DpV94g0Gcg7PJu0miB91kQsR/wIfWtfaxI5WflGCQcjg19b/sm/t4eJfhTrmn+HvGmo3Gv+CJnWFpbpjLcaaCcCRHPzNGO8ZzgD5cHg+b/tQ/sp+If2Y9esYb+8j1rQtS3fYdWgjMYdlxujkQk7HGQcZIIOQeCB4fWmkkTqmf0M21zFeW8VxbypPBKgkjljYMrqRkEEdQR3r81P8AgrF/yUDwH/2C5/8A0aK+m/8Agnn4/uPHf7Muhx3cnm3OhXE2jM5OSUj2vEPwjkjX6KK+ZP8AgrF/yUDwH/2C5/8A0aK54K07Gj2PhGiiv0u/ZX/Yl+EvxR+APhDxT4h0O6u9Z1GGZ7iaPUZ41YrPIgwqsAPlUdK6JSUdWZpXPzRor9hf+Hc3wM/6Fu9/8G1z/wDF0f8ADub4Gf8AQt3v/g2uf/i6z9rErlZ+bP7If/JzXw3/AOwxD/Wv2/rwDwV+wv8ACD4feLNL8SaJoN3b6tpk63FtK+pTyBXHQlWYg/jXv9YzkpPQuKsgr4d/4KmfFT+wvhzoHgS0mxc69c/bLxVP/LtAQVUj0aUqR/1yNfcVfiv+218VP+FsftGeJ76CbztM0uT+yLEg5HlwEqzA9w0hlcezCnTV5BLY8Jr9Z/8Agml8L/8AhCfgG3iK4h8vUPFN213uIw32aPMcKn2yJXHtIK/LDwd4ZuvGvizRvD9kVW71S8hs4mf7qtI4UMfQDOSfQV+8fhS30Dwb4X0jQNNvbWLT9LtIrK3Tzk4jjQIvfrgCtKr0sRHufI//AAVL+GP/AAkHwr0LxrbRbrnw/e/Z7lgP+Xa4wuT9JViA/wCuhr8vK/eP4teH9E+KXwz8TeE7rULMR6vYS2qu0y4jkKny36/wuFb8K/CO+sp9Nvri0uYzFc28jRSxnqrKSCPwIp0npYJbn69f8E8Pip/wsb9nXTdOuZvM1PwzKdJmDH5jCoDQNj08tgg/65mvp2vyc/4Jn/FT/hCfjrN4ZuZvL07xVam2CscL9qiBkhJ+q+ag93FfrHWNRWkXHY/n+8d/8jx4h/7CNx/6Nau8/ZN/5OW+Gv8A2HLb/wBDFcV8Srf7J8RvFUHTytWu0/KZxXVfswXX2P8AaN+GUmcZ8RWMf/fU6L/WuroZdT90KKKK4TcK/novv+P64x08xv5mv6Eby4FnZzzt92JGc/QDNfz0u5kdmY5Zjk10UepnM9s/Yo/5Om+Hf/X+3/omSv2wr8V/2Gbf7V+1d8PUxnF1M/8A3zbSt/Sv2oqau447H4Q/tCf8l8+JX/Yzan/6VSVW+B3/ACWr4f8A/Yw6f/6Ux1Z/aE/5L58Sv+xm1P8A9KpKrfA7/ktXw/8A+xh0/wD9KY66Ohn1PvT/AIKWfs0/29o6/Fbw/a51HT41h1yGJeZrccJcYHUx8Kx/uEHgJX5qV/QvfWNvqdlcWd3BHc2lxG0U0MqhkkRgQysD1BBIIr8Wf2vv2d7j9nf4sXWm28cjeGdS3Xmj3DZOYSfmiJ7tGTtPcja38VZU5dGXJdT1H/gnb+0t/wAKt8enwNrt15fhfxHMqwSSNhLO+OFRvZZOEb3CHgA1l/8ABTL/AJOcuP8AsEWn8nr5SBKkEcGu0+KnxW1f4vaxpWr683naraaZBps10Wy1x5W4LI3+0VK59SCe+K05fe5ib6WOKr95fgV/yRH4e/8AYu6d/wCk0dfg1X7y/Ar/AJIj8Pf+xd07/wBJo6zq7Icdz4p/4K4f80p/7i3/ALZ1+eFfof8A8FcP+aU/9xb/ANs6/PCrp/ChS3P1T/4JV/8AJvfiH/sabj/0ktK6T/gpV/ya7qP/AGE7P/0M1zf/AASr/wCTe/EP/Y03H/pJaV1f/BSG3879lfW3/wCeN/ZP/wCRgv8A7NWH/Lwv7J+QNfo5/wAElf8AkC/Ez/r40/8A9BuK/OOv0R/4JJXf7v4o2pPQ6ZIv/k0D/IVvU+FkR3P0NooorjNgooooAK8I/a0/Zb039pjwXDbrPHpnijTN0ml6i65QFgN0MuOTG2ByOVIBGeQfd6KadndAfg18VPgj42+C2tPp3i7QLrS23lIrpkLW1x7xSj5XGOeDkdwDxXDV/QrqWmWesWclpf2kF9aSjEkFzGskbj0KkEGvHvE37F/wT8WySSXvw80uCR+S2m+ZZc+uIWQfpW6q9zPl7H4l0V+sfiT/AIJg/CHWFc6dceINBlP3Ps18sqA+4lRiR/wIfWvh39qr9j7X/wBmS8sbuW/TX/DGoSGG21SOIxMkoBbypUydrFQSCCQwVumCK0jNS0JcWjf/AGW/25PFnwS1iy0nxDfXXiPwM7iOazuXMk1kp43wMeRjr5ZO0842k5r9c9J1az17S7PUtPuY7ywvIUuLe4hbcksbAMrKe4IINfz2V+tf/BM/x9ceLv2dzpN3Jvm8O6lNYREnLeQwWZM/QyOo9kFZ1IrdFRfQ+s6KKK5zQKKKKACiiigAoornfiB4/wBC+F/hHUfE3iS/j03R7CPzJZn5J7KqjqzMcAKOSSKALviXxVo3g3SzqWvapZ6Pp4kSI3V9MsUYd2Cqu5iBkkgVqKwZQQcg8givxT/am/am1/8AaU8XedN5mm+FbF2GmaOG4QdPNlxw0rDv0UHA7k6nwP8A25vid8ELGHSra+h8R6BFgR6brQaUQqP4YpAwdBjouSo/u1t7J2I5kfszRXwFof8AwVm0iWIDWPh3e2soHLWOppMCfXDRpj8zTPEn/BWXS47RhoHw+u57oggPqWoJGi+hwiMW+mR9an2cuw+ZHZ/8FT77T4fgNoNrcFDqM2vxPapxv2rBN5jD2AZQfdlr8rq9H+OXx+8XftCeKl1zxXeRuYVMdpY2qlLa0QnJWNSSeTjLEljgZOAAPPrOzuNRvILS1gkubqeRYooYVLPI7HCqoHJJJAAFdMI8qsZt3Z+o3/BKu1nh+BXiWd1ZYZvEUnlk9Di2gBI/l+FeQ/8ABWL/AJKB4D/7Bc//AKNFfbP7Lfwjf4IfA3wz4WucHU44Tc35GP8Aj5lJeRcjqFJ2A9wgr4m/4Kxf8lA8B/8AYLn/APRorGLvO5b+E+Ea/aX9hX/k0/4ff9e1x/6VTV+LVfafwK/4KPf8KV+E/h/wV/wrz+2f7Jjkj+3f235Hm7pXkzs+zttxvx949K0qRcloRF2Z+pdFfnh/w9w/6pT/AOXH/wDclH/D3D/qlP8A5cf/ANyVh7OXY05kfofRX54f8PcP+qU/+XH/APclfSn7Jn7U/wDw1Fo/iG//AOEY/wCEZ/sm4ig8v+0Ptfm71Zs58qPbjb79aThJK7HzJnV/tNfFIfBv4G+LPFCSiK+gtDBY+pupT5cRA74Zgx9lNfhkzF2LMSzE5JPU1+hP/BVj4qeZceE/h3aTcRhtav0U9zujgB+g84ke6mvz1ropqyuZyeoUV9tfAH/gm+fjD8J9D8Y6p4xn8PzasjzRWKaaJtsQdlRixkX7wG7p0YV6H/w6V03/AKKXdf8AgmX/AOPU/aR7i5WfnFRX6O/8OldN/wCil3X/AIJl/wDj1eOftTfsEN+zx8No/F+n+KZvEkEd7HbXcMlgLfyUcMFkyJGyN4Vcf7YpqcXoHKz5Z8L+I73wf4l0nXdNk8nUNMu4ry3k/uyRuHU/mBX71+AfGVl8QvBOheJtOObHVrKK9iGclQ6Btp9wTg+4NfgBX6m/8Evfip/wlHwh1XwZdTbr3wzd74FY8/ZZyzqB64kEv0DLUVVpccdz4F/am8MN4P8A2i/iJpjIY1GtXFxGrDpHM3nJ+G2Ra4Pwf4hl8I+LtE12EEzaZfQXqbeu6ORXH6rX3d/wVA+Ad0uqaf8AFXSbZpbSSJNP1ryxnynU4gmPswPlk9AVjH8Vfn1VxfMiXoz+gvwz4i0/xd4d0zXNKuFutM1G2ju7aZejxuoZT+RrTr8b/wBmv9uDxn+zvZDRPs8XifwnvLrpV5IY3tyTlvJlAOwE8lSGXOSACST9N3X/AAVl8Orpu+2+H2pyahj/AFMuoRpFn/fCE4/4DXO6ck9DXmR9SftPfEW0+FvwH8aa7cz+RMNOltbPn5nuZVMcIA7/ADsCfQAntX4ZV7F+0T+1N4y/aS1eCXXpYrHRrNi1no1lkQQkjBdsnLvjjcemTgKCRXjtbwjyozk7n1P/AME1/Cz+IP2n9OvwhaPRdOu75mxwNyeQM/jP+lfrvXx7/wAE3fgHdfDH4Z3ni/W7ZrbWvFPlyQQyDDQ2SgmLI7FyxfH93Z3zX2FXPUd5Gkdj8If2hP8AkvnxK/7GbU//AEqkqt8Dv+S1fD//ALGHT/8A0pjqz+0J/wAl8+JX/Yzan/6VSVW+B3/Javh//wBjDp//AKUx11dDLqfvPXj37VHwBsv2iPhPf6Awjh1y2zd6RePx5VyoOFJ/uOPlb2IOMqK9horiTtqbn89usaTe6Bq15pmo20lnqFnM9vcW8y4eKRGKspHYggiqdfoR/wAFMP2avs8yfFvw/a/u5Clvr8MS/dbhYrnHvwje+w92NfnvXbGXMrmDVgr95fgV/wAkR+Hv/Yu6d/6TR1+DVfvL8Cv+SI/D3/sXdO/9Jo6yq7IqO58U/wDBXD/mlP8A3Fv/AGzr88K/Q/8A4K4f80p/7i3/ALZ1+eFXT+FClufqn/wSr/5N78Q/9jTcf+klpXrP7bnhd/Fn7LXj+0jQvLb2S367RkjyJUmY/wDfMbV5N/wSr/5N78Q/9jTcf+klpX2FqWm22sabd2F5EtxZ3UTwTRN0dGUqyn2IJFc8nadzRbH89VfY3/BMH4iWvhX446n4evZ/Ij8R6cYbfceHuYmEiKfqnnY98DvXgn7RHwV1P4B/FTV/Ct/HI1rHIZtOumHF1aMT5cgPrgbW9GVh2rz3TtRutI1C2vrG4ls722kWaC4gcpJE6nKsrDkEEAgiup+8jLZn9CtFfmp8Kf8AgqhrWh6Rb6f488Lr4hnhUJ/a2mzi3mkA7vEVKlj6qVHtWx8QP+Crz3GlzW/gvwQ1rfyKQl9rN0HWI46+Ug+Y/VwPY1y+zka8yPQv2+P2vtf+B+reHfDHgXUoLTxBMjXuovJbxziOE/LEmHBALEO3qAq9mr5K/wCHjHx0/wChms//AAU23/xFfP3i7xdrHjvxJqGv6/qE2qavfyma4up2yzsf0AAwABwAAAABWl8MfhzrHxa8eaN4U0KBp9R1KdYlbaSsSfxyvjoqLlifQV0KCitTPmbZ+uv7EfxE8cfFj4Jr4r8dXsd9eahqE4sXjto4B9mTbH0QDJ8xZeT7V7b4k8TaT4P0W51fXNStdI0u2Aaa8vJViijBIAyxOBkkD6mua0u18L/s9fCGztrm9j0vwx4Z05InvLk4+RAAXbHV3bsBks2AMmvyf/a4/a41n9pDxJ9ltfO0vwRYSk2GmE4aZhkefNjguR0HRAcDJJJwUed6bGl+VH7KwzR3EKSxOssUihkdDlWBGQQe4p9fix8Df20viX8B7WPTdK1KLWdATG3SNZVpoYh6REMGj+inbnnBr6m8P/8ABWbTZIVXW/h1dQSgfNJp+prKrH1CvGuB7ZNDpyWwcyP0Br5R/wCCmF9p9t+zLcQXhj+1XGq2iWStjd5oLMxH/bMSfnXmWvf8FZdFjtG/sX4fX9zdHgfb9QSFF9/kRyfpx9a+MPj9+0l4y/aM8QQaj4nuIYrS0DLZaXZKUtrYHGSASSzHAyzEk47AACo03e7E5Kx5XX6W/wDBJu1nTwH4+uWVhbSalbxo3YssTFh+Tp+Yr81I43mkWONWd2IVVUZJJ6ACv2q/Yw+DVx8EfgHomj6hG0OtX7NquoxMMGKaUL+7I9URY0PuprSo/dsTHc9yooorkNQooooAKKKKACsvxN4Z0rxloN9omuafBqmk3sZiuLS5TckinsR9cEHqCARzWpRQB+Yn7RH/AATR8ReGby61n4XufEWisWkOizyBb22HXajMQJlHbkP0GGPNfGPiTwprfg7Un0/XtIvtFv0+9a6hbPBIP+AsAa/oJqhq+g6Z4gt/s+qadaalB/zyvIFlX8mBFbRqtbkOJ/PhRX7o6l+zH8JNWnM1z8NvC7Snq0elQxk+52qMmpdH/Zs+FGgzebY/DnwxFKOkjaVC7D6FlJH4VftV2J5T8W/hz8HPG3xa1KOy8I+GtQ1uRm2mWCEiCP8A35ThEHuxFfpX+yF+wVY/BO8tfF3jKaDWfGcYJtreD5rXTsjGVJA8yXB+9gBc8A43V9d2lnBp9tHb2sEdtbxjakUKBEUegA4Aqas5VHLQpRsFfmf/AMFYv+SgeA/+wXP/AOjRX6YVieIPA/hzxZNFLrnh/S9ZlhUrG+oWUc7ICckAupwPpUxlyu5TV0fz+UV+9v8AwpvwB/0I3hv/AMFFv/8AEUf8Kb8Af9CN4b/8FFv/APEVt7XyI5D8EqK/e3/hTfgD/oRvDf8A4KLf/wCIo/4U34A/6Ebw3/4KLf8A+Io9r5ByH4JV+k3/AASekSHwT8RZJGWONL61ZmY4AAjkySa+x/8AhTfgD/oRvDf/AIKLf/4itfRvBfh7w7aXVrpOg6ZplrdDFxDZ2ccKTDBHzqqgNwSOfWolU5lYajZn4hftFfFB/jH8avFnizez2t7eMtmG/hto8RwjHb5FUn3Jrl/APg+8+IXjfQfDOnj/AEzV72GyiOMhS7hdx9hnJ9ga/c7/AIU34A/6Ebw3/wCCi3/+Iq3pfww8G6Hfw32neEtD0+9hO6K5tdNhjkQ4xlWVQRwT09ar2qtZIXKavhzQbPwr4f0zRdOi8nT9NtYrO3j/ALscaBFH5AVo0UVzmgVxHxs+HcXxY+EvivwlKFLapYSQws/RJwN0L/8AAZFRvwrt6KAP55rq2ls7mW3njaGeFzHJG4wysDggj1Br6C/YN+Kn/Crf2jtA+0TeVpevZ0W7yeP3pHlMfpKsfPYFq/Wu5+Efga8uJbi48F+Hp55XMkksmlQMzsTksSUyST3psXwf8BwSpJH4J8OxyIQyuuk24Kkcgg7ODXQ6iatYz5TodZ0ax8RaTeaXqdpDf6deRNBcWtwgeOWNhhlYHqCK/Mv9pr/gnD4g8H3t1r3wwhm8R6BI5dtFB3XtmDztTP8ArkHQY+foMNy1fqDRWUZOOxbVz+evU9LvdFv57HULSewvYG2S211E0ckbejKwBB+tVa/f/wAT+APDHjaLy/EPhzSddTG3bqVlFcDH/A1NcTH+yr8HoZhKvw08Mlgc4bTYmX/vkjH6Vt7VdiOU/E3wv4R1zxvq8WleH9Ivdb1KX7lrYW7TSH3woOB79BX6Cfsn/wDBOV9HvrDxd8VooZbiFhNa+GFIkRWHKtcsMhsHny1yOm4nla+79B8L6N4Vtfs2i6RY6Pbf88bC2SBOOnCACtSolUb2GoiABQABgDoKWiisSz8If2hP+S+fEr/sZtT/APSqSq3wO/5LV8P/APsYdP8A/SmOv28vPhN4H1C7nurrwb4fubqd2llmm0uB3kdjlmZimSSSSSaS1+Evgaxuobm28GeH7e4hcSRzRaVArowOQykJkEEZyK6Pa6WsZ8p1lFFFc5oUNf0HT/FGh3+j6rax32mX8D21zbSjKyRupVlP1BNfiP8AtNfAfUP2efitqXhq48ybS3P2rS71x/x8WrE7ST/eXBVvdSehFfuPWN4g8F+HvFrQHXNC0zWTBuER1Czjn8vOM7d6nGcDOPQVpCXKS1c/n6r95fgV/wAkR+Hv/Yu6d/6TR1Y/4U34A/6Ebw3/AOCi3/8AiK6y1tYLG1htraGO3toUWOKGJQqIoGAqgcAADAApznzBGNj89f8Agrh/zSn/ALi3/tnX54V+/ni74c+E/iB9k/4Sjwvo3iT7Jv8As/8Aa+nw3Xk79u/Z5inbnaucddo9K53/AIZz+E//AES/wZ/4T9p/8bqo1FFWE43Z88f8Eq/+Te/EP/Y03H/pJaV9l1i+FfBfh7wJp8lh4a0HTPD1jJKZ3tdKs47WJpCApcrGoBYhVGeuFHpW1WUnd3KWx5T+0N+zj4X/AGjvB40jXo2tb+33Pp+r26gz2ch64z95DgbkPBwOhAI/KX45fsf/ABH+BN9dPqWjTav4fiJMevaZG0tsU7GTAzEfUPgZ6Ejmv2wpCMjBGRVRm4icbn88VFfvD4k+Afw18XzefrPgLw7qNxnJnm0yEyH/AIHtz+tVdF/Zv+FXh2YTaf8ADrwzbzjkS/2VC7r9GZSR+Fa+1XYnlPxz+EP7OfxB+OGoxW/hXw7c3NoxxJqlwphs4hnktKRjj+6uWPYGv1X/AGVP2R9A/Zp0KWZZV1jxdfxKl/qzLgBc58mEHlYwcZ7sQCegC+8wwpbxJHEixxoAqogwFA6ACn1lKo5aFKNilrOjWHiLSbvTNUs4dQ067iaG4tbmMPHKjDBVlPBBFfnJ+0d/wTN1XTL261z4UONT01yZG8O3UwW4g74hkY4kX0ViGHHLmv0ooqYycdhtXP5+/FXgrxB4F1I6f4j0TUNCvRn/AEfUbZ4HOO4DAZHuOKxa/oS1TR7DXLU22o2NtqFuTkw3UKyJ+TAiuA1T9mf4Ta1MZrv4b+F3lPV00qFCfqVUZ/Gtva90Ryn4WV1XgH4V+L/ilqaaf4T8OahrtyzbD9kgLRxn1eT7qD3YgV+1Olfsz/CbRZhNafDfwuko6O+lQyEfQspx+Feh6fp9rpNnHa2VtDZ2sYwkFvGERR6BQMCh1eyDlPjD9kX/AIJ9W/wr1Sy8ZfEGS31TxRbMJbHS7dvMtrF+0jtj95KO2PlUjI3HBH2vRRWMpOTuy0rBRRRUjCiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigD/2Q==</Data>
+          <ScaleMode>Uniform</ScaleMode>
+          <HorizontalAlignment>Center</HorizontalAlignment>
+          <VerticalAlignment>Middle</VerticalAlignment>
+          <ObjectLayout>
+            <DYMOPoint>
+              <X>1.625242</X>
+              <Y>0.874995</Y>
+            </DYMOPoint>
+            <Size>
+              <Width>0.5847583</Width>
+              <Height>0.2170704</Height>
+            </Size>
+          </ObjectLayout>
+        </ImageObject>
+        <QRCodeObject>
+          <Name>IQRCodeObject0</Name>
+          <Brushes>
+            <BackgroundBrush>
+              <SolidColorBrush>
+                <Color A="1" R="1" G="1" B="1"></Color>
+              </SolidColorBrush>
+            </BackgroundBrush>
+            <BorderBrush>
+              <SolidColorBrush>
+                <Color A="1" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </BorderBrush>
+            <StrokeBrush>
+              <SolidColorBrush>
+                <Color A="1" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </StrokeBrush>
+            <FillBrush>
+              <SolidColorBrush>
+                <Color A="1" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </FillBrush>
+          </Brushes>
+          <Rotation>Rotation0</Rotation>
+          <OutlineThickness>1</OutlineThickness>
+          <IsOutlined>False</IsOutlined>
+          <BorderStyle>SolidLine</BorderStyle>
+          <Margin>
+            <DYMOThickness Left="0" Top="0" Right="0" Bottom="0" />
+          </Margin>
+          <BarcodeFormat>QRCode</BarcodeFormat>
+          <Data>
+            <DataString>LineNo</DataString>
+          </Data>
+          <HorizontalAlignment>Center</HorizontalAlignment>
+          <VerticalAlignment>Middle</VerticalAlignment>
+          <Size>AutoFit</Size>
+          <EQRCodeType>QRCodeText</EQRCodeType>
+          <TextDataHolder>
+            <Value>LineNo</Value>
+          </TextDataHolder>
+          <ObjectLayout>
+            <DYMOPoint>
+              <X>1.59639</X>
+              <Y>0.30771</Y>
+            </DYMOPoint>
+            <Size>
+              <Width>0.6136099</Width>
+              <Height>0.5649999</Height>
+            </Size>
+          </ObjectLayout>
+        </QRCodeObject>
+        <TextObject>
+          <Name>ITextObject0</Name>
+          <Brushes>
+            <BackgroundBrush>
+              <SolidColorBrush>
+                <Color A="0" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </BackgroundBrush>
+            <BorderBrush>
+              <SolidColorBrush>
+                <Color A="1" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </BorderBrush>
+            <StrokeBrush>
+              <SolidColorBrush>
+                <Color A="1" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </StrokeBrush>
+            <FillBrush>
+              <SolidColorBrush>
+                <Color A="0" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </FillBrush>
+          </Brushes>
+          <Rotation>Rotation0</Rotation>
+          <OutlineThickness>1</OutlineThickness>
+          <IsOutlined>False</IsOutlined>
+          <BorderStyle>SolidLine</BorderStyle>
+          <Margin>
+            <DYMOThickness Left="0" Top="0" Right="0" Bottom="0" />
+          </Margin>
+          <HorizontalAlignment>Center</HorizontalAlignment>
+          <VerticalAlignment>Middle</VerticalAlignment>
+          <FitMode>AlwaysFit</FitMode>
+          <IsVertical>False</IsVertical>
+          <FormattedText>
+            <FitMode>AlwaysFit</FitMode>
+            <HorizontalAlignment>Center</HorizontalAlignment>
+            <VerticalAlignment>Middle</VerticalAlignment>
+            <IsVertical>False</IsVertical>
+            <LineTextSpan>
+              <TextSpan>
+                <Text>LineDescription</Text>
+                <FontInfo>
+                  <FontName>Arial</FontName>
+                  <FontSize>8.4</FontSize>
+                  <IsBold>False</IsBold>
+                  <IsItalic>False</IsItalic>
+                  <IsUnderline>False</IsUnderline>
+                  <FontBrush>
+                    <SolidColorBrush>
+                      <Color A="1" R="0" G="0" B="0"></Color>
+                    </SolidColorBrush>
+                  </FontBrush>
+                </FontInfo>
+              </TextSpan>
+            </LineTextSpan>
+          </FormattedText>
+          <ObjectLayout>
+            <DYMOPoint>
+              <X>0.05793645</X>
+              <Y>0.4864781</Y>
+            </DYMOPoint>
+            <Size>
+              <Width>1.501279</Width>
+              <Height>0.1385219</Height>
+            </Size>
+          </ObjectLayout>
+        </TextObject>
+        <TextObject>
+          <Name>ITextObject2</Name>
+          <Brushes>
+            <BackgroundBrush>
+              <SolidColorBrush>
+                <Color A="0" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </BackgroundBrush>
+            <BorderBrush>
+              <SolidColorBrush>
+                <Color A="1" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </BorderBrush>
+            <StrokeBrush>
+              <SolidColorBrush>
+                <Color A="1" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </StrokeBrush>
+            <FillBrush>
+              <SolidColorBrush>
+                <Color A="0" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </FillBrush>
+          </Brushes>
+          <Rotation>Rotation0</Rotation>
+          <OutlineThickness>1</OutlineThickness>
+          <IsOutlined>False</IsOutlined>
+          <BorderStyle>SolidLine</BorderStyle>
+          <Margin>
+            <DYMOThickness Left="0" Top="0" Right="0" Bottom="0" />
+          </Margin>
+          <HorizontalAlignment>Center</HorizontalAlignment>
+          <VerticalAlignment>Middle</VerticalAlignment>
+          <FitMode>AlwaysFit</FitMode>
+          <IsVertical>False</IsVertical>
+          <FormattedText>
+            <FitMode>AlwaysFit</FitMode>
+            <HorizontalAlignment>Center</HorizontalAlignment>
+            <VerticalAlignment>Middle</VerticalAlignment>
+            <IsVertical>False</IsVertical>
+            <LineTextSpan>
+              <TextSpan>
+                <Text>LineInfo</Text>
+                <FontInfo>
+                  <FontName>Arial</FontName>
+                  <FontSize>11.6</FontSize>
+                  <IsBold>False</IsBold>
+                  <IsItalic>False</IsItalic>
+                  <IsUnderline>False</IsUnderline>
+                  <FontBrush>
+                    <SolidColorBrush>
+                      <Color A="1" R="0" G="0" B="0"></Color>
+                    </SolidColorBrush>
+                  </FontBrush>
+                </FontInfo>
+              </TextSpan>
+            </LineTextSpan>
+          </FormattedText>
+          <ObjectLayout>
+            <DYMOPoint>
+              <X>0.1094443</X>
+              <Y>0.6489359</Y>
+            </DYMOPoint>
+            <Size>
+              <Width>1.39365</Width>
+              <Height>0.1946322</Height>
+            </Size>
+          </ObjectLayout>
+        </TextObject>
+        <LineObject>
+          <Name>ILineObject0</Name>
+          <Brushes>
+            <BackgroundBrush>
+              <SolidColorBrush>
+                <Color A="0" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </BackgroundBrush>
+            <BorderBrush>
+              <SolidColorBrush>
+                <Color A="1" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </BorderBrush>
+            <StrokeBrush>
+              <SolidColorBrush>
+                <Color A="1" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </StrokeBrush>
+            <FillBrush>
+              <SolidColorBrush>
+                <Color A="0" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </FillBrush>
+          </Brushes>
+          <Rotation>Rotation0</Rotation>
+          <OutlineThickness>1</OutlineThickness>
+          <IsOutlined>False</IsOutlined>
+          <BorderStyle>SolidLine</BorderStyle>
+          <Margin>
+            <DYMOThickness Left="0" Top="0" Right="0" Bottom="0" />
+          </Margin>
+          <StrokeWidth>1</StrokeWidth>
+          <DashPattern>SolidLine</DashPattern>
+          <LineType>Vertical</LineType>
+          <ObjectLayout>
+            <DYMOPoint>
+              <X>1.505908</X>
+              <Y>0.1278704</Y>
+            </DYMOPoint>
+            <Size>
+              <Width>0.1066151</Width>
+              <Height>1.042131</Height>
+            </Size>
+          </ObjectLayout>
+        </LineObject>
+        <LineObject>
+          <Name>ILineObject1</Name>
+          <Brushes>
+            <BackgroundBrush>
+              <SolidColorBrush>
+                <Color A="0" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </BackgroundBrush>
+            <BorderBrush>
+              <SolidColorBrush>
+                <Color A="1" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </BorderBrush>
+            <StrokeBrush>
+              <SolidColorBrush>
+                <Color A="1" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </StrokeBrush>
+            <FillBrush>
+              <SolidColorBrush>
+                <Color A="0" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </FillBrush>
+          </Brushes>
+          <Rotation>Rotation0</Rotation>
+          <OutlineThickness>1</OutlineThickness>
+          <IsOutlined>False</IsOutlined>
+          <BorderStyle>SolidLine</BorderStyle>
+          <Margin>
+            <DYMOThickness Left="0" Top="0" Right="0" Bottom="0" />
+          </Margin>
+          <StrokeWidth>1</StrokeWidth>
+          <DashPattern>SolidLine</DashPattern>
+          <LineType>Horizontal</LineType>
+          <ObjectLayout>
+            <DYMOPoint>
+              <X>0.1094443</X>
+              <Y>0.5631883</Y>
+            </DYMOPoint>
+            <Size>
+              <Width>1.447844</Width>
+              <Height>0.1560505</Height>
+            </Size>
+          </ObjectLayout>
+        </LineObject>
+        <TextObject>
+          <Name>ITextObject3</Name>
+          <Brushes>
+            <BackgroundBrush>
+              <SolidColorBrush>
+                <Color A="0" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </BackgroundBrush>
+            <BorderBrush>
+              <SolidColorBrush>
+                <Color A="1" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </BorderBrush>
+            <StrokeBrush>
+              <SolidColorBrush>
+                <Color A="1" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </StrokeBrush>
+            <FillBrush>
+              <SolidColorBrush>
+                <Color A="0" R="0" G="0" B="0"></Color>
+              </SolidColorBrush>
+            </FillBrush>
+          </Brushes>
+          <Rotation>Rotation0</Rotation>
+          <OutlineThickness>1</OutlineThickness>
+          <IsOutlined>False</IsOutlined>
+          <BorderStyle>SolidLine</BorderStyle>
+          <Margin>
+            <DYMOThickness Left="0" Top="0" Right="0" Bottom="0" />
+          </Margin>
+          <HorizontalAlignment>Left</HorizontalAlignment>
+          <VerticalAlignment>Middle</VerticalAlignment>
+          <FitMode>AlwaysFit</FitMode>
+          <IsVertical>False</IsVertical>
+          <FormattedText>
+            <FitMode>AlwaysFit</FitMode>
+            <HorizontalAlignment>Left</HorizontalAlignment>
+            <VerticalAlignment>Middle</VerticalAlignment>
+            <IsVertical>False</IsVertical>
+            <LineTextSpan>
+              <TextSpan>
+                <Text>LineQuantity</Text>
+                <FontInfo>
+                  <FontName>Arial</FontName>
+                  <FontSize>12.3</FontSize>
+                  <IsBold>True</IsBold>
+                  <IsItalic>False</IsItalic>
+                  <IsUnderline>False</IsUnderline>
+                  <FontBrush>
+                    <SolidColorBrush>
+                      <Color A="1" R="0" G="0" B="0"></Color>
+                    </SolidColorBrush>
+                  </FontBrush>
+                </FontInfo>
+              </TextSpan>
+            </LineTextSpan>
+          </FormattedText>
+          <ObjectLayout>
+            <DYMOPoint>
+              <X>0.3464218</X>
+              <Y>0.796297</Y>
+            </DYMOPoint>
+            <Size>
+              <Width>1.085</Width>
+              <Height>0.3983329</Height>
+            </Size>
+          </ObjectLayout>
+        </TextObject>
+      </LabelObjects>
+    </DynamicLayoutManager>
+  </DYMOLabel>
+  <LabelApplication>Blank</LabelApplication>
+  <DataTable>
+    <Columns></Columns>
+    <Rows></Rows>
+  </DataTable>
+</DesktopLabel>
