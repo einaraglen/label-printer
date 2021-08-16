@@ -4,37 +4,31 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
-import { Context } from "context/State";
 import LineInfoPicker from "./LineInfoPicker";
 
 //we can now amazingly access awsome shit in our render!
 const fs = window.require("fs");
-const parser = window.require("fast-xml-parser");
 
-const SettingsRow = ({ currentConfig, property, setProperty }) => {
+const SettingsRow = ({
+    currentConfig,
+    property,
+    setProperty,
+    options
+}) => {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [selectedIndex, setSelectedIndex] = React.useState(0);
-    const [options, setOptions] = React.useState([]);
-
-    const state = React.useContext(Context);
 
     React.useEffect(() => {
         let isMounted = true;
-        const getOptions = async () => {
-            const rawData = await readFile(state.value.currentPath);
-            const data = parser.parse(rawData);
-            let rows = data.Table.Row;
-            let currentData = !rows.length ? [rows] : [...rows];
-
+        const getSelected = async () => {
             //async guard
             if (!isMounted) return;
-            setOptions(Object.keys(currentData[0]));
             setSelectedIndex(
-                Object.keys(currentData[0]).indexOf(currentConfig[property])
+                options.indexOf(currentConfig[property])
             );
         };
 
-        getOptions();
+        getSelected();
         return () => {
             isMounted = false;
         };
@@ -72,9 +66,9 @@ const SettingsRow = ({ currentConfig, property, setProperty }) => {
         //we send the new list upwards
         setProperty({
             ...currentConfig,
-            [property]: lineInfo
+            [property]: lineInfo,
         });
-    }   
+    };
 
     //makes it so we can get our data async
     const readFile = async (path) => {
