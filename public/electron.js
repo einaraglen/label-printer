@@ -7,6 +7,7 @@ const store = new Store();
 
 const isDev = require("electron-is-dev");
 const devEnv = /electron/.test(process.argv[0]);
+const shell = require('electron').shell;
 
 require("@electron/remote/main").initialize();
 
@@ -59,25 +60,32 @@ const createWindow = () => {
     );
 
     //for debugging
-   window.webContents.openDevTools();
+    window.webContents.openDevTools();
 };
 
-ipcMain.handle("image-preview", (event, arg) => {
+ipcMain.handle("open-browser", async (event, args) => {
+    shell.openExternal(args)
+});
+
+ipcMain.handle("image-preview", async (event, arg) => {
     // returns imageData as base64 encoded png.
-    return printer.renderLabel(arg).then(imageData => {
-        return {status: true, image: imageData};
-    }).catch(err => {
-        return {status: false, error: err}
-    });
-})
+    return printer
+        .renderLabel(arg)
+        .then((imageData) => {
+            return { status: true, image: imageData };
+        })
+        .catch((err) => {
+            return { status: false, error: err };
+        });
+});
 
 //print method that renderer can acces vi   a ipcRenderer
 ipcMain.handle("print-label", async (event, arg) => {
     try {
         printer.print(store.get("printer"), arg);
-        return { status: true, message: "Success!"};
+        return { status: true, message: "Success!" };
     } catch (err) {
-        return { status: false, messsage: err};
+        return { status: false, messsage: err };
     }
 });
 
@@ -89,7 +97,7 @@ ipcMain.handle("get-template", async (event, arg) => {
 //set template variable in electron-store
 ipcMain.handle("set-template", async (event, arg) => {
     store.set("template", arg);
-    return { status: true, message: "Template set!"}
+    return { status: true, message: "Template set!" };
 });
 
 //get config used to select data
@@ -100,7 +108,7 @@ ipcMain.handle("get-config", async (event, arg) => {
 //set config used to select data
 ipcMain.handle("set-config", async (event, arg) => {
     store.set("config", arg);
-    return { status: true, config: arg}
+    return { status: true, config: arg };
 });
 
 //quit app when done
@@ -121,7 +129,7 @@ ipcMain.handle("get-printer", async (event, arg) => {
 //sets which printer we should use
 ipcMain.handle("set-printer", async (event, arg) => {
     store.set("printer", arg);
-    return { status: true, message: "Template set!"}
+    return { status: true, message: "Template set!" };
 });
 
 //when ready

@@ -5,12 +5,11 @@ import { Context } from "context/State";
 import LabelCarousel from "./LabelCarousel";
 import Switch from "@material-ui/core/Switch";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
+import { readFile, getConfigName } from "utils";
 
 //we can now amazingly access awsome shit in our render!
-const fs = window.require("fs");
 const parser = window.require("fast-xml-parser");
 const { ipcRenderer } = window.require("electron");
-const path = window.require("path");
 
 const PrintView = ({ startPrint }) => {
     const [images, setImages] = React.useState([]);
@@ -60,6 +59,7 @@ const PrintView = ({ startPrint }) => {
                 );
                 return labelXML.toString().replace(regex, lineInfo);
             }
+            //add "pcs" for quantity
             if (property === "LineQuantity") {
                 return labelXML
                     .toString()
@@ -70,6 +70,7 @@ const PrintView = ({ startPrint }) => {
                             : "1 pcs"
                     );
             }
+            //defualt return
             return labelXML
                 .toString()
                 .replace(regex, current[currentConfig[property]]);
@@ -110,6 +111,9 @@ const PrintView = ({ startPrint }) => {
         //test paths
 
         const loadData = async () => {
+            console.log("load data");
+            //for when we save a new config
+            setUnknownConfig(false);
             let result = await ipcRenderer.invoke("get-file");
             let config = await ipcRenderer.invoke("get-config");
 
@@ -118,7 +122,7 @@ const PrintView = ({ startPrint }) => {
                 ? `./src/test/${stateRef.current.value.test}`
                 : result;
             stateRef.current.method.setCurrentPath(result);
-            const fileName = path.parse(result).base.toString().split(" ")[0];
+            const fileName = getConfigName(result);
             let currentConfig = getCurrentConfig(config, fileName);
 
             //if the opened file is not recognized
@@ -143,7 +147,6 @@ const PrintView = ({ startPrint }) => {
 
             let builtImages = await getImages(currentLabels);
 
-
             if (!currentLabels) return;
             //async guard
             if (!isMounted) return;
@@ -153,12 +156,11 @@ const PrintView = ({ startPrint }) => {
             setLabels([...currentLabels]);
         };
 
-        console.log("re-render printview")
         loadData();
         return () => {
             isMounted = false;
         };
-    }, [buildLabels, singles, state.value.config]);
+    }, [buildLabels, singles, state.method]);
 
     //has to be called async
     const getImages = async (currentLabels) => {
@@ -169,16 +171,19 @@ const PrintView = ({ startPrint }) => {
                 "image-preview",
                 currentLabels[i]
             );
-            if (!response.status) return null;
+            //this is only false when a dymo error is thrown, usually when Dymo Connect is not installed!
+            if (!response.status) {
+                state.method.setDymoError(true);
+                return null;
+            }
             images.push(response.image.replace(/"/g, ""));
         }
         return images;
     };
 
+    //damn thats a whole method..
     const getCurrentConfig = (config, fileName) => {
-        for (const property in config)
-            if (fileName.indexOf(property) > -1) return config[property];
-        return null;
+        return config[fileName];
     };
 
     const handleLine = (currentPropertyOf, fileName, current) => {
@@ -191,16 +196,6 @@ const PrintView = ({ startPrint }) => {
                 ? `P-${current[currentPropertyOf]}`
                 : "";
         return current[currentPropertyOf];
-    };
-
-    //makes it so we can get our data async
-    const readFile = async (path) => {
-        return new Promise((resolve, reject) => {
-            fs.readFile(path, "utf8", (err, data) => {
-                if (err) reject(err);
-                resolve(data);
-            });
-        });
     };
 
     const print = async () => {
@@ -234,11 +229,28 @@ const PrintView = ({ startPrint }) => {
         setSingles(!singles);
     };
 
+    const openDymoDownload = async () => {
+        //will open default brower with given link
+        await ipcRenderer.invoke("open-browser", "https://www.dymo.com/en_CA/dymo-connect-for-desktop-v1.3.2.html");
+    };
+
     return (
         <>
-            {unknowConfig ? (
+            {state.value.dymoError ? (
                 <div className="preview">
-                    <p>Config not found</p>
+                    <p>Missing: [DYMO Connect]</p>
+                    <p>Download -> Install -> Restart</p>
+                    <Button
+                        color="primary"
+                        variant="contained"
+                        onClick={openDymoDownload}
+                    >
+                        DYMO Connect
+                    </Button>
+                </div>
+            ) : unknowConfig ? (
+                <div className="preview">
+                    <p>Please setup config</p>
                 </div>
             ) : (
                 <div className="preview">
@@ -265,7 +277,7 @@ const PrintView = ({ startPrint }) => {
                     />
                 </div>
                 <Button
-                    disabled={unknowConfig}
+                    disabled={unknowConfig || state.value.dymoError}
                     onClick={
                         !state.value.isTemplateGood || isLoading ? null : print
                     }

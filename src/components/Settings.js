@@ -4,8 +4,9 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import SettingsRow from "./SettingsRow";
 import { Context } from "context/State";
+import { readFile, getConfigName } from "utils";
+import FiberNewIcon from '@material-ui/icons/FiberNew';
 
-const fs = window.require("fs");
 const { ipcRenderer } = window.require("electron");
 const path = window.require("path");
 const parser = window.require("fast-xml-parser");
@@ -75,18 +76,6 @@ const Settings = () => {
             //for clean startup
             if (!result)
                 await ipcRenderer.invoke("set-config", {
-                    CustomerOrder: {
-                        LineNo: "SalesPartNo",
-                        LineDescription: "Description",
-                        LineInfo: ["CustomersPONo", "ProjectID"],
-                        LineQuantity: "SalesQty",
-                    },
-                    InventoryPartInStock: {
-                        LineNo: "PartNo",
-                        LineDescription: "PartDescription",
-                        LineInfo: ["ProjectID", "SubProjectID"],
-                        LineQuantity: "OnHandQty",
-                    },
                     PurchaseOrder: {
                         LineNo: "PartNo",
                         LineDescription: "PartDescription",
@@ -149,18 +138,8 @@ const Settings = () => {
         setCurrentConfig(newConfig);
     };
 
-    //makes it so we can get our data async
-    const readFile = async (path) => {
-        return new Promise((resolve, reject) => {
-            fs.readFile(path, "utf8", (err, data) => {
-                if (err) reject(err);
-                resolve(data);
-            });
-        });
-    };
-
     const saveCurrentConfing = async () => {
-        let configName = Object.keys(state.value.config)[indexOfConfig];
+        let configName = indexOfConfig === -1 ? getConfigName(state.value.currentPath) : Object.keys(state.value.config)[indexOfConfig];
         let newConfig = {
             ...state.value.config,
             [configName]: currentConfig,
@@ -178,13 +157,14 @@ const Settings = () => {
                     <List component="nav">
                         <ListItem aria-controls="config-menu">
                             <ListItemText
-                                primary="Current Config"
-                                secondary={
+                                primary={
                                     indexOfConfig === -1
-                                        ? "New Config"
+                                        ? getConfigName(state.value.currentPath)
                                         : Object.keys(state.value.config)[indexOfConfig]
                                 }
+                                secondary="Current Config"
                             />
+                            {/*indexOfConfig === -1*/ false ? <FiberNewIcon fontSize="large" style={{ color: "#8bc34a" }} /> : null}
                         </ListItem>
                     </List>
                     {

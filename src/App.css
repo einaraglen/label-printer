@@ -110,14 +110,27 @@ body {
   border-collapse: collapse;
 }
 .bottom {
-  width: 95%;
+  width: 94%;
   margin: auto;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   font-size: 0.7rem;
-  opacity: .4;
+  opacity: .2;
+}
+
+.bottom-middle {
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+.image-error {
+  width: 22%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
 }
 
   /*https://stackoverflow.com/questions/924916/is-there-a-way-to-make-a-div-unselectable*/

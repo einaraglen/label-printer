@@ -17,6 +17,8 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import CloseIcon from "@material-ui/icons/Close";
 import Settings from "components/Settings";
 import Badge from "@material-ui/core/Badge";
+import { readFile } from "utils";
+
 
 //we can now amazingly access awsome shit in our render!
 const fs = window.require("fs");
@@ -37,12 +39,13 @@ const App = () => {
             if (!(await checkConfigKeys(xml))) return false;
             return true;
         } catch (err) {
-            state.method.setButtonText("Please check Template");
+            stateRef.current.method.setButtonText("Please check Template");
         }
         return false;
-    }, [state.method]);
+    }, []);
 
     React.useEffect(() => {
+        console.log("get template")
         const getTemplate = async () => {
             let tempRes = await ipcRenderer.invoke("get-template");
             stateRef.current.method.setTemplate(tempRes);
@@ -64,16 +67,6 @@ const App = () => {
         loadPrinters();
     }, [isTemplateGood]);
 
-    //makes it so we can get our data async
-    const readFile = async (path) => {
-        return new Promise((resolve, reject) => {
-            fs.readFile(path, "utf8", (err, data) => {
-                if (err) reject(err);
-                resolve(data);
-            });
-        });
-    };
-
     const checkConfigKeys = async (xml) => {
         //checks if the template choosen has the right key values
         let config = await ipcRenderer.invoke("get-config");
@@ -85,6 +78,7 @@ const App = () => {
 
     const handleInputChange = async (event) => {
         if (!event.target.value) return;
+        state.method.setTemplate(event.target.files[0].path);
         await ipcRenderer.invoke("set-template", event.target.files[0].path);
         stateRef.current.method.setIsTemplateGood(await isTemplateGood());
     };
@@ -107,6 +101,7 @@ const App = () => {
                         <div className="tools unselectable" unselectable="on">
                             <div className="template-picker">
                                 <input
+                                    disabled={state.value.dymoError}
                                     id="file-button"
                                     style={{ display: "none" }}
                                     accept=".xml"
@@ -116,7 +111,7 @@ const App = () => {
                                 />
                                 <label htmlFor="file-button">
                                     <Button
-                                        disabled={isPrinting}
+                                        disabled={isPrinting || state.value.dymoError}
                                         style={{ marginRight: "0rem" }}
                                         component="span"
                                         variant="text"
@@ -150,7 +145,7 @@ const App = () => {
                                 elevation={1}
                             >
                                 <Select
-                                    disabled={isPrinting}
+                                    disabled={isPrinting || state.value.dymoError}
                                     onChange={handleFormEvent}
                                     name="printer"
                                     value={state.value.printer}
@@ -166,20 +161,20 @@ const App = () => {
                                 </Select>
                             </FormControl>
                             <IconButton
-                                disabled={isPrinting}
+                                disabled={isPrinting || state.value.dymoError}
                                 onClick={toggleSettings}
                                 size="medium"
                                 color="primary"
                                 variant="outlined"
                             >
-                                <Tooltip
+                                {/*<Tooltip
                                     title={
                                         state.value.settingsOpen
                                             ? "Close Settings"
                                             : "Open Settings"
                                     }
                                     placement="bottom"
-                                >
+                                >*/}
                                     <Badge
                                         color="secondary"
                                         variant="dot"
@@ -191,7 +186,7 @@ const App = () => {
                                             <SettingsIcon />
                                         )}
                                     </Badge>
-                                </Tooltip>
+                                {/*</Tooltip>*/}
                             </IconButton>
                         </div>
                     </AccordionSummary>

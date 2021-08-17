@@ -156,6 +156,7 @@ const State = ({ children }) => {
     const [allPicked, setAllPicked] = React.useState(true);
     const [settingsOpen, setSettingsOpen] = React.useState(false);
     const [config, setConfig] = React.useState({});
+    const [dymoError, setDymoError] = React.useState(false);
 
     const testPaths = [
         "CustomerOrderS16112 210804-110500.xml",
@@ -178,6 +179,7 @@ const State = ({ children }) => {
             allPicked: allPicked,
             settingsOpen: settingsOpen,
             config: config,
+            dymoError: dymoError,
         },
         method: {
             setTemplate,
@@ -189,6 +191,7 @@ const State = ({ children }) => {
             setAllPicked,
             setSettingsOpen,
             setConfig,
+            setDymoError,
         },
     };
 

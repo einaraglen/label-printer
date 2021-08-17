@@ -6,9 +6,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import LineInfoPicker from "./LineInfoPicker";
 import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
-
-//we can now amazingly access awsome shit in our render!
-const fs = window.require("fs");
+import { fasterIndexOf  } from "utils";
 
 const SettingsRow = ({ currentConfig, property, setProperty, options }) => {
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -19,7 +17,7 @@ const SettingsRow = ({ currentConfig, property, setProperty, options }) => {
         const getSelected = async () => {
             //async guard
             if (!isMounted) return;
-            setSelectedIndex(options.indexOf(currentConfig[property]));
+            setSelectedIndex(fasterIndexOf(options, currentConfig[property]));
         };
 
         getSelected();
@@ -61,16 +59,6 @@ const SettingsRow = ({ currentConfig, property, setProperty, options }) => {
         setProperty({
             ...currentConfig,
             [property]: lineInfo,
-        });
-    };
-
-    //makes it so we can get our data async
-    const readFile = async (path) => {
-        return new Promise((resolve, reject) => {
-            fs.readFile(path, "utf8", (err, data) => {
-                if (err) reject(err);
-                resolve(data);
-            });
         });
     };
 
