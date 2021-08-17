@@ -126,23 +126,22 @@ const App = () => {
                                         Template
                                     </Button>
                                 </label>
-                                {!state.value.isTemplateGood ? (
-                                    <Tooltip
-                                        title="Check Template file"
-                                        placement="bottom"
-                                    >
+                                <Tooltip
+                                    title={
+                                        !state.value.isTemplateGood
+                                            ? "Check Template file"
+                                            : "Template Working"
+                                    }
+                                    placement="bottom"
+                                >
+                                    {!state.value.isTemplateGood ? (
                                         <ErrorOutlineIcon color="secondary" />
-                                    </Tooltip>
-                                ) : (
-                                    <Tooltip
-                                        title="Template Working"
-                                        placement="bottom"
-                                    >
+                                    ) : (
                                         <CheckIcon
                                             style={{ color: "#8bc34a" }}
                                         />
-                                    </Tooltip>
-                                )}
+                                    )}
+                                </Tooltip>
                             </div>
                             <FormControl
                                 style={{ width: "14rem" }}
@@ -191,7 +190,7 @@ const App = () => {
                         </div>
                     </AccordionSummary>
                     <AccordionDetails>
-                        <Settings settingsOpen={settingsOpen} />
+                        <Settings open={settingsOpen} />
                     </AccordionDetails>
                 </Accordion>
                 <PrintView startPrint={() => setIsPrinting(true)} />

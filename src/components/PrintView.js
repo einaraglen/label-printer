@@ -5,6 +5,7 @@ import { Context } from "context/State";
 import LabelCarousel from "./LabelCarousel";
 import Switch from "@material-ui/core/Switch";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
+import { RepeatOneSharp } from "@material-ui/icons";
 
 //we can now amazingly access awsome shit in our render!
 const fs = window.require("fs");
@@ -21,6 +22,7 @@ const PrintView = ({ startPrint }) => {
     const [jsonData, setJsonData] = React.useState([]);
     const [configInUse, setConfigInUse] = React.useState({});
     const [singles, setSingles] = React.useState(false);
+    const [unknowConfig, setUnknownConfig] = React.useState(false);
 
     const state = React.useContext(Context);
     const stateRef = React.useRef(state);
@@ -107,22 +109,22 @@ const PrintView = ({ startPrint }) => {
     React.useEffect(() => {
         let isMounted = true;
         //test paths
-        const paths = [
-            "CustomerOrderS16112 210804-110500.xml",
-            "InventoryPartInStock 210802-155209.xml",
-            "PurchaseOrder629195 210803-141357.xml",
-            "InventoryPartInStock 210812-124414.xml",
-        ];
 
         const loadData = async () => {
             let result = await ipcRenderer.invoke("get-file");
             let config = await ipcRenderer.invoke("get-config");
 
             //for testing
-            result = !result ? `./src/test/${paths[2]}` : result;
+            result = !result
+                ? `./src/test/${stateRef.current.value.test}`
+                : result;
             stateRef.current.method.setCurrentPath(result);
             const fileName = path.parse(result).base.toString().split(" ")[0];
             let currentConfig = getCurrentConfig(config, fileName);
+
+            //if the opened file is not recognized
+            if (!currentConfig) return setUnknownConfig(true);
+
             setConfigInUse(currentConfig);
             const rawData = await readFile(result);
             const data = parser.parse(rawData);
@@ -139,11 +141,16 @@ const PrintView = ({ startPrint }) => {
                 await readFile(tempPath),
                 fileName
             );
-            //preview first label
+
+            let builtImages = await getImages(currentLabels);
+
+
             if (!currentLabels) return;
             //async guard
             if (!isMounted) return;
-            setImages(await getImages(currentLabels));
+            //if something went wrong, like Dymo Connect not working / not installed
+            if (!builtImages) return;
+            setImages(builtImages);
             setLabels([...currentLabels]);
         };
 
@@ -158,11 +165,12 @@ const PrintView = ({ startPrint }) => {
         let images = [];
         if (!currentLabels) return [];
         for (let i = 0; i < currentLabels.length; i++) {
-            let preview = await ipcRenderer.invoke(
+            let response = await ipcRenderer.invoke(
                 "image-preview",
                 currentLabels[i]
             );
-            images.push(preview.replace(/"/g, ""));
+            if (!response.status) return null;
+            images.push(response.image.replace(/"/g, ""));
         }
         return images;
     };
@@ -170,6 +178,7 @@ const PrintView = ({ startPrint }) => {
     const getCurrentConfig = (config, fileName) => {
         for (const property in config)
             if (fileName.indexOf(property) > -1) return config[property];
+        return null;
     };
 
     const handleLine = (currentPropertyOf, fileName, current) => {
@@ -227,13 +236,19 @@ const PrintView = ({ startPrint }) => {
 
     return (
         <>
-            <div className="preview">
-                <LabelCarousel
-                    images={images}
-                    isPrinting={isLoading}
-                    index={printIndex}
-                />
-            </div>
+            {unknowConfig ? (
+                <div className="preview">
+                    <p>Config not found</p>
+                </div>
+            ) : (
+                <div className="preview">
+                    <LabelCarousel
+                        images={images}
+                        isPrinting={isLoading}
+                        index={printIndex}
+                    />
+                </div>
+            )}
             <div className="print">
                 <div className="controlls">
                     <FormControlLabel
@@ -250,6 +265,7 @@ const PrintView = ({ startPrint }) => {
                     />
                 </div>
                 <Button
+                    disabled={unknowConfig}
                     onClick={
                         !state.value.isTemplateGood || isLoading ? null : print
                     }

@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Table xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3.org/2001/XMLSchema file://C://Users//einar.aglen//AppData//Local//Temp//MaterialTransferRequisitions%20210817-115842.xsd" xmlns="http://www.w3.org/2001/XMLSchema">
+  <Row>
+    <RequisitionNo>10016</RequisitionNo>
+    <Site>SE</Site>
+    <PartNo>16101715</PartNo>
+    <Description>Seaonics name plate</Description>
+    <PartType>Purchased</PartType>
+    <QtytoTransfer>1</QtytoTransfer>
+    <RequiredDate>2022-01-01</RequiredDate>
+    <ReplacementDate />
+    <TransferType>Transfer</TransferType>
+    <SupplySource>Standard Inventory</SupplySource>
+    <Status>PartiallyApproved</Status>
+    <FromShortName />
+    <ProgramID />
+    <FromProjectID>*</FromProjectID>
+    <SubProjectID />
+    <FromActivitySeq>0</FromActivitySeq>
+    <ActivityID />
+    <FromApprovalType>Manual</FromApprovalType>
+    <FromApproval>API</FromApproval>
+    <ToShortName>101304.11100AF1.26</ToShortName>
+    <ProgramID_ />
+    <ToProjectID>101304</ToProjectID>
+    <SubProjectID_>11100AF1</SubProjectID_>
+    <ToActivitySeq>101108795</ToActivitySeq>
+    <ActivityID_>26</ActivityID_>
+    <ToApprovalType>Manual</ToApprovalType>
+    <ToApproval />
+    <OrdRef1 />
+    <OrdRef2 />
+    <OrdRef3 />
+    <TotalCost />
+    <SupplyType />
+    <ManuallyCreated>FALSE</ManuallyCreated>
+    <Excluded>FALSE</Excluded>
+    <Notes>HQ</Notes>
+    <BarcodePrinted>FALSE</BarcodePrinted>
+  </Row>
+  <Row>
+    <RequisitionNo>10017</RequisitionNo>
+    <Site>SE</Site>
+    <PartNo>16101715</PartNo>
+    <Description>Seaonics name plate</Description>
+    <PartType>Purchased</PartType>
+    <QtytoTransfer>1</QtytoTransfer>
+    <RequiredDate>2022-01-01</RequiredDate>
+    <ReplacementDate />
+    <TransferType>Transfer</TransferType>
+    <SupplySource>Standard Inventory</SupplySource>
+    <Status>PartiallyApproved</Status>
+    <FromShortName />
+    <ProgramID />
+    <FromProjectID>*</FromProjectID>
+    <SubProjectID />
+    <FromActivitySeq>0</FromActivitySeq>
+    <ActivityID />
+    <FromApprovalType>Manual</FromApprovalType>
+    <FromApproval>API</FromApproval>
+    <ToShortName>101304.11100AF2.26</ToShortName>
+    <ProgramID_ />
+    <ToProjectID>101304</ToProjectID>
+    <SubProjectID_>11100AF2</SubProjectID_>
+    <ToActivitySeq>101108799</ToActivitySeq>
+    <ActivityID_>26</ActivityID_>
+    <ToApprovalType>Manual</ToApprovalType>
+    <ToApproval />
+    <OrdRef1 />
+    <OrdRef2 />
+    <OrdRef3 />
+    <TotalCost />
+    <SupplyType />
+    <ManuallyCreated>FALSE</ManuallyCreated>
+    <Excluded>FALSE</Excluded>
+    <Notes>HQ</Notes>
+    <BarcodePrinted>FALSE</BarcodePrinted>
+  </Row>
+</Table>

@@ -65,7 +65,9 @@ const createWindow = () => {
 ipcMain.handle("image-preview", (event, arg) => {
     // returns imageData as base64 encoded png.
     return printer.renderLabel(arg).then(imageData => {
-        return imageData;
+        return {status: true, image: imageData};
+    }).catch(err => {
+        return {status: false, error: err}
     });
 })
 

@@ -154,6 +154,14 @@ const State = ({ children }) => {
     const [buttonText, setButtonText] = React.useState("Print");
     const [currentPath, setCurrentPath] = React.useState("");
 
+    const testPaths = [
+        "CustomerOrderS16112 210804-110500.xml",
+        "InventoryPartInStock 210802-155209.xml",
+        "PurchaseOrder629195 210803-141357.xml",
+        "InventoryPartInStock 210812-124414.xml",
+        "MaterialTransferRequisitions 210817-115842.xml"
+    ];
+
     //this will be accessable from all the components that import Context variablex
     state = {
         theme: theme,
@@ -163,6 +171,7 @@ const State = ({ children }) => {
             isTemplateGood: isTemplateGood,
             buttonText: buttonText,
             currentPath: currentPath,
+            test: testPaths[3],
         },
         method: {
             setTemplate,
