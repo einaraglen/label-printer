@@ -32,7 +32,6 @@ const SettingsRow = ({ currentConfig, property, setProperty, options }) => {
 
     const handleMenuItemClick = (event, index, property) => {
         setAnchorEl(null);
-        if (index === -1) return console.log("Add");
         setSelectedIndex(index);
         setProperty({
             ...currentConfig,

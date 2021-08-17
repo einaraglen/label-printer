@@ -45,7 +45,6 @@ const App = () => {
     }, []);
 
     React.useEffect(() => {
-        console.log("get template")
         const getTemplate = async () => {
             let tempRes = await ipcRenderer.invoke("get-template");
             stateRef.current.method.setTemplate(tempRes);

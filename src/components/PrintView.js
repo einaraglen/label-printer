@@ -111,7 +111,6 @@ const PrintView = ({ startPrint }) => {
         //test paths
 
         const loadData = async () => {
-            console.log("load data");
             //for when we save a new config
             setUnknownConfig(false);
             let result = await ipcRenderer.invoke("get-file");
@@ -160,6 +159,7 @@ const PrintView = ({ startPrint }) => {
         return () => {
             isMounted = false;
         };
+        //crackhead method to get re-render on every state change..
     }, [buildLabels, singles, state.method]);
 
     //has to be called async
