@@ -10,22 +10,52 @@ const { ipcRenderer } = window.require("electron");
 const path = window.require("path");
 const parser = window.require("fast-xml-parser");
 
-const Settings = ({ open }) => {
-    const [config, setConfig] = React.useState({});
+const Settings = () => {
     const [properties, setProperties] = React.useState([]);
-    const [currentConfig, setCurrentConfig] = React.useState({});
+    const [currentConfig, setCurrentConfig] = React.useState({
+        LineNo: "",
+        LineDescription: "",
+        LineInfo: [],
+        LineQuantity: "",
+    });
     const [indexOfConfig, setIndexOfConfig] = React.useState(0);
     const [isChanged, setIsChanged] = React.useState(false);
     const [options, setOptions] = React.useState([]);
     const [firstInit, setFirstInit] = React.useState(false);
-    const [unknowConfig, setUnknownConfig] = React.useState(false);
 
     const state = React.useContext(Context);
     const stateRef = React.useRef(state);
 
+    //toggle render ;)
     React.useEffect(() => {
-        setFirstInit(!firstInit ? open : true);
-    }, [open]);
+        let isMounted = true;
+
+        //guard
+        if (!isMounted) return;
+        setFirstInit(!firstInit ? state.value.settingsOpen : true);
+
+        return () => {
+            isMounted = false;
+        };
+    }, [state.value.settingsOpen, firstInit]);
+
+    //check if all properties are picked!
+    React.useEffect(() => {
+        let isMounted = true;
+
+        let keys =  Object.keys(currentConfig)
+        let result = true;
+        for (let i = 0; i < keys.length; i++) {
+            if (currentConfig[keys[i]].length < 1) result = false;
+        }
+        //guard
+        if (!isMounted) return;
+        stateRef.current.method.setAllPicked(result);
+
+        return () => {
+            isMounted = false;
+        };
+    }, [setCurrentConfig, currentConfig]); 
 
     React.useEffect(() => {
         let isMounted = true;
@@ -38,11 +68,9 @@ const Settings = ({ open }) => {
             //async guard
             if (!isMounted) return;
             setOptions(Object.keys(currentData[0]));
-            //console.log(options);
         };
 
         const getConfig = async () => {
-            console.log("run");
             let result = await ipcRenderer.invoke("get-config");
             //for clean startup
             if (!result)
@@ -78,20 +106,24 @@ const Settings = ({ open }) => {
             const fileName = path.parse(filePath).base.toString().split(" ")[0];
             let index = getIndexOfConfig(result, fileName);
             //if we open a file not known to the program
-            if (index === -1) return setUnknownConfig(true);
             //pure evil ...
-            let configName = Object.keys(result)[index];
+            let configName = Object.keys(result)[index === -1 ? 0 : index];
             let configObject = result[configName];
+            //if config is not found, we run with the first rows data
             let currentProperty = Object.keys(configObject);
 
             //async guard
             if (!isMounted) return;
             setIndexOfConfig(index);
             setProperties([...currentProperty]);
-            setConfig(result);
-            setCurrentConfig({
-                ...result[configName],
-            });
+            stateRef.current.method.setConfig(result);
+            setCurrentConfig(
+                index === -1
+                    ? currentConfig
+                    : {
+                          ...result[configName],
+                      }
+            );
         };
         getOptions();
         getConfig();
@@ -109,9 +141,10 @@ const Settings = ({ open }) => {
 
     const setNewConfig = (newConfig) => {
         //recognize changes and enable to save
+        let configName = Object.keys(state.value.config)[indexOfConfig];
         setIsChanged(
             JSON.stringify(newConfig) !==
-                JSON.stringify(config[Object.keys(config)[indexOfConfig]])
+                JSON.stringify(state.value.config[configName])
         );
         setCurrentConfig(newConfig);
     };
@@ -126,57 +159,66 @@ const Settings = ({ open }) => {
         });
     };
 
+    const saveCurrentConfing = async () => {
+        let configName = Object.keys(state.value.config)[indexOfConfig];
+        let newConfig = {
+            ...state.value.config,
+            [configName]: currentConfig,
+        }
+        setIsChanged(false);
+        state.method.setConfig(newConfig)
+        await ipcRenderer.invoke("set-config", newConfig);
+        state.method.setSettingsOpen(false);
+    }
+
     return (
-        <>
-            {unknowConfig ? (
-                <p>Config not found</p>
-            ) : (
-                <div className="settings">
-                    {!firstInit ? null : (
-                        <div>
-                            <List component="nav">
-                                <ListItem button aria-controls="config-menu">
-                                    <ListItemText
-                                        primary="Selected Config"
-                                        secondary={
-                                            Object.keys(config)[indexOfConfig]
-                                        }
+        <div className="settings">
+            {!firstInit ? null : (
+                <div>
+                    <List component="nav">
+                        <ListItem aria-controls="config-menu">
+                            <ListItemText
+                                primary="Current Config"
+                                secondary={
+                                    indexOfConfig === -1
+                                        ? "New Config"
+                                        : Object.keys(state.value.config)[indexOfConfig]
+                                }
+                            />
+                        </ListItem>
+                    </List>
+                    {
+                        <table>
+                            <tbody>
+                                {properties.map((property) => (
+                                    <SettingsRow
+                                        key={property}
+                                        currentConfig={currentConfig}
+                                        property={property}
+                                        setProperty={setNewConfig}
+                                        options={options}
                                     />
-                                </ListItem>
-                            </List>
-                            {
-                                <table>
-                                    <tbody>
-                                        {properties.map((property) => (
-                                            <SettingsRow
-                                                key={property}
-                                                currentConfig={currentConfig}
-                                                property={property}
-                                                setProperty={setNewConfig}
-                                                options={options}
-                                            />
-                                        ))}
-                                    </tbody>
-                                </table>
-                            }
-                            <List component="nav">
-                                <ListItem
-                                    disabled={!isChanged}
-                                    style={{
-                                        height: "3.5rem",
-                                        textAlign: "center",
-                                    }}
-                                    button
-                                    aria-controls="config-menu"
-                                >
-                                    <ListItemText primary="Save" />
-                                </ListItem>
-                            </List>
-                        </div>
-                    )}
+                                ))}
+                            </tbody>
+                        </table>
+                    }
+                    <List component="nav">
+                        <ListItem
+                            disabled={!isChanged || !state.value.allPicked}
+                            style={{
+                                height: "3.5rem",
+                                textAlign: "center",
+                            }}
+                            button
+                            aria-controls="config-menu"
+                            onClick={saveCurrentConfing}
+                        >
+                            <ListItemText primary="Save" />
+                        </ListItem>
+                    </List>
                 </div>
             )}
-        </>
+        </div>
     );
 };
 

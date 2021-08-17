@@ -5,7 +5,6 @@ import { Context } from "context/State";
 import LabelCarousel from "./LabelCarousel";
 import Switch from "@material-ui/core/Switch";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import { RepeatOneSharp } from "@material-ui/icons";
 
 //we can now amazingly access awsome shit in our render!
 const fs = window.require("fs");
@@ -154,6 +153,7 @@ const PrintView = ({ startPrint }) => {
             setLabels([...currentLabels]);
         };
 
+        console.log("re-render printview")
         loadData();
         return () => {
             isMounted = false;

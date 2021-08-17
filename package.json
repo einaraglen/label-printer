@@ -2,7 +2,7 @@
     "name": "LabelPrinter",
     "description": "Printing Plug-In for IFS",
     "author": "Einar Andreas Aglen",
-    "version": "0.2.2",
+    "version": "0.2.4",
     "private": true,
     "dependencies": {
         "@electron/remote": "^1.2.1",

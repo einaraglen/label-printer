@@ -153,6 +153,9 @@ const State = ({ children }) => {
     const [isTemplateGood, setIsTemplateGood] = React.useState(true);
     const [buttonText, setButtonText] = React.useState("Print");
     const [currentPath, setCurrentPath] = React.useState("");
+    const [allPicked, setAllPicked] = React.useState(true);
+    const [settingsOpen, setSettingsOpen] = React.useState(false);
+    const [config, setConfig] = React.useState({});
 
     const testPaths = [
         "CustomerOrderS16112 210804-110500.xml",
@@ -171,7 +174,10 @@ const State = ({ children }) => {
             isTemplateGood: isTemplateGood,
             buttonText: buttonText,
             currentPath: currentPath,
-            test: testPaths[3],
+            test: testPaths[1],
+            allPicked: allPicked,
+            settingsOpen: settingsOpen,
+            config: config,
         },
         method: {
             setTemplate,
@@ -180,6 +186,9 @@ const State = ({ children }) => {
             setIsTemplateGood,
             setButtonText,
             setCurrentPath,
+            setAllPicked,
+            setSettingsOpen,
+            setConfig,
         },
     };
 

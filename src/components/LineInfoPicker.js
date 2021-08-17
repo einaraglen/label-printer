@@ -8,10 +8,11 @@ import {
 } from "@material-ui/core/";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
+import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 
 const LineInfoPicker = ({ options, text, currentPicked, setLineInfo }) => {
     const [anchorEl, setAnchorEl] = React.useState(null);
-    const [picked, setPicked] = React.useState(currentPicked);
+    const [picked, setPicked] = React.useState(!currentPicked ? [] : currentPicked);
 
     const handleClickListItem = (event) => {
         setAnchorEl(event.currentTarget);
@@ -38,7 +39,8 @@ const LineInfoPicker = ({ options, text, currentPicked, setLineInfo }) => {
                 button
                 onClick={handleClickListItem}
             >
-                <ListItemText primary={text} />
+                <ListItemText primary={!text ? "Pick LineInfo" : text} />
+                {!text ? <ErrorOutlineIcon color="secondary" /> : null}
             </ListItem>
             <Menu
                 onClose={handleClose}
@@ -48,11 +50,11 @@ const LineInfoPicker = ({ options, text, currentPicked, setLineInfo }) => {
             >
                 <FormControl>
                     <FormGroup>
-                        {options.map((option) => (
+                        {!options ? null : options.map((option) => (
                             <FormControlLabel
                                 key={option}
                                 style={{ paddingLeft: "1rem" }}
-                                label={option}
+                                label={`${option} ${picked.indexOf(option) > -1 ? " - " + (picked.indexOf(option) + 1) : ""}`}
                                 control={
                                     <Checkbox
                                         color="primary"

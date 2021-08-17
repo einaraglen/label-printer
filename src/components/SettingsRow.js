@@ -5,16 +5,12 @@ import ListItemText from "@material-ui/core/ListItemText";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import LineInfoPicker from "./LineInfoPicker";
+import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 
 //we can now amazingly access awsome shit in our render!
 const fs = window.require("fs");
 
-const SettingsRow = ({
-    currentConfig,
-    property,
-    setProperty,
-    options
-}) => {
+const SettingsRow = ({ currentConfig, property, setProperty, options }) => {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [selectedIndex, setSelectedIndex] = React.useState(0);
 
@@ -23,9 +19,7 @@ const SettingsRow = ({
         const getSelected = async () => {
             //async guard
             if (!isMounted) return;
-            setSelectedIndex(
-                options.indexOf(currentConfig[property])
-            );
+            setSelectedIndex(options.indexOf(currentConfig[property]));
         };
 
         getSelected();
@@ -82,7 +76,23 @@ const SettingsRow = ({
 
     return (
         <tr key={property}>
-            <td style={{ width: "30%", textAlign: "center" }}>{property}</td>
+            <td style={{ width: "30%", textAlign: "center" }}>
+                <List component="nav">
+                    <ListItem
+                        aria-controls="property text"
+                        style={{ height: "4rem", textAlign: "center" }}
+                    >
+                        <ListItemText
+                            primary={property}
+                            secondary={
+                                property === "LineInfo"
+                                    ? "Multiple"
+                                    : "Single"
+                            }
+                        />
+                    </ListItem>
+                </List>
+            </td>
             <td>
                 {property === "LineInfo" ? (
                     <LineInfoPicker
@@ -102,8 +112,9 @@ const SettingsRow = ({
                                 onClick={handleClickListItem}
                             >
                                 <ListItemText
-                                    primary={currentConfig[property]}
+                                    primary={!currentConfig[property] ? `Pick ${property}` : currentConfig[property]}
                                 />
+                                {!currentConfig[property] ? <ErrorOutlineIcon color="secondary" /> : null}
                             </ListItem>
                         </List>
                         <Menu

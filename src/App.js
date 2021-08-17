@@ -16,6 +16,7 @@ import AccordionDetails from "@material-ui/core/AccordionDetails";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import CloseIcon from "@material-ui/icons/Close";
 import Settings from "components/Settings";
+import Badge from "@material-ui/core/Badge";
 
 //we can now amazingly access awsome shit in our render!
 const fs = window.require("fs");
@@ -23,7 +24,6 @@ const { ipcRenderer } = window.require("electron");
 
 const App = () => {
     const [printers, setPrinters] = React.useState([]);
-    const [settingsOpen, setSettingsOpen] = React.useState(false);
     const [isPrinting, setIsPrinting] = React.useState(false);
 
     const state = React.useContext(Context);
@@ -96,13 +96,13 @@ const App = () => {
 
     const toggleSettings = () => {
         //toggle
-        setSettingsOpen(!settingsOpen);
+        state.method.setSettingsOpen(!state.value.settingsOpen);
     };
 
     return (
         <ThemeProvider theme={state.theme}>
             <div className="main">
-                <Accordion square expanded={settingsOpen}>
+                <Accordion square expanded={state.value.settingsOpen}>
                     <AccordionSummary>
                         <div className="tools unselectable" unselectable="on">
                             <div className="template-picker">
@@ -174,23 +174,29 @@ const App = () => {
                             >
                                 <Tooltip
                                     title={
-                                        settingsOpen
+                                        state.value.settingsOpen
                                             ? "Close Settings"
                                             : "Open Settings"
                                     }
                                     placement="bottom"
                                 >
-                                    {settingsOpen ? (
-                                        <CloseIcon />
-                                    ) : (
-                                        <SettingsIcon />
-                                    )}
+                                    <Badge
+                                        color="secondary"
+                                        variant="dot"
+                                        invisible={state.value.allPicked}
+                                    >
+                                        {state.value.settingsOpen ? (
+                                            <CloseIcon />
+                                        ) : (
+                                            <SettingsIcon />
+                                        )}
+                                    </Badge>
                                 </Tooltip>
                             </IconButton>
                         </div>
                     </AccordionSummary>
                     <AccordionDetails>
-                        <Settings open={settingsOpen} />
+                        <Settings open={state.value.settingsOpen} />
                     </AccordionDetails>
                 </Accordion>
                 <PrintView startPrint={() => setIsPrinting(true)} />
