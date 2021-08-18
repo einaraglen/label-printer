@@ -89,9 +89,16 @@ const Settings = () => {
                 });
 
             let filePath = await ipcRenderer.invoke("get-file");
-            filePath = !filePath
-                ? `./src/test/${stateRef.current.value.test}`
-                : filePath;
+            //testing / release
+            if (!result) {
+                if (false) {
+                    result = !result
+                        ? `./src/test/${stateRef.current.value.test}`
+                        : result;
+                } else {
+                    return stateRef.current.method.setNoFileFound(true);
+                }
+            }
             const fileName = path.parse(filePath).base.toString().split(" ")[0];
             let index = getIndexOfConfig(result, fileName);
             //if we open a file not known to the program

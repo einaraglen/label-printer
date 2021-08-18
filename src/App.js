@@ -94,7 +94,6 @@ const App = () => {
     };
 
     const toggleDevTools = () => {
-        console.log("toggle")
         setDevTools(!devTools);
     }
 

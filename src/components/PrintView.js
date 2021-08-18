@@ -118,7 +118,7 @@ const PrintView = ({ startPrint }) => {
 
             //testing / release
             if (!result) {
-                if (true) {
+                if (false) {
                     result = !result
                         ? `./src/test/${stateRef.current.value.test}`
                         : result;
