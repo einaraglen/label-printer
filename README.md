@@ -64,7 +64,7 @@ As you can see, the following information has to exist in the Template:
 
 Important to remember if you have a Barcode or QR-code on your label
 
-Always go to the text selection in DYMO Connect and writhe `LineNo` there aswell:
+Always go to the text selection for the Code in DYMO Connect and write `LineNo` there aswell:
 
 ![alt text](https://res.cloudinary.com/sushi-panel-images/image/upload/v1629303899/readme/QR_oubd82.png "QR Code")
 
