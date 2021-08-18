@@ -148,6 +148,14 @@ const State = ({ children }) => {
         },
     });
 
+    const testPaths = [
+        "CustomerOrderS16112 210804-110500.xml",
+        "InventoryPartInStock 210802-155209.xml",
+        "PurchaseOrder629195 210803-141357.xml",
+        "InventoryPartInStock 210812-124414.xml",
+        "MaterialTransferRequisitions 210817-115842.xml"
+    ];
+
     const [template, setTemplate] = React.useState("");
     const [printer, setPrinter] = React.useState("");
     const [isTemplateGood, setIsTemplateGood] = React.useState(true);
@@ -158,15 +166,11 @@ const State = ({ children }) => {
     const [config, setConfig] = React.useState({});
     const [dymoError, setDymoError] = React.useState(false);
     const [noFileFound, setNoFileFound] = React.useState(false);
-    const [testPath, setTestPath] = React.useState(0);
+    const [testPath, setTestPath] = React.useState(testPaths[0]);
 
-    const testPaths = [
-        "CustomerOrderS16112 210804-110500.xml",
-        "InventoryPartInStock 210802-155209.xml",
-        "PurchaseOrder629195 210803-141357.xml",
-        "InventoryPartInStock 210812-124414.xml",
-        "MaterialTransferRequisitions 210817-115842.xml"
-    ];
+    const setTest = (index) => {
+        setTestPath(testPaths[index]);
+    }
 
     //this will be accessable from all the components that import Context variablex
     state = {
@@ -177,7 +181,7 @@ const State = ({ children }) => {
             isTemplateGood: isTemplateGood,
             buttonText: buttonText,
             currentPath: currentPath,
-            test: testPaths[testPath],
+            test: testPath,
             allPicked: allPicked,
             settingsOpen: settingsOpen,
             config: config,
@@ -196,7 +200,7 @@ const State = ({ children }) => {
             setConfig,
             setDymoError,
             setNoFileFound,
-            setTestPath,
+            setTest,
         },
     };
 

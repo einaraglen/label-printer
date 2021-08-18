@@ -28,10 +28,11 @@ const DevTools = () => {
 
     const setCommand = (method, value) => {
         if (!method) return buildResponse(false, `Method keyword not found`);
-        if (!state.method[method]) return buildResponse(false, `Method ${method} does not exist`);
+        if (!state.method[method]) return buildResponse(false, `Method "${method}" does not exist`);
         if (!value) return buildResponse(false, `Missing value: "${method} VALUE"`);
         try {
-            state.method[method](value);
+            let currentValue = !isNaN(parseInt(value)) ? parseInt(value) : value;
+            state.method[method](currentValue);
             return buildResponse(true, `${method}(${value}) was set`);
         } catch (err) {
             if (!state.method[method]) return buildResponse(false, `Cause: ${err.message}`);
