@@ -157,6 +157,8 @@ const State = ({ children }) => {
     const [settingsOpen, setSettingsOpen] = React.useState(false);
     const [config, setConfig] = React.useState({});
     const [dymoError, setDymoError] = React.useState(false);
+    const [noFileFound, setNoFileFound] = React.useState(false);
+    const [testPath, setTestPath] = React.useState(0);
 
     const testPaths = [
         "CustomerOrderS16112 210804-110500.xml",
@@ -175,11 +177,12 @@ const State = ({ children }) => {
             isTemplateGood: isTemplateGood,
             buttonText: buttonText,
             currentPath: currentPath,
-            test: testPaths[4],
+            test: testPaths[testPath],
             allPicked: allPicked,
             settingsOpen: settingsOpen,
             config: config,
             dymoError: dymoError,
+            noFileFound: noFileFound,
         },
         method: {
             setTemplate,
@@ -192,6 +195,8 @@ const State = ({ children }) => {
             setSettingsOpen,
             setConfig,
             setDymoError,
+            setNoFileFound,
+            setTestPath,
         },
     };
 

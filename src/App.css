@@ -133,6 +133,33 @@ body {
   align-items: center;
 }
 
+.dev-tools {
+  position: absolute;
+  width: 100%;
+  height: 7rem;
+  background-color: rgba(0, 0, 0 ,0.7);
+  z-index: 1000;
+}
+
+.history {
+  height: 5.3rem;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  color: #FFF;
+}
+
+.history p {
+  margin: 0px;
+}
+
+.bad {
+  color: red;
+}
+
+.good {
+  color: greenyellow;
+}
+
   /*https://stackoverflow.com/questions/924916/is-there-a-way-to-make-a-div-unselectable*/
 .unselectable {
   -moz-user-select: -moz-none;

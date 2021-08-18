@@ -18,6 +18,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import Settings from "components/Settings";
 import Badge from "@material-ui/core/Badge";
 import { readFile } from "utils";
+import DevTools from "components/DevTools";
 
 //we can now amazingly access awsome shit in our render!
 const fs = window.require("fs");
@@ -110,6 +111,7 @@ const App = () => {
 
     return (
         <ThemeProvider theme={state.theme}>
+            {devTools ? <DevTools /> : null}
             <div className="main" >
                 <Accordion square expanded={state.value.settingsOpen}>
                     <AccordionSummary>
@@ -180,7 +182,7 @@ const App = () => {
                                 </Select>
                             </FormControl>
                             <IconButton
-                                disabled={isPrinting || state.value.dymoError}
+                                disabled={isPrinting || state.value.dymoError || state.value.noFileFound}
                                 onClick={toggleSettings}
                                 size="medium"
                                 color="primary"

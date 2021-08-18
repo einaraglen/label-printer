@@ -116,10 +116,16 @@ const PrintView = ({ startPrint }) => {
             let result = await ipcRenderer.invoke("get-file");
             let config = await ipcRenderer.invoke("get-config");
 
-            //for testing
-            result = !result
-                ? `./src/test/${stateRef.current.value.test}`
-                : result;
+            //testing / release
+            if (!result) {
+                if (true) {
+                    result = !result
+                        ? `./src/test/${stateRef.current.value.test}`
+                        : result;
+                } else {
+                    return stateRef.current.method.setNoFileFound(true);
+                }
+            }
             stateRef.current.method.setCurrentPath(result);
             const fileName = getConfigName(result);
             let currentConfig = getCurrentConfig(config, fileName);
@@ -168,8 +174,8 @@ const PrintView = ({ startPrint }) => {
         if (!currentLabels) return [];
         for (let i = 0; i < currentLabels.length; i++) {
             //fix for xml error "Line 1 containes no data" removes all space between tags
-            let currentXML = currentLabels[i].replace(/>\s*/g, '>');
-            currentXML = currentXML.replace(/\s*</g, '<');
+            let currentXML = currentLabels[i].replace(/>\s*/g, ">");
+            currentXML = currentXML.replace(/\s*</g, "<");
             let response = await ipcRenderer.invoke(
                 "image-preview",
                 currentXML
@@ -234,7 +240,10 @@ const PrintView = ({ startPrint }) => {
 
     const openDymoDownload = async () => {
         //will open default brower with given link
-        await ipcRenderer.invoke("open-browser", "https://www.dymo.com/en_CA/dymo-connect-for-desktop-v1.3.2.html");
+        await ipcRenderer.invoke(
+            "open-browser",
+            "https://www.dymo.com/en_CA/dymo-connect-for-desktop-v1.3.2.html"
+        );
     };
 
     return (
@@ -242,7 +251,7 @@ const PrintView = ({ startPrint }) => {
             {state.value.dymoError ? (
                 <div className="preview">
                     <p>Missing: [DYMO Connect]</p>
-                    <p>Download -> Install -> Restart</p>
+                    <p>Download, Install, Restart</p>
                     <Button
                         color="primary"
                         variant="contained"
@@ -282,7 +291,7 @@ const PrintView = ({ startPrint }) => {
                 <Button
                     disabled={unknowConfig || state.value.dymoError}
                     onClick={
-                        !state.value.isTemplateGood || isLoading ? null : print
+                        !state.value.isTemplateGood || isLoading || state.value.noFileFound ? null : print
                     }
                     color={
                         !state.value.isTemplateGood ? "secondary" : "primary"
