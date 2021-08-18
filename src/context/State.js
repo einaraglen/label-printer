@@ -175,7 +175,7 @@ const State = ({ children }) => {
             isTemplateGood: isTemplateGood,
             buttonText: buttonText,
             currentPath: currentPath,
-            test: testPaths[1],
+            test: testPaths[4],
             allPicked: allPicked,
             settingsOpen: settingsOpen,
             config: config,

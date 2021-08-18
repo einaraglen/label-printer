@@ -19,7 +19,6 @@ import Settings from "components/Settings";
 import Badge from "@material-ui/core/Badge";
 import { readFile } from "utils";
 
-
 //we can now amazingly access awsome shit in our render!
 const fs = window.require("fs");
 const { ipcRenderer } = window.require("electron");
@@ -27,6 +26,7 @@ const { ipcRenderer } = window.require("electron");
 const App = () => {
     const [printers, setPrinters] = React.useState([]);
     const [isPrinting, setIsPrinting] = React.useState(false);
+    const [devTools, setDevTools] = React.useState(false);
 
     const state = React.useContext(Context);
     const stateRef = React.useRef(state);
@@ -92,9 +92,25 @@ const App = () => {
         state.method.setSettingsOpen(!state.value.settingsOpen);
     };
 
+    const toggleDevTools = () => {
+        console.log("toggle")
+        setDevTools(!devTools);
+    }
+
+    let ctrlDown = false;
+
+    document.body.onkeydown = (event) => {
+        if (event.code === "Insert" && ctrlDown) return toggleDevTools();
+        if (event.code === "ControlLeft") return ctrlDown = true;
+    };
+
+    document.body.onkeyup = (event) => {
+        if (event.code === "ControlLeft") return ctrlDown = true;
+    };
+
     return (
         <ThemeProvider theme={state.theme}>
-            <div className="main">
+            <div className="main" >
                 <Accordion square expanded={state.value.settingsOpen}>
                     <AccordionSummary>
                         <div className="tools unselectable" unselectable="on">
@@ -103,14 +119,16 @@ const App = () => {
                                     disabled={state.value.dymoError}
                                     id="file-button"
                                     style={{ display: "none" }}
-                                    accept=".xml"
+                                    accept={[".xml", ".dymo"]}
                                     type="file"
                                     name="upload_file"
                                     onChange={handleInputChange}
                                 />
                                 <label htmlFor="file-button">
                                     <Button
-                                        disabled={isPrinting || state.value.dymoError}
+                                        disabled={
+                                            isPrinting || state.value.dymoError
+                                        }
                                         style={{ marginRight: "0rem" }}
                                         component="span"
                                         variant="text"
@@ -144,7 +162,9 @@ const App = () => {
                                 elevation={1}
                             >
                                 <Select
-                                    disabled={isPrinting || state.value.dymoError}
+                                    disabled={
+                                        isPrinting || state.value.dymoError
+                                    }
                                     onChange={handleFormEvent}
                                     name="printer"
                                     value={state.value.printer}
@@ -174,17 +194,17 @@ const App = () => {
                                     }
                                     placement="bottom"
                                 >*/}
-                                    <Badge
-                                        color="secondary"
-                                        variant="dot"
-                                        invisible={state.value.allPicked}
-                                    >
-                                        {state.value.settingsOpen ? (
-                                            <CloseIcon />
-                                        ) : (
-                                            <SettingsIcon />
-                                        )}
-                                    </Badge>
+                                <Badge
+                                    color="secondary"
+                                    variant="dot"
+                                    invisible={state.value.allPicked}
+                                >
+                                    {state.value.settingsOpen ? (
+                                        <CloseIcon />
+                                    ) : (
+                                        <SettingsIcon />
+                                    )}
+                                </Badge>
                                 {/*</Tooltip>*/}
                             </IconButton>
                         </div>
