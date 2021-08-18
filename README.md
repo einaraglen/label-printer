@@ -1,29 +1,91 @@
 # Label Printer for IFS
 
-This is a "plug-in" for IFS that can be used to print labels from the item-lists found in IFS
+The LabelPrinter program is a Plug-in for IFS.
 
-It works by being used as a Output program that accepts temporary XML files generated from IFS on output
+It allows you to print DYMO Labels straight from the lines found in IFS.
+
+You can configure the labels for different IFS pages to fit your needs.
+
+This is all made possible with the following technologies:
+
+- [`Node.js`](https://nodejs.org/en/) JavaScript Runtime Environment
+- [`Electron.js`](https://www.electronjs.org/) JavaScript Framework for creating native Application
+- [`React.js`](https://reactjs.org/) JavaScript Framework for Components and Application Logic
+- [`dymojs`](https://github.com/dsandor/dymojs) JavaScript Library for printing DYMO Labels
+- [`Material-UI`](https://material-ui.com/) Component Library for creating a professional Application
+- [`GitHub`](https://github.com/) Version Control
+
+
+
+## Installation
+
+For the setup.exe go to [this](https://github.com/einaraglen/label-printer/releases/) link, and download the latest release
+
+After completing the installation, the program will automatically open, and it might look like this:
+
+![alt text](https://res.cloudinary.com/sushi-panel-images/image/upload/v1629300312/readme/dymo_vpdftg.png "DYMO Connect Missing")
+
+If your screen looks like the image above, please do as the program tells, 
+
+download the [DYMO Connect Software](https://www.dymo.com/en_CA/dymo-connect-for-desktop-v1.3.2.html), install it and restart your computer before the next step
+
+If not, you can go to the continue to Startup
 
 ## Startup
 
-On first startup you will be presented with something similar to this:
+You can now Open the application from the shortcut created on your Desktop
 
-![alt text](https://res.cloudinary.com/sushi-panel-images/image/upload/v1628546888/readme/error_erv0ga.png "Statup with no template file")
+The application will look something like the following picture on your first launch:
 
-If you hover the red icon next to the template button, some text will display and tell you to check your template file,
+![alt text](https://res.cloudinary.com/sushi-panel-images/image/upload/v1629302911/readme/error_deskfh.png "Bad Template")
 
-You can now click on the button and select a xml file containing the code generated from the DYMO Connect program.
+If we hover the red icon next to the Template button, we wil be promted with the text "Check Template file"
 
-![alt text](https://res.cloudinary.com/sushi-panel-images/image/upload/v1628546928/readme/good_xjhm75.png "Statup with good template")
+This will be our next step.
 
-After choosing a temlpate file and reopening the program from IFS, you will se your template filled-out with the infromation from the line you selected.
+## Creating Template
 
-![alt text](https://res.cloudinary.com/sushi-panel-images/image/upload/v1628546969/readme/printer_hmwakm.png "Select printer")
+When Creating a new Template for our LabelPrinter, we have to create a new Label file in the DYMO Connect Software
 
-Then you can select which printer to use, since the program is based on the DYMO JavaScript framework [`dymojs`](https://github.com/dsandor/dymojs) you should select your DYMO printer
+So Open DYMO Connect and create something that looks like the image bellow:
 
-![alt text](https://res.cloudinary.com/sushi-panel-images/image/upload/v1628546950/readme/printing_qgamys.png "Select printer")
+![alt text](https://res.cloudinary.com/sushi-panel-images/image/upload/v1629303267/readme/dymolabel_pqbaow.png "Creating Template")
 
-After everything checks out, you can press the "Print" button. You should then see "1 of n" Labels being printed in the Button text,
+It is very important to select the right Label Size for your printer (This is done when creating a new label file in the DYMO Software)
 
-After printing all labels program will display text "Print complete" and auto-close
+As you can see, the following information has to exist in the Template:
+
+| Key | Type | Usage |
+| --- | :-: | :-: |
+| `LineNo` | Single| Display Part number found in Lines |
+| `LineDescription` | Single | Part description of other info |
+| `LineInfo` | Multiple | Multiple columns from the Line (ProjectID, SubProjectID)|
+| `LineQuantity` | Single | Quantity found on the Line |
+
+Important to remember if you have a Barcode or QR-code on your label
+
+Always go to the text selection in DYMO Connect and writhe `LineNo` there aswell:
+
+![alt text](https://res.cloudinary.com/sushi-panel-images/image/upload/v1629303899/readme/QR_oubd82.png "QR Code")
+
+If not the Code will be un-usable
+
+After this, simply save the file to a location that you will remember, then on the next step
+
+## Prepare for IFS
+
+Now that we have our Template saved where we can grab it, we go to our program, click the Template Button
+
+Then locate the `.dymo` file we created from DYMO Connect, and simply select it
+
+If all goes well, our program will look something like this:
+
+![alt text](https://res.cloudinary.com/sushi-panel-images/image/upload/v1629302911/readme/good_fitxhr.png "Good Template")
+
+Next is to Select the DYMO Printer we want to use, in the top of our application you can see a Input Field containing "OneNote"
+
+To select the DYMO Printer we want to use we simply click the Field and select the printer as seen bellow:
+
+![alt text](https://res.cloudinary.com/sushi-panel-images/image/upload/v1629302911/readme/printer_bfmmxi.png "Selecting a printer")
+
+Thats it! now the LabelPrinter is usable, the next step would be to Configure the application to act as a Output program for IFS(in XML format)
