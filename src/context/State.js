@@ -166,7 +166,9 @@ const State = ({ children }) => {
     const [config, setConfig] = React.useState({});
     const [dymoError, setDymoError] = React.useState(false);
     const [noFileFound, setNoFileFound] = React.useState(false);
-    const [testPath, setTestPath] = React.useState(testPaths[0]);
+    const [testPath, setTestPath] = React.useState(testPaths[2]);
+    //set to false before build
+    const inDevMode = false;
 
     const setTest = (index) => {
         setTestPath(testPaths[index]);
@@ -187,6 +189,7 @@ const State = ({ children }) => {
             config: config,
             dymoError: dymoError,
             noFileFound: noFileFound,
+            inDevMode: inDevMode,
         },
         method: {
             setTemplate,

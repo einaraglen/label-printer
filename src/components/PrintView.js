@@ -26,12 +26,12 @@ const PrintView = ({ startPrint }) => {
     const stateRef = React.useRef(state);
 
     const handleLineInfo = React.useCallback(
-        (currentProperty, fileName, current) => {
+        (currentProperty, path, current) => {
             let lineInfo = "";
             for (let i = 0; i < currentProperty.length; i++) {
                 let currentLine = handleLine(
                     currentProperty[i],
-                    fileName,
+                    path,
                     current
                 );
                 lineInfo += currentLine;
@@ -46,7 +46,7 @@ const PrintView = ({ startPrint }) => {
     );
 
     const handleProperty = React.useCallback(
-        (singles, property, fileName, current, labelXML, currentConfig) => {
+        (singles, property, path, current, labelXML, currentConfig) => {
             const regex = new RegExp(property, "g");
             const currentProperty = currentConfig[property];
             //handle "LineInfo"
@@ -54,7 +54,7 @@ const PrintView = ({ startPrint }) => {
                 //TODO: handle shit and return the string
                 let lineInfo = handleLineInfo(
                     currentProperty,
-                    fileName,
+                    path,
                     current
                 );
                 return labelXML.toString().replace(regex, lineInfo);
@@ -79,7 +79,7 @@ const PrintView = ({ startPrint }) => {
     );
 
     const buildLabels = React.useCallback(
-        (singles, currentData, currentConfig, templateXML, fileName) => {
+        (singles, currentData, currentConfig, templateXML, path) => {
             let currentLabels = [];
             let limit = !singles
                 ? currentData.length
@@ -91,7 +91,7 @@ const PrintView = ({ startPrint }) => {
                     labelXML = handleProperty(
                         singles,
                         property,
-                        fileName,
+                        path,
                         current,
                         labelXML,
                         currentConfig
@@ -118,7 +118,7 @@ const PrintView = ({ startPrint }) => {
 
             //testing / release
             if (!result) {
-                if (false) {
+                if (stateRef.current.value.inDevMode) {
                     result = !result
                         ? `./src/test/${stateRef.current.value.test}`
                         : result;
@@ -147,7 +147,7 @@ const PrintView = ({ startPrint }) => {
                 currentData,
                 currentConfig,
                 await readFile(tempPath),
-                fileName
+                result
             );
 
             let builtImages = await getImages(currentLabels);
@@ -195,9 +195,12 @@ const PrintView = ({ startPrint }) => {
         return config[fileName];
     };
 
-    const handleLine = (currentPropertyOf, fileName, current) => {
-        if (currentPropertyOf === "PurchaseOrder")
+    const handleLine = (currentPropertyOf, path, current) => {
+        if (currentPropertyOf === "PurchaseOrder") {
+            let fileName = path.replace(/^.*[\\\/]/, '').split(" ")[0];
             return `PO ${fileName.replace("PurchaseOrder", "")}`;
+        }
+
         if (currentPropertyOf === "CustomersPONo")
             return `PO ${current[currentPropertyOf]}`;
         if (currentPropertyOf === "ProjectID")
@@ -212,12 +215,18 @@ const PrintView = ({ startPrint }) => {
         //this calles the start printing method from App.js
         startPrint();
         for (let i = 0; i < labels.length; i++) {
-            let currentLabel = labels[i].replace(/(\r\n|\n|\r)/gm, "");
+            let currentLabel = labels[i].replace(/>\s*/g, ">");
+            currentLabel = labels[i].replace(/\s*</g, "<");
             setPrintIndex(i);
             state.method.setButtonText(
                 `Printing Label ${i + 1} of ${labels.length}`
             );
-            await ipcRenderer.invoke("print-label", currentLabel);
+            let result = await ipcRenderer.invoke("print-label", currentLabel);
+            console.log(result)
+            if (!result.status) {
+                setIsLoading(false);
+                return state.method.setButtonText("Print Error!");
+            }
             await new Promise((resolve) => setTimeout(resolve, 2000));
         }
         //complete print with close
@@ -291,7 +300,11 @@ const PrintView = ({ startPrint }) => {
                 <Button
                     disabled={unknowConfig || state.value.dymoError}
                     onClick={
-                        !state.value.isTemplateGood || isLoading || state.value.noFileFound ? null : print
+                        !state.value.isTemplateGood ||
+                        isLoading ||
+                        state.value.noFileFound
+                            ? null
+                            : print
                     }
                     color={
                         !state.value.isTemplateGood ? "secondary" : "primary"

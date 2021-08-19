@@ -7,7 +7,7 @@ const store = new Store();
 
 const isDev = require("electron-is-dev");
 const devEnv = /electron/.test(process.argv[0]);
-const shell = require('electron').shell;
+const shell = require("electron").shell;
 
 require("@electron/remote/main").initialize();
 
@@ -64,7 +64,7 @@ const createWindow = () => {
 };
 
 ipcMain.handle("open-browser", async (event, args) => {
-    shell.openExternal(args)
+    shell.openExternal(args);
 });
 
 ipcMain.handle("image-preview", async (event, arg) => {
@@ -81,12 +81,9 @@ ipcMain.handle("image-preview", async (event, arg) => {
 
 //print method that renderer can acces vi   a ipcRenderer
 ipcMain.handle("print-label", async (event, arg) => {
-    try {
-        printer.print(store.get("printer"), arg);
-        return { status: true, message: "Success!" };
-    } catch (err) {
-        return { status: false, messsage: err };
-    }
+    let result = await printer.print(store.get("printer"), arg);
+    if (!JSON.parse(result).exceptionMessage) return { status: true, message: "Success!" };
+    return { status: false, message: JSON.parse(result).exceptionMessage };
 });
 
 //returns our stored path to template file || default is null

@@ -91,7 +91,7 @@ const Settings = () => {
             let filePath = await ipcRenderer.invoke("get-file");
             //testing / release
             if (!result) {
-                if (false) {
+                if (stateRef.current.value.inDevMode) {
                     result = !result
                         ? `./src/test/${stateRef.current.value.test}`
                         : result;
