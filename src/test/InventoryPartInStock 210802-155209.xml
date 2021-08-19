@@ -134,7 +134,7 @@
     <LocationNo>HQ-PRJ</LocationNo>
     <LotBatchNo>*</LotBatchNo>
     <SerialNo>*</SerialNo>
-    <OnHandQty>1</OnHandQty>
+    <OnHandQty>3</OnHandQty>
     <ReservedQty>0</ReservedQty>
     <Warehouse>HQ</Warehouse>
     <ActivityID>26</ActivityID>
@@ -197,7 +197,7 @@
     <LocationNo>HQ-PRJ</LocationNo>
     <LotBatchNo>*</LotBatchNo>
     <SerialNo>*</SerialNo>
-    <OnHandQty>1</OnHandQty>
+    <OnHandQty>2</OnHandQty>
     <ReservedQty>0</ReservedQty>
     <Warehouse>HQ</Warehouse>
     <ActivityID>26</ActivityID>

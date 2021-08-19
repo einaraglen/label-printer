@@ -24,7 +24,7 @@ const SettingsRow = ({ currentConfig, property, setProperty, options }) => {
         return () => {
             isMounted = false;
         };
-    }, []);
+    }, [currentConfig, options, property]);
 
     const handleClickListItem = (event) => {
         setAnchorEl(event.currentTarget);

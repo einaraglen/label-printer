@@ -5,10 +5,8 @@ import ListItemText from "@material-ui/core/ListItemText";
 import SettingsRow from "./SettingsRow";
 import { Context } from "context/State";
 import { readFile, getConfigName } from "utils";
-import FiberNewIcon from '@material-ui/icons/FiberNew';
 
 const { ipcRenderer } = window.require("electron");
-const path = window.require("path");
 const parser = window.require("fast-xml-parser");
 
 const Settings = () => {
@@ -19,7 +17,6 @@ const Settings = () => {
         LineInfo: [],
         LineQuantity: "",
     });
-    const [indexOfConfig, setIndexOfConfig] = React.useState(0);
     const [isChanged, setIsChanged] = React.useState(false);
     const [options, setOptions] = React.useState([]);
     const [firstInit, setFirstInit] = React.useState(false);
@@ -40,28 +37,21 @@ const Settings = () => {
         };
     }, [state.value.settingsOpen, firstInit]);
 
-    //check if all properties are picked!
-    React.useEffect(() => {
-        let isMounted = true;
-
-        let keys =  Object.keys(currentConfig)
-        let result = true;
-        for (let i = 0; i < keys.length; i++) {
-            if (currentConfig[keys[i]].length < 1) result = false;
-        }
-        //guard
-        if (!isMounted) return;
-        stateRef.current.method.setAllPicked(result);
-
-        return () => {
-            isMounted = false;
-        };
-    }, [setCurrentConfig, currentConfig]); 
-
     React.useEffect(() => {
         let isMounted = true;
         const getOptions = async () => {
-            const rawData = await readFile(state.value.currentPath);
+            let filePath = await ipcRenderer.invoke("get-file");
+            //testing / release
+            if (!filePath) {
+                if (stateRef.current.value.inDevMode) {
+                    filePath = !filePath
+                        ? `./src/test/${stateRef.current.value.test}`
+                        : filePath;
+                } else {
+                    return stateRef.current.method.setNoFileFound(true);
+                }
+            }
+            const rawData = await readFile(filePath);
             const data = parser.parse(rawData);
             let rows = data.Table.Row;
             let currentData = !rows.length ? [rows] : [...rows];
@@ -90,31 +80,43 @@ const Settings = () => {
 
             let filePath = await ipcRenderer.invoke("get-file");
             //testing / release
-            if (!result) {
+            if (!filePath) {
                 if (stateRef.current.value.inDevMode) {
-                    result = !result
+                    filePath = !filePath
                         ? `./src/test/${stateRef.current.value.test}`
-                        : result;
+                        : filePath;
                 } else {
                     return stateRef.current.method.setNoFileFound(true);
                 }
             }
-            const fileName = path.parse(filePath).base.toString().split(" ")[0];
-            let index = getIndexOfConfig(result, fileName);
-            //if we open a file not known to the program
-            //pure evil ...
-            let configName = Object.keys(result)[index === -1 ? 0 : index];
-            let configObject = result[configName];
-            //if config is not found, we run with the first rows data
-            let currentProperty = Object.keys(configObject);
+            const configName = getConfigName(filePath);
+            let currentProperties = [
+                "LineNo",
+                "LineDescription",
+                "LineInfo",
+                "LineQuantity",
+            ];
 
             //async guard
             if (!isMounted) return;
-            setIndexOfConfig(index);
-            setProperties([...currentProperty]);
+            setProperties([...currentProperties]);
             stateRef.current.method.setConfig(result);
+            stateRef.current.method.setAllPicked(
+                checkAllPicked(
+                    configExists(result, configName)
+                        ? {
+                              LineNo: "",
+                              LineDescription: "",
+                              LineInfo: [],
+                              LineQuantity: "",
+                          }
+                        : {
+                              ...result[configName],
+                          }
+                )
+            );
             setCurrentConfig(
-                index === -1
+                configExists(result, configName)
                     ? currentConfig
                     : {
                           ...result[configName],
@@ -128,16 +130,14 @@ const Settings = () => {
         };
     }, [firstInit]);
 
-    const getIndexOfConfig = (config, fileName) => {
-        for (let i = 0; i < Object.keys(config).length; i++) {
-            if (fileName.indexOf(Object.keys(config)[i]) > -1) return i;
-        }
-        return -1;
+    const configExists = (config, configName) => {
+        return !config[configName];
     };
 
     const setNewConfig = (newConfig) => {
+        state.method.setAllPicked(checkAllPicked(newConfig));
         //recognize changes and enable to save
-        let configName = Object.keys(state.value.config)[indexOfConfig];
+        let configName = getConfigName(state.value.currentPath);
         setIsChanged(
             JSON.stringify(newConfig) !==
                 JSON.stringify(state.value.config[configName])
@@ -145,17 +145,26 @@ const Settings = () => {
         setCurrentConfig(newConfig);
     };
 
+    const checkAllPicked = (newConfig) => {
+        let keys = Object.keys(newConfig);
+        let result = true;
+        for (let i = 0; i < keys.length; i++) {
+            if (newConfig[keys[i]].length < 1) result = false;
+        }
+        return result;
+    };
+
     const saveCurrentConfing = async () => {
-        let configName = indexOfConfig === -1 ? getConfigName(state.value.currentPath) : Object.keys(state.value.config)[indexOfConfig];
+        let configName = getConfigName(state.value.currentPath);
         let newConfig = {
             ...state.value.config,
             [configName]: currentConfig,
-        }
+        };
         setIsChanged(false);
-        state.method.setConfig(newConfig)
+        state.method.setConfig(newConfig);
         await ipcRenderer.invoke("set-config", newConfig);
         state.method.setSettingsOpen(false);
-    }
+    };
 
     return (
         <div className="settings">
@@ -164,14 +173,9 @@ const Settings = () => {
                     <List component="nav">
                         <ListItem aria-controls="config-menu">
                             <ListItemText
-                                primary={
-                                    indexOfConfig === -1
-                                        ? getConfigName(state.value.currentPath)
-                                        : Object.keys(state.value.config)[indexOfConfig]
-                                }
+                                primary={getConfigName(state.value.currentPath)}
                                 secondary="Current Config"
                             />
-                            {/*indexOfConfig === -1*/ false ? <FiberNewIcon fontSize="large" style={{ color: "#8bc34a" }} /> : null}
                         </ListItem>
                     </List>
                     {

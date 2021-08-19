@@ -26,12 +26,12 @@ const PrintView = ({ startPrint }) => {
     const stateRef = React.useRef(state);
 
     const handleLineInfo = React.useCallback(
-        (currentProperty, path, current) => {
+        (currentProperty, fileName, current) => {
             let lineInfo = "";
             for (let i = 0; i < currentProperty.length; i++) {
                 let currentLine = handleLine(
                     currentProperty[i],
-                    path,
+                    fileName,
                     current
                 );
                 lineInfo += currentLine;
@@ -46,15 +46,14 @@ const PrintView = ({ startPrint }) => {
     );
 
     const handleProperty = React.useCallback(
-        (singles, property, path, current, labelXML, currentConfig) => {
+        (singles, property, fileName, current, labelXML, currentConfig) => {
             const regex = new RegExp(property, "g");
             const currentProperty = currentConfig[property];
             //handle "LineInfo"
             if (property === "LineInfo") {
-                //TODO: handle shit and return the string
                 let lineInfo = handleLineInfo(
                     currentProperty,
-                    path,
+                    fileName,
                     current
                 );
                 return labelXML.toString().replace(regex, lineInfo);
@@ -79,36 +78,60 @@ const PrintView = ({ startPrint }) => {
     );
 
     const buildLabels = React.useCallback(
-        (singles, currentData, currentConfig, templateXML, path) => {
+        (singles, currentData, currentConfig, templateXML, fileName) => {
             let currentLabels = [];
-            let limit = !singles
-                ? currentData.length
-                : currentData[0][currentConfig.LineQuantity];
             let labelXML = templateXML.toString();
-            for (let i = 0; i < limit; i++) {
-                let current = !singles ? currentData[i] : currentData[0];
-                for (const property in currentConfig) {
-                    labelXML = handleProperty(
-                        singles,
-                        property,
-                        path,
-                        current,
-                        labelXML,
-                        currentConfig
-                    );
+            //loop every label
+            for (let i = 0; i < currentData.length; i++) {
+                let current = currentData[i];
+                let limit = singles ? current[currentConfig.LineQuantity] : 1;
+                //extra loop for quantity if singles is enabled
+                for (let j = 0; j < limit; j++) {
+                    //loop for the display info on the label
+                    for (const property in currentConfig) {
+                        labelXML = handleProperty(
+                            singles,
+                            property,
+                            fileName,
+                            current,
+                            labelXML,
+                            currentConfig
+                        );
+                    }
+                    currentLabels.push(labelXML);
+                    //reset the template string
+                    labelXML = templateXML.toString();
                 }
-                currentLabels.push(labelXML);
-                //reset the template string
-                labelXML = templateXML.toString();
             }
             return [...currentLabels];
         },
         [handleProperty]
     );
 
+    //has to be called async
+    const getImages = React.useCallback(async (currentLabels) => {
+        let images = [];
+        if (!currentLabels) return [];
+        for (let i = 0; i < currentLabels.length; i++) {
+            //fix for xml error "Line 1 containes no data" removes all space between tags
+            let currentXML = currentLabels[i].replace(/>\s*/g, ">");
+            currentXML = currentXML.replace(/\s*</g, "<");
+            let response = await ipcRenderer.invoke(
+                "image-preview",
+                currentXML
+            );
+            //this is only false when a dymo error is thrown, usually when Dymo Connect is not installed!
+            if (!response.status) {
+                state.method.setDymoError(true);
+                return null;
+            }
+            images.push(response.image.replace(/"/g, ""));
+        }
+        return images;
+    }, [state.method]);
+
     React.useEffect(() => {
         let isMounted = true;
-        //test paths
 
         const loadData = async () => {
             //for when we save a new config
@@ -131,7 +154,10 @@ const PrintView = ({ startPrint }) => {
             let currentConfig = getCurrentConfig(config, fileName);
 
             //if the opened file is not recognized
-            if (!currentConfig) return setUnknownConfig(true);
+            if (!currentConfig) {
+                stateRef.current.method.setAllPicked(false);
+                return setUnknownConfig(true);
+            } 
 
             setConfigInUse(currentConfig);
             const rawData = await readFile(result);
@@ -147,7 +173,7 @@ const PrintView = ({ startPrint }) => {
                 currentData,
                 currentConfig,
                 await readFile(tempPath),
-                result
+                fileName
             );
 
             let builtImages = await getImages(currentLabels);
@@ -168,39 +194,16 @@ const PrintView = ({ startPrint }) => {
         //crackhead method to get re-render on every state change..
     }, [buildLabels, singles, state.method]);
 
-    //has to be called async
-    const getImages = async (currentLabels) => {
-        let images = [];
-        if (!currentLabels) return [];
-        for (let i = 0; i < currentLabels.length; i++) {
-            //fix for xml error "Line 1 containes no data" removes all space between tags
-            let currentXML = currentLabels[i].replace(/>\s*/g, ">");
-            currentXML = currentXML.replace(/\s*</g, "<");
-            let response = await ipcRenderer.invoke(
-                "image-preview",
-                currentXML
-            );
-            //this is only false when a dymo error is thrown, usually when Dymo Connect is not installed!
-            if (!response.status) {
-                state.method.setDymoError(true);
-                return null;
-            }
-            images.push(response.image.replace(/"/g, ""));
-        }
-        return images;
-    };
+    
 
     //damn thats a whole method..
     const getCurrentConfig = (config, fileName) => {
         return config[fileName];
     };
 
-    const handleLine = (currentPropertyOf, path, current) => {
-        if (currentPropertyOf === "PurchaseOrder") {
-            let fileName = path.replace(/^.*[\\\/]/, '').split(" ")[0];
+    const handleLine = (currentPropertyOf, fileName, current) => {
+        if (currentPropertyOf === "PurchaseOrder")
             return `PO ${fileName.replace("PurchaseOrder", "")}`;
-        }
-
         if (currentPropertyOf === "CustomersPONo")
             return `PO ${current[currentPropertyOf]}`;
         if (currentPropertyOf === "ProjectID")
@@ -222,11 +225,7 @@ const PrintView = ({ startPrint }) => {
                 `Printing Label ${i + 1} of ${labels.length}`
             );
             let result = await ipcRenderer.invoke("print-label", currentLabel);
-            console.log(result)
-            if (!result.status) {
-                setIsLoading(false);
-                return state.method.setButtonText("Print Error!");
-            }
+            if (!result.status) return state.method.setButtonText("Printer Error!");
             await new Promise((resolve) => setTimeout(resolve, 2000));
         }
         //complete print with close
@@ -237,9 +236,13 @@ const PrintView = ({ startPrint }) => {
     };
 
     const specialCase = () => {
-        //if there is only 1 labels, with more that 1 qty
+        //check if any labels contain n>1 labels
+        let hasMoreThanOne = false;
+        for (let i = 0; i < jsonData.length; i++) {
+            if (jsonData[i][configInUse.LineQuantity] > 1) hasMoreThanOne = true;
+        }
         return (
-            jsonData.length === 1 && jsonData[0][configInUse.LineQuantity] > 1
+            hasMoreThanOne && (jsonData.length !== 1 || jsonData[0][configInUse.LineQuantity] > 1)
         );
     };
 
@@ -287,7 +290,7 @@ const PrintView = ({ startPrint }) => {
                     <FormControlLabel
                         control={
                             <Switch
-                                disabled={!specialCase()}
+                                disabled={!specialCase() || unknowConfig || state.value.noFileFound}
                                 checked={singles}
                                 onChange={toggleSingles}
                                 color="primary"
@@ -300,11 +303,7 @@ const PrintView = ({ startPrint }) => {
                 <Button
                     disabled={unknowConfig || state.value.dymoError}
                     onClick={
-                        !state.value.isTemplateGood ||
-                        isLoading ||
-                        state.value.noFileFound
-                            ? null
-                            : print
+                        !state.value.isTemplateGood || isLoading || state.value.noFileFound ? null : print
                     }
                     color={
                         !state.value.isTemplateGood ? "secondary" : "primary"
