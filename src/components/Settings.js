@@ -195,7 +195,8 @@ const Settings = () => {
                     }
                     <List component="nav">
                         <ListItem
-                            disabled={!isChanged || !state.value.allPicked}
+                            //disabled={!isChanged || !state.value.allPicked}
+                            disabled={!state.value.allPicked}
                             style={{
                                 height: "3.5rem",
                                 textAlign: "center",
