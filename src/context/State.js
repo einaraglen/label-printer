@@ -158,17 +158,19 @@ const State = ({ children }) => {
 
     //shared variables
     const [template, setTemplate] = React.useState("");
-    const [printer, setPrinter] = React.useState("");
     const [config, setConfig] = React.useState({});
     const [currentPath, setCurrentPath] = React.useState("");
-
+    //devtools
+    const [output, setOutput] = React.useState([]);
+    //extras
+    const [printer, setPrinter] = React.useState("");
     const [isTemplateGood, setIsTemplateGood] = React.useState(true);
     const [buttonText, setButtonText] = React.useState("Print");
     const [allPicked, setAllPicked] = React.useState(true);
     const [settingsOpen, setSettingsOpen] = React.useState(false);
     const [dymoError, setDymoError] = React.useState(false);
     const [noFileFound, setNoFileFound] = React.useState(false);
-    const [testPath, setTestPath] = React.useState(testPaths[1]);
+    const [testPath, setTestPath] = React.useState(testPaths[2]);
     //set to false before build
     const inDevMode = true;
 
@@ -212,6 +214,7 @@ const State = ({ children }) => {
             noFileFound: noFileFound,
             inDevMode: inDevMode,
             usableProperties: usableProperties,
+            output: output,
         },
         method: {
             setTemplate,
@@ -227,6 +230,7 @@ const State = ({ children }) => {
             setNoFileFound,
             setTest,
             handleFileResult,
+            setOutput,
         },
     };
 

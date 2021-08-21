@@ -16,7 +16,6 @@ const PrintView = ({ startPrint }) => {
     const [printIndex, setPrintIndex] = React.useState(null);
     const [isLoading, setIsLoading] = React.useState(false);
     const [labels, setLabels] = React.useState([]);
-    //for our lil special case
     const [jsonData, setJsonData] = React.useState([]);
     const [singles, setSingles] = React.useState(false);
     const [unknowConfig, setUnknownConfig] = React.useState(false);
@@ -205,7 +204,7 @@ const PrintView = ({ startPrint }) => {
     };
 
     const toggleSingles = (event) => {
-        setSingles(!singles);
+        setSingles(s => !s);
     };
 
     const openDymoDownload = async () => {

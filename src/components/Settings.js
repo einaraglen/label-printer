@@ -51,9 +51,6 @@ const Settings = () => {
                       getConfigName(stateRef.current.value.currentPath)
                   ]
         );
-        console.log(stateRef.current.value.config[
-            getConfigName(stateRef.current.value.currentPath)
-        ])
         stateRef.current.method.setAllPicked(
             checkAllPicked(
                 configNotFound

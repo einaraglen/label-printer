@@ -14,8 +14,6 @@ import List from "@material-ui/core/List";
 const LineInfoPicker = ({ options, text, currentPicked, setInfo }) => {
     const [anchorEl, setAnchorEl] = React.useState(null);
 
-    console.log(currentPicked)
-
     const handleClickListItem = (event) => {
         setAnchorEl(event.currentTarget);
     };

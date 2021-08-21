@@ -11,7 +11,6 @@ const AlwaysScrollToBottom = () => {
 
 const DevTools = () => {
     const [commandField, setCommandField] = React.useState("");
-    const [output, setOutput] = React.useState([]);
 
     const state = React.useContext(Context);
 
@@ -44,17 +43,17 @@ const DevTools = () => {
         let command = commandField.split(" ")[0].toLocaleLowerCase();
         switch (command) {
             case "set":
-                setOutput([
-                    ...output,
+                state.method.setOutput(o => [
+                    ...o,
                     setCommand(commandField.split(" ")[1], commandField.split(" ")[2])
                 ])
                 break;
             case "clear":
-                setOutput([]);
+                state.method.setOutput([]);
                 break;
             default:
-                setOutput([
-                    ...output,
+                state.method.setOutput(o => [
+                    ...o,
                     buildResponse(false, `Command "${command}" not recognized`)
                 ])
                 break;
@@ -67,7 +66,7 @@ const DevTools = () => {
     return (
         <div className="dev-tools">
             <div className="history" >
-                {output.map((current) => current)}
+                {state.value.output.map((current) => current)}
                 <AlwaysScrollToBottom />
             </div>
             <TextField

@@ -10,13 +10,11 @@ import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 const SettingsRow = ({ currentConfig, property, setProperty, options }) => {
     const [anchorEl, setAnchorEl] = React.useState(null);
 
-    console.log(currentConfig)
-    console.log(property)
-
     const handleClickListItem = (event) => {
         setAnchorEl(event.currentTarget);
     };
 
+    //normal menues
     const handleMenuItemClick = (event, property, option) => {
         setAnchorEl(null);
         setProperty({
@@ -39,6 +37,7 @@ const SettingsRow = ({ currentConfig, property, setProperty, options }) => {
         return lineInfoString;
     };
 
+    //custom menu / multiple choice
     const setInfo = (info) => {
         //we send the new list upwards
         setProperty({
