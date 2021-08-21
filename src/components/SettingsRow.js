@@ -9,22 +9,19 @@ import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 
 const SettingsRow = ({ currentConfig, property, setProperty, options }) => {
     const [anchorEl, setAnchorEl] = React.useState(null);
-    const [selectedIndex, setSelectedIndex] = React.useState(
-        !currentConfig
-            ? null
-            : options.indexOf(currentConfig[property])
-    );
+
+    console.log(currentConfig)
+    console.log(property)
 
     const handleClickListItem = (event) => {
         setAnchorEl(event.currentTarget);
     };
 
-    const handleMenuItemClick = (event, index, property) => {
+    const handleMenuItemClick = (event, property, option) => {
         setAnchorEl(null);
-        setSelectedIndex(index);
         setProperty({
             ...currentConfig,
-            [property]: index === -1 ? "EMPTY" : options[index],
+            [property]: option,
         });
     };
 
@@ -42,11 +39,11 @@ const SettingsRow = ({ currentConfig, property, setProperty, options }) => {
         return lineInfoString;
     };
 
-    const setLineInfo = (lineInfo) => {
+    const setInfo = (info) => {
         //we send the new list upwards
         setProperty({
             ...currentConfig,
-            [property]: lineInfo,
+            [property]: info,
         });
     };
 
@@ -77,7 +74,7 @@ const SettingsRow = ({ currentConfig, property, setProperty, options }) => {
                         options={options}
                         text={buildLineInfo(currentConfig[property])}
                         currentPicked={currentConfig[property]}
-                        setLineInfo={(lineInfo) => setLineInfo(lineInfo)}
+                        setInfo={(info) => setInfo(info)}
                     />
                 ) : (
                     <>
@@ -110,22 +107,22 @@ const SettingsRow = ({ currentConfig, property, setProperty, options }) => {
                             onClose={handleClose}
                         >
                             <MenuItem
-                                selected={-1 === selectedIndex}
+                                selected={currentConfig[property] === "EMPTY"}
                                 onClick={(event) =>
-                                    handleMenuItemClick(event, -1, property)
+                                    handleMenuItemClick(event, property, "EMPTY")
                                 }
                             >
                                 EMPTY
                             </MenuItem>
-                            {options.map((option, index) => (
+                            {options.map((option) => (
                                 <MenuItem
                                     key={option}
-                                    selected={index === selectedIndex}
+                                    selected={currentConfig[property] === option}
                                     onClick={(event) =>
                                         handleMenuItemClick(
                                             event,
-                                            index,
-                                            property
+                                            property,
+                                            option
                                         )
                                     }
                                 >

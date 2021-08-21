@@ -168,7 +168,7 @@ const State = ({ children }) => {
     const [settingsOpen, setSettingsOpen] = React.useState(false);
     const [dymoError, setDymoError] = React.useState(false);
     const [noFileFound, setNoFileFound] = React.useState(false);
-    const [testPath, setTestPath] = React.useState(testPaths[4]);
+    const [testPath, setTestPath] = React.useState(testPaths[1]);
     //set to false before build
     const inDevMode = true;
 

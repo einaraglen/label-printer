@@ -68,7 +68,7 @@
             <IsVertical>False</IsVertical>
             <LineTextSpan>
               <TextSpan>
-                <Text>LineNo</Text>
+                <Text>_Number</Text>
                 <FontInfo>
                   <FontName>Arial</FontName>
                   <FontSize>19.4</FontSize>
@@ -174,14 +174,14 @@
           </Margin>
           <BarcodeFormat>QRCode</BarcodeFormat>
           <Data>
-            <DataString>LineNo</DataString>
+            <DataString>_Number</DataString>
           </Data>
           <HorizontalAlignment>Center</HorizontalAlignment>
           <VerticalAlignment>Middle</VerticalAlignment>
           <Size>AutoFit</Size>
           <EQRCodeType>QRCodeText</EQRCodeType>
           <TextDataHolder>
-            <Value>LineNo</Value>
+            <Value>_Number</Value>
           </TextDataHolder>
           <ObjectLayout>
             <DYMOPoint>
@@ -236,7 +236,7 @@
             <IsVertical>False</IsVertical>
             <LineTextSpan>
               <TextSpan>
-                <Text>LineDescription</Text>
+                <Text>_Description</Text>
                 <FontInfo>
                   <FontName>Arial</FontName>
                   <FontSize>8.4</FontSize>
@@ -305,7 +305,7 @@
             <IsVertical>False</IsVertical>
             <LineTextSpan>
               <TextSpan>
-                <Text>LineInfo</Text>
+                <Text>_Info</Text>
                 <FontInfo>
                   <FontName>Arial</FontName>
                   <FontSize>11.6</FontSize>
@@ -464,7 +464,7 @@
             <IsVertical>False</IsVertical>
             <LineTextSpan>
               <TextSpan>
-                <Text>LineQuantity</Text>
+                <Text>_Quantity</Text>
                 <FontInfo>
                   <FontName>Arial</FontName>
                   <FontSize>12.3</FontSize>

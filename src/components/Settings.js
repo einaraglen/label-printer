@@ -10,11 +10,12 @@ const { ipcRenderer } = window.require("electron");
 const parser = window.require("fast-xml-parser");
 
 const Settings = () => {
-    const state = React.useContext(Context);
-    const stateRef = React.useRef(state);
-
     const [options, setOptions] = React.useState([]);
     const [currentConfig, setCurrentConfig] = React.useState({});
+    const [isLoading, setIsLoading] = React.useState(true);
+
+    const state = React.useContext(Context);
+    const stateRef = React.useRef(state);
 
     React.useEffect(() => {
         let isMounted = true;
@@ -28,6 +29,7 @@ const Settings = () => {
             if (!isMounted) return;
             //gets the options from the XML file
             setOptions(Object.keys(currentData[0]));
+            setIsLoading(false);
         };
 
         let configName = getConfigName(stateRef.current.value.currentPath);
@@ -49,6 +51,9 @@ const Settings = () => {
                       getConfigName(stateRef.current.value.currentPath)
                   ]
         );
+        console.log(stateRef.current.value.config[
+            getConfigName(stateRef.current.value.currentPath)
+        ])
         stateRef.current.method.setAllPicked(
             checkAllPicked(
                 configNotFound
@@ -85,7 +90,6 @@ const Settings = () => {
             ...state.value.config,
             [configName]: currentConfig,
         };
-        console.log(newConfig);
         state.method.setConfig(newConfig);
         await ipcRenderer.invoke("set-config", newConfig);
         state.method.setSettingsOpen(false);
@@ -102,7 +106,7 @@ const Settings = () => {
                         />
                     </ListItem>
                 </List>
-                {
+                {isLoading ? <p>Loading</p> :
                     <table>
                         <tbody>
                             {state.value.usableProperties.map((property) => (

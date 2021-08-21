@@ -17,11 +17,20 @@ export const readFile = async (path) => {
 
 export const getConfigName = (filePath) => {
     //get our capital letter words into an array ["Customer", "Order"]
-    let words = path.parse(filePath).base.toString().match(/[A-Z][a-z]+/g);
+    let words = path
+        .parse(filePath)
+        .base.toString()
+        .match(/[A-Z][a-z]+/g);
     let configName = "";
     //build the name
     for (let i = 0; i < words.length; i++) {
         configName += words[i];
     }
     return configName;
-}
+};
+
+export const cleanXMLString = (xml) => {
+    //remove all space between tags
+    //let cleanXML = xml.replace(/>\s*/g, ">");
+    return xml.replace(/\s*</g, "<")
+};

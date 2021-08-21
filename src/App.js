@@ -34,13 +34,25 @@ const App = () => {
     const state = React.useContext(Context);
     const stateRef = React.useRef(state);
 
+    const checkConfigKeys = React.useCallback((xml) => {
+        //checks if the template choosen has the right key values, except "_Extra"
+        for (let i = 0; i < stateRef.current.value.usableProperties.length; i++) {
+            if (
+                xml.indexOf(stateRef.current.value.usableProperties[i]) === -1 &&
+                stateRef.current.value.usableProperties[i] !== "_Extra"
+            )
+                return false;
+        }
+        return true;
+    }, []);
+
     const isTemplateGood = React.useCallback(async () => {
         let tempPath = await ipcRenderer.invoke("get-template");
         if (!fs.existsSync(tempPath)) return false;
         let xml = await readFile(tempPath);
         if (!(await checkConfigKeys(xml))) return false;
         return true;
-    }, []);
+    }, [checkConfigKeys]);
 
     React.useEffect(() => {
         //guard setup
@@ -126,14 +138,7 @@ const App = () => {
         };
     }, [state.value.settingsOpen, state.method.setSettingsOpen]);
 
-    const checkConfigKeys = async (xml) => {
-        //checks if the template choosen has the right key values
-        let config = await ipcRenderer.invoke("get-config");
-        for (const key in config[Object.keys(config)[0]]) {
-            if (xml.indexOf(key) === -1) return false;
-        }
-        return true;
-    };
+   
 
     const handleInputChange = async (event) => {
         if (!event.target.value) return;

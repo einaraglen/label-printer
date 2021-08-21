@@ -5,7 +5,7 @@ import { Context } from "context/State";
 import LabelCarousel from "./LabelCarousel";
 import Switch from "@material-ui/core/Switch";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import { readFile, getConfigName } from "utils";
+import { readFile, getConfigName, cleanXMLString } from "utils";
 
 //we can now amazingly access awsome shit in our render!
 const parser = window.require("fast-xml-parser");
@@ -24,9 +24,10 @@ const PrintView = ({ startPrint }) => {
     const state = React.useContext(Context);
     const stateRef = React.useRef(state);
 
-    const handleLineInfo = React.useCallback((currentProperty, current) => {
+    const handleInfo = React.useCallback((currentProperty, current) => {
         let lineInfo = "";
         for (let i = 0; i < currentProperty.length; i++) {
+            if (currentProperty[i] === "EMPTY") return "";
             let currentLine = current[currentProperty[i]];
             lineInfo += currentLine;
             lineInfo +=
@@ -46,7 +47,7 @@ const PrintView = ({ startPrint }) => {
                 return labelXML.toString().replace(regex, "");
             //handle "_Info" and "_Extra"
             if (property === "_Info" || property === "_Extra") {
-                let lineInfo = handleLineInfo(currentProperty, current);
+                let lineInfo = handleInfo(currentProperty, current);
                 return labelXML.toString().replace(regex, lineInfo);
             }
             //add "pcs" for quantity
@@ -65,7 +66,7 @@ const PrintView = ({ startPrint }) => {
                 .toString()
                 .replace(regex, current[currentConfig[property]]);
         },
-        [handleLineInfo]
+        [handleInfo]
     );
 
     const buildLabels = React.useCallback(
@@ -104,8 +105,7 @@ const PrintView = ({ startPrint }) => {
         if (!currentLabels) return [];
         for (let i = 0; i < currentLabels.length; i++) {
             //fix for xml error "Line 1 containes no data" removes all space between tags
-            let currentXML = currentLabels[i].replace(/>\s*/g, ">");
-            currentXML = currentXML.replace(/\s*</g, "<");
+            let currentXML = cleanXMLString(currentLabels[i]);
             let response = await ipcRenderer.invoke(
                 "image-preview",
                 currentXML
@@ -173,8 +173,7 @@ const PrintView = ({ startPrint }) => {
         //this calles the start printing method from App.js
         startPrint();
         for (let i = 0; i < labels.length; i++) {
-            let currentLabel = labels[i].replace(/>\s*/g, ">");
-            currentLabel = labels[i].replace(/\s*</g, "<");
+            let currentLabel = cleanXMLString(labels[i]);
             setPrintIndex(i);
             state.method.setButtonText(
                 `Printing Label ${i + 1} of ${labels.length}`

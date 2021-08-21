@@ -9,10 +9,12 @@ import {
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
+import List from "@material-ui/core/List";
 
-const LineInfoPicker = ({ options, text, currentPicked, setLineInfo }) => {
+const LineInfoPicker = ({ options, text, currentPicked, setInfo }) => {
     const [anchorEl, setAnchorEl] = React.useState(null);
-    const [picked, setPicked] = React.useState(!currentPicked ? [] : currentPicked);
+
+    console.log(currentPicked)
 
     const handleClickListItem = (event) => {
         setAnchorEl(event.currentTarget);
@@ -23,14 +25,26 @@ const LineInfoPicker = ({ options, text, currentPicked, setLineInfo }) => {
     };
 
     const handleChange = (event) => {
-        //if already in list, remove
+        //then check if exists, if so -> remove
         let newList =
-            picked.indexOf(event.currentTarget.id) > -1
-                ? picked.filter((item) => item !== event.currentTarget.id)
-                : [...picked, event.currentTarget.id];
-        setPicked(newList);
-        setLineInfo(newList);
+            currentPicked.indexOf(event.currentTarget.id) > -1
+                ? currentPicked.filter(
+                      (item) => item !== event.currentTarget.id
+                  )
+                : [...currentPicked, event.currentTarget.id];
+        //remember to filter out "EMPTY"
+        setInfo(newList.filter((item) => item !== "EMPTY"));
     };
+
+    const handleSpecialButtons = (closeAfter) => {
+        //EMPTY
+        if (closeAfter) {
+            setInfo(["EMPTY"])
+            return handleClose();
+        }
+        //Unselect All
+        setInfo([]);
+    }
 
     return (
         <div>
@@ -50,23 +64,59 @@ const LineInfoPicker = ({ options, text, currentPicked, setLineInfo }) => {
             >
                 <FormControl>
                     <FormGroup>
-                        {!options ? null : options.map((option) => (
-                            <FormControlLabel
-                                key={option}
-                                style={{ paddingLeft: "1rem" }}
-                                label={`${option} ${picked.indexOf(option) > -1 ? " - " + (picked.indexOf(option) + 1) : ""}`}
-                                control={
-                                    <Checkbox
-                                        color="primary"
-                                        checked={picked.indexOf(option) > -1}
-                                        onChange={(event) =>
-                                            handleChange(event)
-                                        }
-                                        id={option}
-                                    />
-                                }
-                            />
-                        ))}
+                    <List component="controlls">
+                            <ListItem
+                                style={{ height: "2rem" }}
+                                button
+                                aria-haspopup="true"
+                                onClick={() => handleSpecialButtons(false)}
+                            >
+                                <ListItemText
+                                    primary="Unselect All"
+                                />
+                            </ListItem>
+                            <ListItem
+                                style={{ height: "2rem" }}
+                                button
+                                aria-haspopup="true"
+                                onClick={() => handleSpecialButtons(true)}
+                                selected={currentPicked.indexOf("EMPTY") !== -1}
+                            >
+                                <ListItemText
+                                    primary="EMPTY"
+                                />
+                            </ListItem>
+                        </List>
+
+                        {!options
+                            ? null
+                            : options.map((option) => (
+                                  <FormControlLabel
+                                      key={option}
+                                      style={{ paddingLeft: "1rem" }}
+                                      label={`${option} ${
+                                          currentPicked.indexOf(option) > -1
+                                              ? " - " +
+                                                (currentPicked.indexOf(option) +
+                                                    1)
+                                              : ""
+                                      }`}
+                                      control={
+                                          <Checkbox
+                                              color="primary"
+                                              checked={
+                                                  currentPicked.indexOf(
+                                                      option
+                                                  ) > -1
+                                              }
+                                              onChange={(event) =>
+                                                  handleChange(event)
+                                              }
+                                              id={option}
+                                          />
+                                      }
+                                  />
+                              ))}
                     </FormGroup>
                 </FormControl>
             </Menu>
