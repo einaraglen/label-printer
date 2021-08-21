@@ -49,7 +49,7 @@ When Creating a new Template for our LabelPrinter, we have to create a new Label
 
 So Open DYMO Connect and create something that looks like the image bellow:
 
-![alt text](https://res.cloudinary.com/sushi-panel-images/image/upload/v1629303267/readme/dymolabel_pqbaow.png "Creating Template")
+![alt text](https://res.cloudinary.com/sushi-panel-images/image/upload/v1629577335/readme/dymolabel_zjunxt.png "Creating Template")
 
 It is very important to select the right Label Size for your printer (This is done when creating a new label file in the DYMO Software)
 
@@ -67,7 +67,7 @@ Important to remember if you have a Barcode or QR-code on your label
 
 Always go to the text selection for the Code in DYMO Connect and write `_Number` there aswell:
 
-![alt text](https://res.cloudinary.com/sushi-panel-images/image/upload/v1629303899/readme/QR_oubd82.png "QR Code")
+![alt text](https://res.cloudinary.com/sushi-panel-images/image/upload/v1629577374/readme/QR_qya70v.png "QR Code")
 
 If not the Code will be un-usable
 
