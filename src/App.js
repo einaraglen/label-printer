@@ -28,44 +28,103 @@ const App = () => {
     const [printers, setPrinters] = React.useState([]);
     const [isPrinting, setIsPrinting] = React.useState(false);
     const [devTools, setDevTools] = React.useState(false);
+    const [isLoading, setIsLoading] = React.useState(true);
+    const [hidePrintView, setHidePrintView] = React.useState(false);
 
     const state = React.useContext(Context);
     const stateRef = React.useRef(state);
 
     const isTemplateGood = React.useCallback(async () => {
-        try {
-            let tempPath = await ipcRenderer.invoke("get-template");
-            if (!fs.existsSync(tempPath)) return false;
-            let xml = await readFile(tempPath);
-            if (!(await checkConfigKeys(xml))) return false;
-            return true;
-        } catch (err) {
-            stateRef.current.method.setButtonText("Please check Template");
-        }
-        return false;
+        let tempPath = await ipcRenderer.invoke("get-template");
+        if (!fs.existsSync(tempPath)) return false;
+        let xml = await readFile(tempPath);
+        if (!(await checkConfigKeys(xml))) return false;
+        return true;
     }, []);
 
     React.useEffect(() => {
+        //guard setup
+        let isMounted = true;
+        //loads in the template file and stores it into state
         const getTemplate = async () => {
-            let tempRes = await ipcRenderer.invoke("get-template");
-            stateRef.current.method.setTemplate(tempRes);
+            let template = await ipcRenderer.invoke("get-template");
+            if (!template || !isMounted) return;
+            stateRef.current.method.setTemplate(template);
             stateRef.current.method.setIsTemplateGood(await isTemplateGood());
+            return true;
         };
 
-        const loadPrinters = async () => {
+        //loads in the file-path and stores it into state
+        const getFilePath = async () => {
+            let filePath = await ipcRenderer.invoke("get-file");
+            //testing / release
+            filePath = !filePath
+                ? stateRef.current.method.handleFileResult(filePath)
+                : filePath;
+            if (!filePath || !isMounted) return;
+            stateRef.current.method.setCurrentPath(filePath);
+            return true;
+        };
+
+        //loads in the config and stores it into state
+        const getConfig = async () => {
+            let config = await ipcRenderer.invoke("get-config");
+            if (!config || !isMounted) return;
+            stateRef.current.method.setConfig(config);
+            return true;
+        };
+
+        //loads in the printers and printer-in-use, then stores it into state
+        const getPrinters = async () => {
             //get all printers
             let printers = await ipcRenderer.invoke("get-printers");
+            if (!printers || !isMounted) return;
             setPrinters(printers);
-            //get printer stored as our printer in-use
+            //get printer stored as our printer in-use, if none stored: use [0]
             let printer = await ipcRenderer.invoke("get-printer");
+            if (!printer || !isMounted) return;
             stateRef.current.method.setPrinter(
                 !printer ? printers[0].name : printer
             );
+            return true;
         };
 
-        getTemplate();
-        loadPrinters();
+        //big brain move :O
+        const completeLoad = async () => {
+            if (!isMounted) return;
+            let result =
+                (await getTemplate()) &&
+                (await getFilePath()) &&
+                (await getConfig()) &&
+                (await getPrinters());
+            setIsLoading(!result);
+        };
+
+        //full useEffect execution!
+        completeLoad();
+
+        //prevent memory leak
+        return () => {
+            isMounted = false;
+        };
     }, [isTemplateGood]);
+
+    //for hiding printview when settings is showing
+    React.useEffect(() => {
+        let isMounted = true;
+        const handleShowPrintView = async () => {
+            //wait with hiding when settings is not open, un-hide directly when settings is open
+            if (!state.value.settingsOpen) return setHidePrintView(false);
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+            if (!isMounted) return;
+            setHidePrintView(true);
+        };
+
+        handleShowPrintView();
+        return () => {
+            isMounted = false;
+        };
+    }, [state.value.settingsOpen, state.method.setSettingsOpen]);
 
     const checkConfigKeys = async (xml) => {
         //checks if the template choosen has the right key values
@@ -88,138 +147,144 @@ const App = () => {
         state.method.setPrinter(event.target.value);
     };
 
-    const toggleSettings = () => {
+    const toggleSettings = async () => {
         //toggle
         state.method.setSettingsOpen(!state.value.settingsOpen);
     };
 
     const toggleDevTools = () => {
         setDevTools(!devTools);
-    }
+    };
 
+    //devtools controlls
     let ctrlDown = false;
 
     document.body.onkeydown = (event) => {
         if (event.code === "Insert" && ctrlDown) return toggleDevTools();
-        if (event.code === "ControlLeft") return ctrlDown = true;
+        if (event.code === "ControlLeft") return (ctrlDown = true);
     };
 
     document.body.onkeyup = (event) => {
-        if (event.code === "ControlLeft") return ctrlDown = true;
+        if (event.code === "ControlLeft") return (ctrlDown = true);
     };
 
     return (
         <ThemeProvider theme={state.theme}>
             {devTools ? <DevTools /> : null}
-            <div className="main" >
-                <Accordion square expanded={state.value.settingsOpen}>
-                    <AccordionSummary>
-                        <div className="tools unselectable" unselectable="on">
-                            <div className="template-picker">
-                                <input
-                                    disabled={state.value.dymoError}
-                                    id="file-button"
-                                    style={{ display: "none" }}
-                                    accept={[".xml", ".dymo"]}
-                                    type="file"
-                                    name="upload_file"
-                                    onChange={handleInputChange}
-                                />
-                                <label htmlFor="file-button">
-                                    <Button
+            {isLoading ? (
+                <p>loading i guess..</p>
+            ) : (
+                <div className="main">
+                    <Accordion square expanded={state.value.settingsOpen}>
+                        <AccordionSummary>
+                            <div
+                                className="tools unselectable"
+                                unselectable="on"
+                            >
+                                <div className="template-picker">
+                                    <input
+                                        disabled={state.value.dymoError}
+                                        id="file-button"
+                                        style={{ display: "none" }}
+                                        accept={[".xml", ".dymo"]}
+                                        type="file"
+                                        name="upload_file"
+                                        onChange={handleInputChange}
+                                    />
+                                    <label htmlFor="file-button">
+                                        <Button
+                                            disabled={
+                                                isPrinting ||
+                                                state.value.dymoError
+                                            }
+                                            style={{ marginRight: "0rem" }}
+                                            component="span"
+                                            variant="text"
+                                            color="primary"
+                                            startIcon={<FolderOpenIcon />}
+                                        >
+                                            Template
+                                        </Button>
+                                    </label>
+                                    <Tooltip
+                                        title={
+                                            !state.value.isTemplateGood
+                                                ? "Check Template file"
+                                                : "Template Working"
+                                        }
+                                        placement="bottom"
+                                    >
+                                        {!state.value.isTemplateGood ? (
+                                            <ErrorOutlineIcon color="secondary" />
+                                        ) : (
+                                            <CheckIcon
+                                                style={{ color: "#8bc34a" }}
+                                            />
+                                        )}
+                                    </Tooltip>
+                                </div>
+                                <FormControl
+                                    style={{ width: "14rem" }}
+                                    size="small"
+                                    variant="filled"
+                                    elevation={1}
+                                >
+                                    <Select
                                         disabled={
                                             isPrinting || state.value.dymoError
                                         }
-                                        style={{ marginRight: "0rem" }}
-                                        component="span"
-                                        variant="text"
-                                        color="primary"
-                                        startIcon={<FolderOpenIcon />}
+                                        onChange={handleFormEvent}
+                                        name="printer"
+                                        value={state.value.printer}
                                     >
-                                        Template
-                                    </Button>
-                                </label>
-                                <Tooltip
-                                    title={
-                                        !state.value.isTemplateGood
-                                            ? "Check Template file"
-                                            : "Template Working"
-                                    }
-                                    placement="bottom"
-                                >
-                                    {!state.value.isTemplateGood ? (
-                                        <ErrorOutlineIcon color="secondary" />
-                                    ) : (
-                                        <CheckIcon
-                                            style={{ color: "#8bc34a" }}
-                                        />
-                                    )}
-                                </Tooltip>
-                            </div>
-                            <FormControl
-                                style={{ width: "14rem" }}
-                                size="small"
-                                variant="filled"
-                                elevation={1}
-                            >
-                                <Select
+                                        {printers.map((printer) => (
+                                            <MenuItem
+                                                key={printer.name}
+                                                value={printer.name}
+                                            >
+                                                {printer.name}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                                <IconButton
                                     disabled={
-                                        isPrinting || state.value.dymoError
+                                        isPrinting ||
+                                        state.value.dymoError ||
+                                        state.value.noFileFound
                                     }
-                                    onChange={handleFormEvent}
-                                    name="printer"
-                                    value={state.value.printer}
+                                    onClick={toggleSettings}
+                                    size="medium"
+                                    color="primary"
+                                    variant="outlined"
                                 >
-                                    {printers.map((printer) => (
-                                        <MenuItem
-                                            key={printer.name}
-                                            value={printer.name}
-                                        >
-                                            {printer.name}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                            <IconButton
-                                disabled={isPrinting || state.value.dymoError || state.value.noFileFound}
-                                onClick={toggleSettings}
-                                size="medium"
-                                color="primary"
-                                variant="outlined"
-                            >
-                                {/*<Tooltip
-                                    title={
-                                        state.value.settingsOpen
-                                            ? "Close Settings"
-                                            : "Open Settings"
-                                    }
-                                    placement="bottom"
-                                >*/}
-                                <Badge
-                                    color="secondary"
-                                    variant="dot"
-                                    invisible={state.value.allPicked}
-                                >
-                                    {state.value.settingsOpen ? (
-                                        <CloseIcon />
-                                    ) : (
-                                        <SettingsIcon />
-                                    )}
-                                </Badge>
-                                {/*</Tooltip>*/}
-                            </IconButton>
-                        </div>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                        <Settings open={state.value.settingsOpen} />
-                    </AccordionDetails>
-                </Accordion>
-                <PrintView startPrint={() => setIsPrinting(true)} />
-                <div className="bottom unselectable">
-                    <div>Created by Einar Aglen</div>
-                    <div>{`Version ${packageJson.version}`}</div>
+                                    <Badge
+                                        color="secondary"
+                                        variant="dot"
+                                        invisible={state.value.allPicked}
+                                    >
+                                        {state.value.settingsOpen ? (
+                                            <CloseIcon />
+                                        ) : (
+                                            <SettingsIcon />
+                                        )}
+                                    </Badge>
+                                </IconButton>
+                            </div>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Settings open={state.value.settingsOpen} />
+                        </AccordionDetails>
+                    </Accordion>
+                    {hidePrintView ? null : (
+                        <PrintView startPrint={() => setIsPrinting(true)} />
+                    )}
+                    <div className="bottom unselectable">
+                        <div>Created by Einar Aglen</div>
+                        <div>{`Version ${packageJson.version}`}</div>
+                    </div>
                 </div>
-            </div>
+            )}
         </ThemeProvider>
     );
 };

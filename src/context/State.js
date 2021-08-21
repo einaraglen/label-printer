@@ -15,8 +15,8 @@ const State = ({ children }) => {
         overrides: {
             MuiCheckbox: {
                 root: {
-                    color: "#0288d1"
-                }
+                    color: "#0288d1",
+                },
             },
             MuiTypography: {
                 colorTextSecondary: {
@@ -25,8 +25,8 @@ const State = ({ children }) => {
             },
             MuiAccordionDetails: {
                 root: {
-                    padding: "0px"
-                }
+                    padding: "0px",
+                },
             },
             MuiAccordion: {
                 root: {
@@ -49,7 +49,7 @@ const State = ({ children }) => {
             MuiButtonBase: {
                 root: {
                     curson: "default",
-                }
+                },
             },
             MuiAccordionSummary: {
                 root: {
@@ -58,7 +58,7 @@ const State = ({ children }) => {
                     borderBottom: "1px solid rgba(0, 0, 0, .2)",
                     marginBottom: -1,
                     minHeight: 30,
-                   "&$expanded": {
+                    "&$expanded": {
                         minHeight: 30,
                     },
                 },
@@ -82,13 +82,13 @@ const State = ({ children }) => {
             MuiList: {
                 padding: {
                     paddingTop: "0px",
-                    paddingBottom: "0px"
-                }
+                    paddingBottom: "0px",
+                },
             },
             MuiListItem: {
                 root: {
                     paddingTop: "0px",
-                    paddingBottom: "0px"
+                    paddingBottom: "0px",
                 },
                 button: {
                     "&:hover": {
@@ -153,25 +153,46 @@ const State = ({ children }) => {
         "InventoryPartInStock 210802-155209.xml",
         "PurchaseOrder629195 210803-141357.xml",
         "InventoryPartInStock 210812-124414.xml",
-        "MaterialTransferRequisitions 210817-115842.xml"
+        "MaterialTransferRequisitions 210817-115842.xml",
     ];
 
+    //shared variables
     const [template, setTemplate] = React.useState("");
     const [printer, setPrinter] = React.useState("");
+    const [config, setConfig] = React.useState({});
+    const [currentPath, setCurrentPath] = React.useState("");
+
     const [isTemplateGood, setIsTemplateGood] = React.useState(true);
     const [buttonText, setButtonText] = React.useState("Print");
-    const [currentPath, setCurrentPath] = React.useState("");
     const [allPicked, setAllPicked] = React.useState(true);
     const [settingsOpen, setSettingsOpen] = React.useState(false);
-    const [config, setConfig] = React.useState({});
     const [dymoError, setDymoError] = React.useState(false);
     const [noFileFound, setNoFileFound] = React.useState(false);
-    const [testPath, setTestPath] = React.useState(testPaths[2]);
+    const [testPath, setTestPath] = React.useState(testPaths[4]);
     //set to false before build
     const inDevMode = true;
 
+    const usableProperties = [
+        "_Number",
+        "_Description",
+        "_Info",
+        "_Extra",
+        "_Quantity",
+    ];
+
     const setTest = (index) => {
         setTestPath(testPaths[index]);
+    };
+
+    const handleFileResult = (result) => {
+        if (!result) {
+            if (inDevMode) 
+                return result = !result
+                    ? `./src/test/${testPath}`
+                    : result;
+            setNoFileFound(true);
+            return null;
+        }
     }
 
     //this will be accessable from all the components that import Context variablex
@@ -190,6 +211,7 @@ const State = ({ children }) => {
             dymoError: dymoError,
             noFileFound: noFileFound,
             inDevMode: inDevMode,
+            usableProperties: usableProperties,
         },
         method: {
             setTemplate,
@@ -204,6 +226,7 @@ const State = ({ children }) => {
             setDymoError,
             setNoFileFound,
             setTest,
+            handleFileResult,
         },
     };
 

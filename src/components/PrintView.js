@@ -18,48 +18,39 @@ const PrintView = ({ startPrint }) => {
     const [labels, setLabels] = React.useState([]);
     //for our lil special case
     const [jsonData, setJsonData] = React.useState([]);
-    const [configInUse, setConfigInUse] = React.useState({});
     const [singles, setSingles] = React.useState(false);
     const [unknowConfig, setUnknownConfig] = React.useState(false);
 
     const state = React.useContext(Context);
     const stateRef = React.useRef(state);
 
-    const handleLineInfo = React.useCallback(
-        (currentProperty, fileName, current) => {
-            let lineInfo = "";
-            for (let i = 0; i < currentProperty.length; i++) {
-                let currentLine = handleLine(
-                    currentProperty[i],
-                    fileName,
-                    current
-                );
-                lineInfo += currentLine;
-                lineInfo +=
-                    i === currentProperty.length - 1 || currentLine.length === 0
-                        ? ""
-                        : " - ";
-            }
-            return lineInfo;
-        },
-        []
-    );
+    const handleLineInfo = React.useCallback((currentProperty, current) => {
+        let lineInfo = "";
+        for (let i = 0; i < currentProperty.length; i++) {
+            let currentLine = current[currentProperty[i]];
+            lineInfo += currentLine;
+            lineInfo +=
+                i === currentProperty.length - 1 || currentLine.length === 0
+                    ? ""
+                    : " - ";
+        }
+        return lineInfo;
+    }, []);
 
     const handleProperty = React.useCallback(
-        (singles, property, fileName, current, labelXML, currentConfig) => {
+        (singles, property, current, labelXML, currentConfig) => {
             const regex = new RegExp(property, "g");
             const currentProperty = currentConfig[property];
-            //handle "LineInfo"
-            if (property === "LineInfo") {
-                let lineInfo = handleLineInfo(
-                    currentProperty,
-                    fileName,
-                    current
-                );
+            //if user has selected the empty item, we add dead space
+            if (currentConfig[property] === "EMPTY")
+                return labelXML.toString().replace(regex, "");
+            //handle "_Info" and "_Extra"
+            if (property === "_Info" || property === "_Extra") {
+                let lineInfo = handleLineInfo(currentProperty, current);
                 return labelXML.toString().replace(regex, lineInfo);
             }
             //add "pcs" for quantity
-            if (property === "LineQuantity") {
+            if (property === "_Quantity") {
                 return labelXML
                     .toString()
                     .replace(
@@ -78,13 +69,13 @@ const PrintView = ({ startPrint }) => {
     );
 
     const buildLabels = React.useCallback(
-        (singles, currentData, currentConfig, templateXML, fileName) => {
+        (singles, currentData, currentConfig, templateXML) => {
             let currentLabels = [];
             let labelXML = templateXML.toString();
             //loop every label
             for (let i = 0; i < currentData.length; i++) {
                 let current = currentData[i];
-                let limit = singles ? current[currentConfig.LineQuantity] : 1;
+                let limit = singles ? current[currentConfig._Quantity] : 1;
                 //extra loop for quantity if singles is enabled
                 for (let j = 0; j < limit; j++) {
                     //loop for the display info on the label
@@ -92,7 +83,6 @@ const PrintView = ({ startPrint }) => {
                         labelXML = handleProperty(
                             singles,
                             property,
-                            fileName,
                             current,
                             labelXML,
                             currentConfig
@@ -122,95 +112,60 @@ const PrintView = ({ startPrint }) => {
             );
             //this is only false when a dymo error is thrown, usually when Dymo Connect is not installed!
             if (!response.status) {
-                state.method.setDymoError(true);
+                stateRef.current.method.setDymoError(true);
                 return null;
             }
             images.push(response.image.replace(/"/g, ""));
         }
         return images;
-    }, [state.method]);
+    }, []);
 
     React.useEffect(() => {
         let isMounted = true;
 
-        const loadData = async () => {
+        const getLabels = async () => {
             //for when we save a new config
             setUnknownConfig(false);
-            let result = await ipcRenderer.invoke("get-file");
-            let config = await ipcRenderer.invoke("get-config");
-
-            //testing / release
-            if (!result) {
-                if (stateRef.current.value.inDevMode) {
-                    result = !result
-                        ? `./src/test/${stateRef.current.value.test}`
-                        : result;
-                } else {
-                    return stateRef.current.method.setNoFileFound(true);
-                }
-            }
-            stateRef.current.method.setCurrentPath(result);
-            const fileName = getConfigName(result);
-            let currentConfig = getCurrentConfig(config, fileName);
+            let currentConfig = getCurrentConfig();
 
             //if the opened file is not recognized
             if (!currentConfig) {
-                stateRef.current.method.setAllPicked(false);
                 return setUnknownConfig(true);
-            } 
+            }
 
-            setConfigInUse(currentConfig);
-            const rawData = await readFile(result);
-            const data = parser.parse(rawData);
-            const rows = data.Table.Row;
+            let rawData = await readFile(stateRef.current.value.currentPath);
+            let data = parser.parse(rawData);
+            let rows = data.Table.Row;
             let currentData = !rows.length ? [rows] : [...rows];
-            setJsonData(currentData);
-            let tempPath = await ipcRenderer.invoke("get-template");
-            if (!tempPath) return;
             //build print data for dymo printer
-            let currentLabels = buildLabels(
+            let builtLabels = buildLabels(
                 singles,
                 currentData,
                 currentConfig,
-                await readFile(tempPath),
-                fileName
+                await readFile(stateRef.current.value.template)
             );
+            let builtImages = await getImages(builtLabels);
 
-            let builtImages = await getImages(currentLabels);
-
-            if (!currentLabels) return;
             //async guard
             if (!isMounted) return;
-            //if something went wrong, like Dymo Connect not working / not installed
-            if (!builtImages) return;
+            setJsonData(currentData);
+            setLabels([...builtLabels]);
             setImages(builtImages);
-            setLabels([...currentLabels]);
         };
 
-        loadData();
+        getLabels();
         return () => {
             isMounted = false;
         };
         //crackhead method to get re-render on every state change..
-    }, [buildLabels, singles, state.method]);
-
-    
+        //}, [buildLabels, singles, state.method]);
+    }, [buildLabels, getImages, singles]);
 
     //damn thats a whole method..
-    const getCurrentConfig = (config, fileName) => {
-        return config[fileName];
-    };
-
-    const handleLine = (currentPropertyOf, fileName, current) => {
-        if (currentPropertyOf === "PurchaseOrder")
-            return `PO ${fileName.replace("PurchaseOrder", "")}`;
-        if (currentPropertyOf === "CustomersPONo")
-            return `PO ${current[currentPropertyOf]}`;
-        if (currentPropertyOf === "ProjectID")
-            return current[currentPropertyOf].length !== 0
-                ? `P-${current[currentPropertyOf]}`
-                : "";
-        return current[currentPropertyOf];
+    const getCurrentConfig = () => {
+        return stateRef.current.value.config[
+            getConfigName(stateRef.current.value.currentPath)
+        ];
     };
 
     const print = async () => {
@@ -225,7 +180,8 @@ const PrintView = ({ startPrint }) => {
                 `Printing Label ${i + 1} of ${labels.length}`
             );
             let result = await ipcRenderer.invoke("print-label", currentLabel);
-            if (!result.status) return state.method.setButtonText("Printer Error!");
+            if (!result.status)
+                return state.method.setButtonText("Printer Error!");
             await new Promise((resolve) => setTimeout(resolve, 2000));
         }
         //complete print with close
@@ -239,10 +195,13 @@ const PrintView = ({ startPrint }) => {
         //check if any labels contain n>1 labels
         let hasMoreThanOne = false;
         for (let i = 0; i < jsonData.length; i++) {
-            if (jsonData[i][configInUse.LineQuantity] > 1) hasMoreThanOne = true;
+            if (jsonData[i][getCurrentConfig()._Quantity] > 1)
+                hasMoreThanOne = true;
         }
         return (
-            hasMoreThanOne && (jsonData.length !== 1 || jsonData[0][configInUse.LineQuantity] > 1)
+            hasMoreThanOne &&
+            (jsonData.length !== 1 ||
+                jsonData[0][getCurrentConfig()._Quantity] > 1)
         );
     };
 
@@ -290,7 +249,11 @@ const PrintView = ({ startPrint }) => {
                     <FormControlLabel
                         control={
                             <Switch
-                                disabled={!specialCase() || unknowConfig || state.value.noFileFound}
+                                disabled={
+                                    !specialCase() ||
+                                    unknowConfig ||
+                                    state.value.noFileFound
+                                }
                                 checked={singles}
                                 onChange={toggleSingles}
                                 color="primary"
@@ -303,7 +266,11 @@ const PrintView = ({ startPrint }) => {
                 <Button
                     disabled={unknowConfig || state.value.dymoError}
                     onClick={
-                        !state.value.isTemplateGood || isLoading || state.value.noFileFound ? null : print
+                        !state.value.isTemplateGood ||
+                        isLoading ||
+                        state.value.noFileFound
+                            ? null
+                            : print
                     }
                     color={
                         !state.value.isTemplateGood ? "secondary" : "primary"

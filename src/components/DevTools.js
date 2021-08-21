@@ -71,6 +71,7 @@ const DevTools = () => {
                 <AlwaysScrollToBottom />
             </div>
             <TextField
+                autoFocus
                 onKeyDown={handleKeyDown}
                 value={commandField}
                 onChange={(event) => setCommandField(event.target.value)}

@@ -25,11 +25,3 @@ export const getConfigName = (filePath) => {
     }
     return configName;
 }
-
-//this is gonna helt alot with settings
-export const fasterIndexOf = (arr, value) => {
-    let index = Object.keys(arr).find((key) => {
-        return arr[key] === value;
-    })
-    return index !== undefined ? index : -1;
-}

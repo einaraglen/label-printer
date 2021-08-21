@@ -6,25 +6,14 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import LineInfoPicker from "./LineInfoPicker";
 import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
-import { fasterIndexOf  } from "utils";
 
 const SettingsRow = ({ currentConfig, property, setProperty, options }) => {
     const [anchorEl, setAnchorEl] = React.useState(null);
-    const [selectedIndex, setSelectedIndex] = React.useState(0);
-
-    React.useEffect(() => {
-        let isMounted = true;
-        const getSelected = async () => {
-            //async guard
-            if (!isMounted) return;
-            setSelectedIndex(fasterIndexOf(options, currentConfig[property]));
-        };
-
-        getSelected();
-        return () => {
-            isMounted = false;
-        };
-    }, [currentConfig, options, property]);
+    const [selectedIndex, setSelectedIndex] = React.useState(
+        !currentConfig
+            ? null
+            : options.indexOf(currentConfig[property])
+    );
 
     const handleClickListItem = (event) => {
         setAnchorEl(event.currentTarget);
@@ -35,7 +24,7 @@ const SettingsRow = ({ currentConfig, property, setProperty, options }) => {
         setSelectedIndex(index);
         setProperty({
             ...currentConfig,
-            [property]: options[index],
+            [property]: index === -1 ? "EMPTY" : options[index],
         });
     };
 
@@ -72,7 +61,9 @@ const SettingsRow = ({ currentConfig, property, setProperty, options }) => {
                         <ListItemText
                             primary={property}
                             secondary={
-                                property === "LineInfo"
+                                property === "_Extra"
+                                    ? "Optional"
+                                    : property === "_Info"
                                     ? "Multiple"
                                     : "Single"
                             }
@@ -81,7 +72,7 @@ const SettingsRow = ({ currentConfig, property, setProperty, options }) => {
                 </List>
             </td>
             <td>
-                {property === "LineInfo" ? (
+                {property === "_Info" || property === "_Extra" ? (
                     <LineInfoPicker
                         options={options}
                         text={buildLineInfo(currentConfig[property])}
@@ -99,9 +90,16 @@ const SettingsRow = ({ currentConfig, property, setProperty, options }) => {
                                 onClick={handleClickListItem}
                             >
                                 <ListItemText
-                                    primary={!currentConfig[property] ? `Pick ${property}` : currentConfig[property]}
+                                    primary={
+                                        !currentConfig[property]
+                                            ? `Pick ${property}`
+                                            : currentConfig[property]
+                                    }
                                 />
-                                {!currentConfig[property] ? <ErrorOutlineIcon color="secondary" /> : null}
+                                {!currentConfig[property] &&
+                                property !== "_Extra" ? (
+                                    <ErrorOutlineIcon color="secondary" />
+                                ) : null}
                             </ListItem>
                         </List>
                         <Menu
@@ -111,6 +109,14 @@ const SettingsRow = ({ currentConfig, property, setProperty, options }) => {
                             open={Boolean(anchorEl)}
                             onClose={handleClose}
                         >
+                            <MenuItem
+                                selected={-1 === selectedIndex}
+                                onClick={(event) =>
+                                    handleMenuItemClick(event, -1, property)
+                                }
+                            >
+                                EMPTY
+                            </MenuItem>
                             {options.map((option, index) => (
                                 <MenuItem
                                     key={option}
