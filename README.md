@@ -55,16 +55,17 @@ It is very important to select the right Label Size for your printer (This is do
 
 As you can see, the following information has to exist in the Template:
 
-| Key | Type | Usage |
-| --- | :-: | :-: |
-| `LineNo` | Single| Display Part number found in Lines |
-| `LineDescription` | Single | Part description of other info |
-| `LineInfo` | Multiple | Multiple columns from the Line (ProjectID, SubProjectID)|
-| `LineQuantity` | Single | Quantity found on the Line |
+| Key | Type | Mandatory | Usage |
+| --- | :-: | :-: | :-: |
+| `_Number` | Single| `true` | Display Part number found in Lines |
+| `_Description` | Single | `true` | Part description of other info |
+| `_Info` | Multiple | `true` | Multiple columns from the Line (ProjectID, SubProjectID)|
+| `_Extra` | Multiple | `false` | Same as  `_Info`|
+| `_Quantity` | Single | `true` | Quantity found on the Line |
 
 Important to remember if you have a Barcode or QR-code on your label
 
-Always go to the text selection for the Code in DYMO Connect and write `LineNo` there aswell:
+Always go to the text selection for the Code in DYMO Connect and write `_Number` there aswell:
 
 ![alt text](https://res.cloudinary.com/sushi-panel-images/image/upload/v1629303899/readme/QR_oubd82.png "QR Code")
 
