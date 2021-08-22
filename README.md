@@ -58,7 +58,7 @@ As you can see, the following information has to exist in the Template:
 | Key | Type | Mandatory | Usage |
 | --- | :-: | :-: | :-: |
 | `_Number` | Single| `true` | Display Part number found in Lines |
-| `_Description` | Single | `true` | Part description of other info |
+| `_Description` | Single | `true` | Part description or other info |
 | `_Info` | Multiple | `true` | Multiple columns from the Line (ProjectID, SubProjectID)|
 | `_Extra` | Multiple | `false` | Same as  `_Info`|
 | `_Quantity` | Single | `true` | Quantity found on the Line |
