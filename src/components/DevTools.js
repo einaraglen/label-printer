@@ -25,16 +25,31 @@ const DevTools = () => {
         </p>
     }
 
-    const setCommand = (method, value) => {
-        if (!method) return buildResponse(false, `Method keyword not found`);
-        if (!state.method[method]) return buildResponse(false, `Method "${method}" does not exist`);
-        if (!value) return buildResponse(false, `Missing value: "${method} VALUE"`);
+    const checkInput = (keyword, value) => {
+        if (!keyword) return buildResponse(false, `Keyword not found`);
+        if (!state.method[keyword]) return buildResponse(false, `Keyword "${keyword}" does not exist`);
+        if (!value) return buildResponse(false, `Missing value: "${keyword} VALUE"`);
+        return false;
+    }
+
+    const setCommand = (keyword, value) => {
+        if (checkInput(keyword, value)) return checkInput(keyword,value);
         try {
             let currentValue = !isNaN(parseInt(value)) ? parseInt(value) : value;
-            state.method[method](currentValue);
-            return buildResponse(true, `${method}(${value}) was set`);
+            state.method[keyword](currentValue);
+            return buildResponse(true, `${keyword}(${value}) was set`);
         } catch (err) {
-            if (!state.method[method]) return buildResponse(false, `Cause: ${err.message}`);
+            if (!state.method[keyword]) return buildResponse(false, `Cause: ${err.message}`);
+        }
+    }
+
+    const resetCommand = (keyword, value) => {
+        if (checkInput(keyword, value)) return checkInput(keyword,value);
+        try {
+            state.method[keyword](null);
+            return buildResponse(true, `${keyword} was reset`);
+        } catch (err) {
+            if (!state.method[keyword]) return buildResponse(false, `Cause: ${err.message}`);
         }
     }
 
@@ -46,6 +61,12 @@ const DevTools = () => {
                 state.method.setOutput(o => [
                     ...o,
                     setCommand(commandField.split(" ")[1], commandField.split(" ")[2])
+                ])
+                break;
+            case "reset":
+                state.method.setOutput(o => [
+                    ...o,
+                    resetCommand(commandField.split(" ")[1], "blank")
                 ])
                 break;
             case "clear":

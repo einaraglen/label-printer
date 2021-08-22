@@ -15,6 +15,7 @@ const PrintView = ({ startPrint }) => {
     const [images, setImages] = React.useState([]);
     const [printIndex, setPrintIndex] = React.useState(null);
     const [isLoading, setIsLoading] = React.useState(false);
+    const [isBuilding, setIsBuilding] = React.useState(true);
     const [labels, setLabels] = React.useState([]);
     const [jsonData, setJsonData] = React.useState([]);
     const [singles, setSingles] = React.useState(false);
@@ -29,10 +30,7 @@ const PrintView = ({ startPrint }) => {
             if (currentProperty[i] === "EMPTY") return "";
             let currentLine = current[currentProperty[i]];
             lineInfo += currentLine;
-            lineInfo +=
-                i === currentProperty.length - 1 || currentLine.length === 0
-                    ? ""
-                    : " - ";
+            lineInfo += i === currentProperty.length - 1 || currentLine.length === 0 ? "" : " - ";
         }
         return lineInfo;
     }, []);
@@ -42,8 +40,7 @@ const PrintView = ({ startPrint }) => {
             const regex = new RegExp(property, "g");
             const currentProperty = currentConfig[property];
             //if user has selected the empty item, we add dead space
-            if (currentConfig[property] === "EMPTY")
-                return labelXML.toString().replace(regex, "");
+            if (currentConfig[property] === "EMPTY") return labelXML.toString().replace(regex, "");
             //handle "_Info" and "_Extra"
             if (property === "_Info" || property === "_Extra") {
                 let lineInfo = handleInfo(currentProperty, current);
@@ -53,17 +50,10 @@ const PrintView = ({ startPrint }) => {
             if (property === "_Quantity") {
                 return labelXML
                     .toString()
-                    .replace(
-                        regex,
-                        !singles
-                            ? `${current[currentConfig[property]]} pcs`
-                            : "1 pcs"
-                    );
+                    .replace(regex, !singles ? `${current[currentConfig[property]]} pcs` : "1 pcs");
             }
             //defualt return
-            return labelXML
-                .toString()
-                .replace(regex, current[currentConfig[property]]);
+            return labelXML.toString().replace(regex, current[currentConfig[property]]);
         },
         [handleInfo]
     );
@@ -80,13 +70,7 @@ const PrintView = ({ startPrint }) => {
                 for (let j = 0; j < limit; j++) {
                     //loop for the display info on the label
                     for (const property in currentConfig) {
-                        labelXML = handleProperty(
-                            singles,
-                            property,
-                            current,
-                            labelXML,
-                            currentConfig
-                        );
+                        labelXML = handleProperty(singles, property, current, labelXML, currentConfig);
                     }
                     currentLabels.push(labelXML);
                     //reset the template string
@@ -105,10 +89,7 @@ const PrintView = ({ startPrint }) => {
         for (let i = 0; i < currentLabels.length; i++) {
             //fix for xml error "Line 1 containes no data" removes all space between tags
             let currentXML = cleanXMLString(currentLabels[i]);
-            let response = await ipcRenderer.invoke(
-                "image-preview",
-                currentXML
-            );
+            let response = await ipcRenderer.invoke("image-preview", currentXML);
             //this is only false when a dymo error is thrown, usually when Dymo Connect is not installed!
             if (!response.status) {
                 stateRef.current.method.setDymoError(true);
@@ -120,9 +101,12 @@ const PrintView = ({ startPrint }) => {
     }, []);
 
     React.useEffect(() => {
+        //guard setup
         let isMounted = true;
 
         const getLabels = async () => {
+            //init build loading
+            setIsBuilding(true);
             //for when we save a new config
             setUnknownConfig(false);
             let currentConfig = getCurrentConfig();
@@ -150,21 +134,19 @@ const PrintView = ({ startPrint }) => {
             setJsonData(currentData);
             setLabels([...builtLabels]);
             setImages(builtImages);
+            //carousel will render after this is set to false
+            setIsBuilding(false);
         };
 
         getLabels();
         return () => {
             isMounted = false;
         };
-        //crackhead method to get re-render on every state change..
-        //}, [buildLabels, singles, state.method]);
     }, [buildLabels, getImages, singles]);
 
-    //damn thats a whole method..
+    //had to be extracted into method, very unreadable without..
     const getCurrentConfig = () => {
-        return stateRef.current.value.config[
-            getConfigName(stateRef.current.value.currentPath)
-        ];
+        return stateRef.current.value.config[getConfigName(stateRef.current.value.currentPath)];
     };
 
     const print = async () => {
@@ -174,12 +156,9 @@ const PrintView = ({ startPrint }) => {
         for (let i = 0; i < labels.length; i++) {
             let currentLabel = cleanXMLString(labels[i]);
             setPrintIndex(i);
-            state.method.setButtonText(
-                `Printing Label ${i + 1} of ${labels.length}`
-            );
+            state.method.setButtonText(`Printing Label ${i + 1} of ${labels.length}`);
             let result = await ipcRenderer.invoke("print-label", currentLabel);
-            if (!result.status)
-                return state.method.setButtonText("Printer Error!");
+            if (!result.status) return state.method.setButtonText("Printer Error!");
             await new Promise((resolve) => setTimeout(resolve, 2000));
         }
         //complete print with close
@@ -193,18 +172,13 @@ const PrintView = ({ startPrint }) => {
         //check if any labels contain n>1 labels
         let hasMoreThanOne = false;
         for (let i = 0; i < jsonData.length; i++) {
-            if (jsonData[i][getCurrentConfig()._Quantity] > 1)
-                hasMoreThanOne = true;
+            if (jsonData[i][getCurrentConfig()._Quantity] > 1) hasMoreThanOne = true;
         }
-        return (
-            hasMoreThanOne &&
-            (jsonData.length !== 1 ||
-                jsonData[0][getCurrentConfig()._Quantity] > 1)
-        );
+        return hasMoreThanOne && (jsonData.length !== 1 || jsonData[0][getCurrentConfig()._Quantity] > 1);
     };
 
     const toggleSingles = (event) => {
-        setSingles(s => !s);
+        setSingles((s) => !s);
     };
 
     const openDymoDownload = async () => {
@@ -221,13 +195,13 @@ const PrintView = ({ startPrint }) => {
                 <div className="preview">
                     <p>Missing: [DYMO Connect]</p>
                     <p>Download, Install, Restart</p>
-                    <Button
-                        color="primary"
-                        variant="contained"
-                        onClick={openDymoDownload}
-                    >
+                    <Button color="primary" variant="contained" onClick={openDymoDownload}>
                         DYMO Connect
                     </Button>
+                </div>
+            ) : state.value.noFileFound ? (
+                <div className="preview">
+                    No File Found
                 </div>
             ) : unknowConfig ? (
                 <div className="preview">
@@ -235,11 +209,11 @@ const PrintView = ({ startPrint }) => {
                 </div>
             ) : (
                 <div className="preview">
-                    <LabelCarousel
-                        images={images}
-                        isPrinting={isLoading}
-                        index={printIndex}
-                    />
+                    {isBuilding ? (
+                        <CircularProgress size={40} />
+                    ) : (
+                        <LabelCarousel images={images} isPrinting={isLoading} index={printIndex} />
+                    )}
                 </div>
             )}
             <div className="print">
@@ -247,11 +221,7 @@ const PrintView = ({ startPrint }) => {
                     <FormControlLabel
                         control={
                             <Switch
-                                disabled={
-                                    !specialCase() ||
-                                    unknowConfig ||
-                                    state.value.noFileFound
-                                }
+                                disabled={!specialCase() || unknowConfig || state.value.noFileFound}
                                 checked={singles}
                                 onChange={toggleSingles}
                                 color="primary"
@@ -264,15 +234,9 @@ const PrintView = ({ startPrint }) => {
                 <Button
                     disabled={unknowConfig || state.value.dymoError}
                     onClick={
-                        !state.value.isTemplateGood ||
-                        isLoading ||
-                        state.value.noFileFound
-                            ? null
-                            : print
+                        !state.value.isTemplateGood || isLoading || state.value.noFileFound ? null : print
                     }
-                    color={
-                        !state.value.isTemplateGood ? "secondary" : "primary"
-                    }
+                    color={!state.value.isTemplateGood ? "secondary" : "primary"}
                     variant="outlined"
                     style={{ width: "56%" }}
                     endIcon={isLoading ? <CircularProgress size={20} /> : null}

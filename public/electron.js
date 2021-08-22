@@ -60,7 +60,7 @@ const createWindow = () => {
     );
 
     //for debugging
-    window.webContents.openDevTools();
+    //window.webContents.openDevTools();
 };
 
 ipcMain.handle("open-browser", async (event, args) => {

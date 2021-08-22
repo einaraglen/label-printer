@@ -7,6 +7,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   overflow: hidden; 
   background-color: 	hsl(215, 28%, 14%);
+  color: hsl(0, 0%, 86%);
 
 }
 
@@ -45,7 +46,9 @@ body {
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-  width: 100%;
+  width: calc(100vw - 14px);
+  padding: 7px 7px;
+  border-bottom: 1px solid rgba(0, 0, 0 ,0.3);
 }
 
 .template-picker {
@@ -120,7 +123,7 @@ body {
   border-collapse: collapse;
 }
 .bottom {
-  width: 94%;
+  width: 94.8%;
   margin: auto;
   display: flex;
   flex-direction: row;
@@ -156,6 +159,11 @@ body {
   overflow-y: scroll;
   overflow-x: hidden;
   color: #FFF;
+}
+
+.ReactCollapse--collapse {
+  width: 100vw;
+  transition: height 200ms;
 }
 
 .history p {

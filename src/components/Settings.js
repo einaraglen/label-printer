@@ -9,7 +9,7 @@ import { readFile, getConfigName } from "utils";
 const { ipcRenderer } = window.require("electron");
 const parser = window.require("fast-xml-parser");
 
-const Settings = () => {
+const Settings = ({ collapseComplete }) => {
     const [options, setOptions] = React.useState([]);
     const [currentConfig, setCurrentConfig] = React.useState({});
     const [isLoading, setIsLoading] = React.useState(true);
@@ -47,17 +47,13 @@ const Settings = () => {
         setCurrentConfig(
             configNotFound
                 ? cleanConfig
-                : stateRef.current.value.config[
-                      getConfigName(stateRef.current.value.currentPath)
-                  ]
+                : stateRef.current.value.config[getConfigName(stateRef.current.value.currentPath)]
         );
         stateRef.current.method.setAllPicked(
             checkAllPicked(
                 configNotFound
                     ? cleanConfig
-                    : stateRef.current.value.config[
-                          getConfigName(stateRef.current.value.currentPath)
-                      ]
+                    : stateRef.current.value.config[getConfigName(stateRef.current.value.currentPath)]
             )
         );
         getOptions();
@@ -94,45 +90,43 @@ const Settings = () => {
 
     return (
         <div className="settings">
-            <div>
-                <List component="nav">
-                    <ListItem aria-controls="config-menu">
-                        <ListItemText
-                            primary={getConfigName(state.value.currentPath)}
-                            secondary="Current Config"
+            <List component="nav">
+                <ListItem aria-controls="config-menu">
+                    <ListItemText
+                        primary={getConfigName(state.value.currentPath)}
+                        secondary="Current Config"
+                    />
+                </ListItem>
+            </List>
+
+            <table>
+                <tbody>
+                    {state.value.usableProperties.map((property) => (
+                        <SettingsRow
+                            collapseComplete={collapseComplete}
+                            key={property}
+                            currentConfig={currentConfig}
+                            property={property}
+                            setProperty={setNewConfig}
+                            options={options}
                         />
-                    </ListItem>
-                </List>
-                {isLoading ? <p>Loading</p> :
-                    <table>
-                        <tbody>
-                            {state.value.usableProperties.map((property) => (
-                                <SettingsRow
-                                    key={property}
-                                    currentConfig={currentConfig}
-                                    property={property}
-                                    setProperty={setNewConfig}
-                                    options={options}
-                                />
-                            ))}
-                        </tbody>
-                    </table>
-                }
-                <List component="nav">
-                    <ListItem
-                        disabled={!state.value.allPicked}
-                        style={{
-                            height: "3.5rem",
-                            textAlign: "center",
-                        }}
-                        button
-                        aria-controls="config-menu"
-                        onClick={saveCurrentConfing}
-                    >
-                        <ListItemText primary="Save" />
-                    </ListItem>
-                </List>
-            </div>
+                    ))}
+                </tbody>
+            </table>
+            <List component="nav">
+                <ListItem
+                    disabled={!state.value.allPicked}
+                    style={{
+                        height: "3.5rem",
+                        textAlign: "center",
+                    }}
+                    button
+                    aria-controls="config-menu"
+                    onClick={saveCurrentConfing}
+                >
+                    <ListItemText primary="Save" />
+                </ListItem>
+            </List>
         </div>
     );
 };

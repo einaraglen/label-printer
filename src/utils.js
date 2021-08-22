@@ -21,6 +21,7 @@ export const getConfigName = (filePath) => {
         .parse(filePath)
         .base.toString()
         .match(/[A-Z][a-z]+/g);
+    if (!words) return null;
     let configName = "";
     //build the name
     for (let i = 0; i < words.length; i++) {

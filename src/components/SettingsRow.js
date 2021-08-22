@@ -7,14 +7,13 @@ import Menu from "@material-ui/core/Menu";
 import LineInfoPicker from "./LineInfoPicker";
 import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 
-const SettingsRow = ({ currentConfig, property, setProperty, options }) => {
+const SettingsRow = ({ collapseComplete, currentConfig, property, setProperty, options }) => {
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     const handleClickListItem = (event) => {
         setAnchorEl(event.currentTarget);
     };
 
-    //normal menues
     const handleMenuItemClick = (event, property, option) => {
         setAnchorEl(null);
         setProperty({
@@ -37,7 +36,6 @@ const SettingsRow = ({ currentConfig, property, setProperty, options }) => {
         return lineInfoString;
     };
 
-    //custom menu / multiple choice
     const setInfo = (info) => {
         //we send the new list upwards
         setProperty({
@@ -50,10 +48,7 @@ const SettingsRow = ({ currentConfig, property, setProperty, options }) => {
         <tr key={property}>
             <td style={{ width: "30%", textAlign: "center" }}>
                 <List component="nav">
-                    <ListItem
-                        aria-controls="property text"
-                        style={{ height: "4rem", textAlign: "center" }}
-                    >
+                    <ListItem aria-controls="property text" style={{ height: "4rem", textAlign: "center" }}>
                         <ListItemText
                             primary={property}
                             secondary={
@@ -68,7 +63,24 @@ const SettingsRow = ({ currentConfig, property, setProperty, options }) => {
                 </List>
             </td>
             <td>
-                {property === "_Info" || property === "_Extra" ? (
+                {!collapseComplete ? (
+                    <List component="nav">
+                        <ListItem style={{ height: "4rem" }} disabled>
+                            <ListItemText
+                                primary={
+                                    property === "_Info" || property === "_Extra"
+                                        ? buildLineInfo(currentConfig[property])
+                                        : !currentConfig[property]
+                                        ? `Pick ${property}`
+                                        : currentConfig[property]
+                                }
+                            />
+                            {!currentConfig[property] && property !== "_Extra" ? (
+                                <ErrorOutlineIcon color="secondary" />
+                            ) : null}
+                        </ListItem>
+                    </List>
+                ) : property === "_Info" || property === "_Extra" ? (
                     <LineInfoPicker
                         options={options}
                         text={buildLineInfo(currentConfig[property])}
@@ -92,8 +104,7 @@ const SettingsRow = ({ currentConfig, property, setProperty, options }) => {
                                             : currentConfig[property]
                                     }
                                 />
-                                {!currentConfig[property] &&
-                                property !== "_Extra" ? (
+                                {!currentConfig[property] && property !== "_Extra" ? (
                                     <ErrorOutlineIcon color="secondary" />
                                 ) : null}
                             </ListItem>
@@ -107,9 +118,7 @@ const SettingsRow = ({ currentConfig, property, setProperty, options }) => {
                         >
                             <MenuItem
                                 selected={currentConfig[property] === "EMPTY"}
-                                onClick={(event) =>
-                                    handleMenuItemClick(event, property, "EMPTY")
-                                }
+                                onClick={(event) => handleMenuItemClick(event, property, "EMPTY")}
                             >
                                 EMPTY
                             </MenuItem>
@@ -117,13 +126,7 @@ const SettingsRow = ({ currentConfig, property, setProperty, options }) => {
                                 <MenuItem
                                     key={option}
                                     selected={currentConfig[property] === option}
-                                    onClick={(event) =>
-                                        handleMenuItemClick(
-                                            event,
-                                            property,
-                                            option
-                                        )
-                                    }
+                                    onClick={(event) => handleMenuItemClick(event, property, option)}
                                 >
                                     {option}
                                 </MenuItem>

@@ -13,6 +13,12 @@ const State = ({ children }) => {
     //style overriding Material UI components
     const theme = createTheme({
         overrides: {
+            MuiDrawer: {
+                root: {
+                    position: "relative",
+                    marginTop: "100px"
+                }
+            },
             MuiCheckbox: {
                 root: {
                     color: "#0288d1",
@@ -20,7 +26,8 @@ const State = ({ children }) => {
             },
             MuiTypography: {
                 colorTextSecondary: {
-                    color: "#29b6f6",
+                    //color: "#29b6f6",
+                    color: "hsl(0, 0%, 86%)",
                 },
             },
             MuiAccordionDetails: {
@@ -46,14 +53,10 @@ const State = ({ children }) => {
                 },
                 expanded: {},
             },
-            MuiButtonBase: {
-                root: {
-                    curson: "default",
-                },
-            },
             MuiAccordionSummary: {
                 root: {
-                    curson: "default",
+                    padding: "0px",
+                    cursor: "default",
                     backgroundColor: "hsl(215, 28%, 14%)",
                     borderBottom: "1px solid rgba(0, 0, 0, .2)",
                     marginBottom: -1,
@@ -63,10 +66,11 @@ const State = ({ children }) => {
                     },
                 },
                 content: {
-                    curson: "default",
-                    margin: "7px 0",
+                    padding: "7px 9px",
+                    cursor: "default",
+                    margin: "0px",
                     "&$expanded": {
-                        margin: "7px 0",
+                        margin: "0px",
                     },
                 },
                 expanded: {},
@@ -87,6 +91,9 @@ const State = ({ children }) => {
             },
             MuiListItem: {
                 root: {
+                    "&$selected, &$selected:hover, &$selected:focus": {
+                        backgroundColor: "hsl(215, 28%, 15%)",
+                    },
                     paddingTop: "0px",
                     paddingBottom: "0px",
                 },
@@ -172,7 +179,7 @@ const State = ({ children }) => {
     const [noFileFound, setNoFileFound] = React.useState(false);
     const [testPath, setTestPath] = React.useState(testPaths[2]);
     //set to false before build
-    const inDevMode = true;
+    const inDevMode = false;
 
     const usableProperties = [
         "_Number",
