@@ -27,7 +27,6 @@ const App = () => {
     const [isPrinting, setIsPrinting] = React.useState(false);
     const [devTools, setDevTools] = React.useState(false);
     const [isLoading, setIsLoading] = React.useState(true);
-    const [hidePrintView, setHidePrintView] = React.useState(false);
     const [toolTipText, setToolTipText] = React.useState("");
     const [collapseComplete, setCollapseComplete] = React.useState(false);
 
@@ -72,6 +71,16 @@ const App = () => {
         return true;
     }, [checkConfigKeys]);
 
+    const isConfigGood = React.useCallback((config) => {
+        console.log(config)
+        //a blank config will work
+        if (!config || !config[Object.keys(config)[0]]) return true;
+        for (let property in config[Object.keys(config)[0]]) {
+            if (stateRef.current.value.usableProperties.indexOf(property) === -1) return false;
+        }
+        return true;
+    }, []);
+
     React.useEffect(() => {
         //guard setup
         let isMounted = true;
@@ -100,7 +109,15 @@ const App = () => {
         //loads in the config and stores it into state
         const getConfig = async () => {
             let config = await ipcRenderer.invoke("get-config");
-            if (!config || !isMounted) return true;
+            if (!isMounted) return true;
+            //bad old config (from earlier builds)
+            if (!isConfigGood(config)) {
+                //wipe old config, since it does not fit anymore
+                await ipcRenderer.invoke("set-config", {});
+                stateRef.current.method.setConfig(config);
+                return true;
+            } 
+            //normal execution
             stateRef.current.method.setConfig(config);
             return true;
         };
@@ -136,24 +153,7 @@ const App = () => {
         return () => {
             isMounted = false;
         };
-    }, [isTemplateGood]);
-
-    //for hiding printview when settings is showing
-    React.useEffect(() => {
-        let isMounted = true;
-        const handleShowPrintView = async () => {
-            //wait with hiding when settings is not open, un-hide directly when settings is open
-            if (!state.value.settingsOpen) return setHidePrintView(false);
-            await new Promise((resolve) => setTimeout(resolve, 1000));
-            if (!isMounted) return;
-            setHidePrintView(true);
-        };
-
-        handleShowPrintView();
-        return () => {
-            isMounted = false;
-        };
-    }, [state.value.settingsOpen, state.method.setSettingsOpen]);
+    }, [isTemplateGood, isConfigGood]);
 
     const handleInputChange = async (event) => {
         if (!event.target.value) return;
@@ -191,7 +191,7 @@ const App = () => {
         <ThemeProvider theme={state.theme}>
             {devTools ? <DevTools /> : null}
             {isLoading ? (
-                <p>loading i guess..</p>
+                null
             ) : (
                 <div className="main">
                     <div className="tools">

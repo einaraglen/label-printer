@@ -12,7 +12,6 @@ const parser = window.require("fast-xml-parser");
 const Settings = ({ collapseComplete }) => {
     const [options, setOptions] = React.useState([]);
     const [currentConfig, setCurrentConfig] = React.useState({});
-    const [isLoading, setIsLoading] = React.useState(true);
 
     const state = React.useContext(Context);
     const stateRef = React.useRef(state);
@@ -29,7 +28,6 @@ const Settings = ({ collapseComplete }) => {
             if (!isMounted) return;
             //gets the options from the XML file
             setOptions(Object.keys(currentData[0]));
-            setIsLoading(false);
         };
 
         let configName = getConfigName(stateRef.current.value.currentPath);
