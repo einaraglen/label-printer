@@ -105,6 +105,45 @@ const PrintView = ({ startPrint }) => {
         [handleProperty]
     );
 
+    const handleGroupProperty = React.useCallback(
+        (property, current, labelXML, currentConfig) => {
+            const regex = new RegExp(property, "g");
+            //add "pcs" for quantity
+            if (property === "_Quantity") {
+                return labelXML
+                    .toString()
+                    .replace(regex, current[property] + " pcs");
+            }
+            //defualt return
+            return labelXML.toString().replace(regex, current[property]);
+        },
+        []
+    );
+
+    const buildGroups = React.useCallback(
+        (currentData, currentConfig, templateXML) => {
+            let currentLabels = [];
+            let labelXML = templateXML.toString();
+            //loop every label
+            for (let i = 0; i < currentData.length; i++) {
+                let current = currentData[i];
+                for (const property in currentData[0]) {
+                    labelXML = handleGroupProperty(
+                        property,
+                        current,
+                        labelXML,
+                        currentConfig
+                    );
+                }
+                currentLabels.push(labelXML);
+                //reset the template string
+                labelXML = templateXML.toString();
+            }
+            return [...currentLabels];
+        },
+        [handleGroupProperty]
+    );
+
     //has to be called async
     const getImages = React.useCallback(async (currentLabels) => {
         let images = [];
@@ -147,19 +186,28 @@ const PrintView = ({ startPrint }) => {
             let rows = data.Table.Row;
             let currentData = !rows.length ? [rows] : [...rows];
             //build print data for dymo printer
-            let builtLabels = buildLabels(
-                currentMode,
-                currentData,
-                currentConfig,
-                await readFile(stateRef.current.value.template)
-            );
+            let groups = getGroups(currentConfig, currentData);
+            let builtLabels =
+                currentMode === "group"
+                    ? buildGroups(
+                          groups,
+                          currentConfig,
+                          await readFile(stateRef.current.value.template)
+                      )
+                    : buildLabels(
+                          currentMode,
+                          currentData,
+                          currentConfig,
+                          await readFile(stateRef.current.value.template)
+                      );
+            //let builtImages = await getImages(builtLabels);
             let builtImages = await getImages(builtLabels);
 
             //async guard
             if (!isMounted) return;
             setSpecialCases({
                 single: singlesDetected(currentConfig, currentData),
-                group: groupDetected(currentConfig, currentData)
+                group: groups.length !== currentData.length,
             });
             setLabels([...builtLabels]);
             setImages(builtImages);
@@ -172,25 +220,24 @@ const PrintView = ({ startPrint }) => {
             isMounted = false;
         };
         //}, [buildLabels, getImages, singles]);
-    }, [buildLabels, getImages, currentMode]);
+    }, [buildLabels, buildGroups, getImages, currentMode]);
 
-    //needs to be added to useEffect, currently running every render!!!
     const singlesDetected = (currentConfig, jsonData) => {
         //check if any labels contain n>1 labels
         let hasMoreThanOne = false;
         for (let i = 0; i < jsonData.length; i++) {
-            if (jsonData[i][currentConfig._Quantity] > 1)
-                hasMoreThanOne = true;
+            if (jsonData[i][currentConfig._Quantity] > 1) hasMoreThanOne = true;
         }
         return (
             hasMoreThanOne &&
-            (jsonData.length !== 1 ||
-                jsonData[0][currentConfig._Quantity] > 1)
+            (jsonData.length !== 1 || jsonData[0][currentConfig._Quantity] > 1)
         );
     };
 
-    //needs to be added to useEffect, currently running every render!!!
-    const groupDetected = (currentConfig, jsonData) => {
+    const getGroups = (currentConfig, jsonData) => {
+        //if no "_Info" is picked, or is "EMPTY" return default data
+        if (!currentConfig._Info[0] || currentConfig._Info[0] === "EMPTY")
+            return jsonData;
         //detect that there are more than one instance of any partnumber in given data
         let frequency = [];
         for (let i = 0; i < jsonData.length; i++) {
@@ -199,20 +246,30 @@ const PrintView = ({ startPrint }) => {
                     entry._Number === jsonData[i][currentConfig._Number] &&
                     entry._Info1 === jsonData[i][currentConfig._Info[0]]
             );
+            let moreInfo = !jsonData[i][currentConfig._Info[1]] ? "" : jsonData[i][currentConfig._Info[1]]
             if (index === -1) {
                 frequency.push({
                     _Number: jsonData[i][currentConfig._Number],
                     _Info1: jsonData[i][currentConfig._Info[0]],
-                    data: [jsonData[i]],
+                    _Description: jsonData[i][currentConfig._Description],
+                    _Info: `${jsonData[i][currentConfig._Info[0]]} - ${
+                        moreInfo
+                    }`,
+                    _Quantity: `${jsonData[i][currentConfig._Quantity]}`,
                 });
             } else {
                 frequency[index] = {
                     ...frequency[index],
-                    data: [...frequency[index].data, jsonData[i]],
+                    _Info: `${frequency[index]._Info}, ${
+                        moreInfo
+                    }`,
+                    _Quantity: `${frequency[index]._Quantity}, ${
+                        jsonData[i][currentConfig._Quantity]
+                    }`,
                 };
             }
         }
-        return jsonData.length !== frequency.length;
+        return frequency;
     };
 
     //had to be extracted into method, very unreadable without..
