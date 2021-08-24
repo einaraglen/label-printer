@@ -161,6 +161,7 @@ const State = ({ children }) => {
         "PurchaseOrder629195 210803-141357.xml",
         "InventoryPartInStock 210812-124414.xml",
         "MaterialTransferRequisitions 210817-115842.xml",
+        "MaterialTransferRequisitions 210824-100806.xml"
     ];
 
     //shared variables
@@ -177,9 +178,9 @@ const State = ({ children }) => {
     const [settingsOpen, setSettingsOpen] = React.useState(false);
     const [dymoError, setDymoError] = React.useState(false);
     const [noFileFound, setNoFileFound] = React.useState(false);
-    const [testPath, setTestPath] = React.useState(testPaths[2]);
+    const [testPath, setTestPath] = React.useState(testPaths[5]);
     //set to false before build
-    const inDevMode = false;
+    const inDevMode = true;
 
     const usableProperties = [
         "_Number",

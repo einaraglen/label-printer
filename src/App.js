@@ -72,7 +72,6 @@ const App = () => {
     }, [checkConfigKeys]);
 
     const isConfigGood = React.useCallback((config) => {
-        console.log(config)
         //a blank config will work
         if (!config || !config[Object.keys(config)[0]]) return true;
         for (let property in config[Object.keys(config)[0]]) {
