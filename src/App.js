@@ -39,14 +39,9 @@ const App = () => {
     const checkConfigKeys = React.useCallback((xml) => {
         //checks if the template choosen has the right key values, except "_Extra"
         let result = { status: true, missing: [] };
-        for (
-            let i = 0;
-            i < stateRef.current.value.usableProperties.length;
-            i++
-        ) {
+        for (let i = 0; i < stateRef.current.value.usableProperties.length; i++) {
             if (
-                xml.indexOf(stateRef.current.value.usableProperties[i]) ===
-                    -1 &&
+                xml.indexOf(stateRef.current.value.usableProperties[i]) === -1 &&
                 stateRef.current.value.usableProperties[i] !== "_Extra"
             ) {
                 result.missing.push(stateRef.current.value.usableProperties[i]);
@@ -94,10 +89,7 @@ const App = () => {
                 setTemplateIsGood(false);
                 return true;
             }
-            stateRef.current.method.setOutput((o) => [
-                ...o,
-                buildResponse(true, "Previous template loaded"),
-            ]);
+            stateRef.current.method.setOutput((o) => [...o, buildResponse(true, "Previous template loaded")]);
             stateRef.current.method.setTemplate(template);
             setTemplateIsGood(await isTemplateGood());
             return true;
@@ -107,21 +99,17 @@ const App = () => {
         const getFilePath = async () => {
             let filePath = await ipcRenderer.invoke("get-file");
             //testing / release
-            filePath = !filePath
-                ? stateRef.current.method.handleFileResult(filePath)
-                : filePath;
+            filePath = !filePath ? stateRef.current.method.handleFileResult(filePath) : filePath;
             if (!filePath || !isMounted) {
+                //set title
+                document.title = "LabelPrinter - No File Found";
                 stateRef.current.method.setNoFileFound(true);
-                stateRef.current.method.setOutput((o) => [
-                    ...o,
-                    buildResponse(false, "No file loaded"),
-                ]);
+                stateRef.current.method.setOutput((o) => [...o, buildResponse(false, "No file loaded")]);
                 return true;
             }
-            stateRef.current.method.setOutput((o) => [
-                ...o,
-                buildResponse(true, "Opened file loaded"),
-            ]);
+            //set title
+            document.title = "LabelPrinter - " + getConfigName(filePath);
+            stateRef.current.method.setOutput((o) => [...o, buildResponse(true, "Opened file loaded")]);
             stateRef.current.method.setCurrentPath(filePath);
             return true;
         };
@@ -131,9 +119,7 @@ const App = () => {
             let config = await ipcRenderer.invoke("get-config");
             if (!isMounted) return true;
             //bad old config (from earlier builds)
-            if (
-                !isConfigGood(config, stateRef.current.value.usableProperties)
-            ) {
+            if (!isConfigGood(config, stateRef.current.value.usableProperties)) {
                 //wipe old config, since it does not fit anymore
                 await ipcRenderer.invoke("set-config", {});
                 stateRef.current.method.setConfig({});
@@ -149,10 +135,8 @@ const App = () => {
             ]);
             //normal execution
             stateRef.current.method.setConfig(!config ? {} : config);
-            if (config) {
-                let noCurrentConfig = !config[getConfigName(stateRef.current.value.currentPath)];
-                stateRef.current.method.setAllPicked(noCurrentConfig)
-            }
+            //config cannot be picked if there is not config
+            if (!config) stateRef.current.method.setAllPicked(false);
             return true;
         };
 
@@ -167,10 +151,7 @@ const App = () => {
                 ]);
                 return true;
             }
-            stateRef.current.method.setOutput((o) => [
-                ...o,
-                buildResponse(true, "Printers loaded"),
-            ]);
+            stateRef.current.method.setOutput((o) => [...o, buildResponse(true, "Printers loaded")]);
             setPrinters(printers);
             //get printer stored as our printer in-use, if none stored: use [0]
             let printer = await ipcRenderer.invoke("get-printer");
@@ -182,10 +163,7 @@ const App = () => {
                 ]);
                 return true;
             }
-            stateRef.current.method.setOutput((o) => [
-                ...o,
-                buildResponse(true, "Previous printer loaded"),
-            ]);
+            stateRef.current.method.setOutput((o) => [...o, buildResponse(true, "Previous printer loaded")]);
             stateRef.current.method.setPrinter(printer);
             return true;
         };
@@ -241,6 +219,11 @@ const App = () => {
         }
     };
 
+    const hideBadge = () => {
+        let current = state.value.config[getConfigName(state.value.currentPath)];
+        return !(!current || !state.value.allPicked);
+    };
+
     //devtools controlls
     let ctrlDown = false;
     document.body.onkeydown = (event) => {
@@ -270,24 +253,17 @@ const App = () => {
                             />
                             <label htmlFor="file-button">
                                 <Button
-                                    disabled={
-                                        isPrinting || state.value.dymoError
-                                    }
+                                    disabled={isPrinting || state.value.dymoError}
                                     component="span"
                                     variant="text"
                                     color="primary"
                                     startIcon={<FolderOpenIcon />}
                                     endIcon={
-                                        <Tooltip
-                                            title={toolTipText}
-                                            placement="bottom"
-                                        >
+                                        <Tooltip title={toolTipText} placement="bottom">
                                             {!templateIsGood ? (
                                                 <ErrorOutlineIcon color="secondary" />
                                             ) : (
-                                                <CheckIcon
-                                                    style={{ color: "#8bc34a" }}
-                                                />
+                                                <CheckIcon style={{ color: "#8bc34a" }} />
                                             )}
                                         </Tooltip>
                                     }
@@ -313,10 +289,7 @@ const App = () => {
                                 value={state.value.printer}
                             >
                                 {printers.map((printer) => (
-                                    <MenuItem
-                                        key={printer.name}
-                                        value={printer.name}
-                                    >
+                                    <MenuItem key={printer.name} value={printer.name}>
                                         {printer.name}
                                     </MenuItem>
                                 ))}
@@ -324,43 +297,25 @@ const App = () => {
                         </FormControl>
                         <div className="settings-button">
                             <IconButton
-                                disabled={
-                                    isPrinting ||
-                                    state.value.dymoError ||
-                                    state.value.noFileFound
-                                }
+                                disabled={isPrinting || state.value.dymoError || state.value.noFileFound}
                                 onClick={toggleSettings}
                                 size="medium"
                                 color="primary"
                                 variant="outlined"
                             >
-                                <Badge
-                                    color="secondary"
-                                    variant="dot"
-                                    invisible={
-                                        state.value.allPicked ||
-                                        state.value.noFileFound
-                                    }
-                                >
-                                    {state.value.settingsOpen ? (
-                                        <CloseIcon />
-                                    ) : (
-                                        <SettingsIcon />
-                                    )}
+                                <Badge color="secondary" variant="dot" invisible={hideBadge()}>
+                                    {state.value.settingsOpen ? <CloseIcon /> : <SettingsIcon />}
                                 </Badge>
                             </IconButton>
                         </div>
                     </div>
                     <UnmountClosed
-                        onRest={() =>
-                            setCollapseComplete(state.value.settingsOpen)
-                        }
+                        onRest={() => setCollapseComplete(state.value.settingsOpen)}
                         isOpened={state.value.settingsOpen}
                     >
                         <Settings collapseComplete={collapseComplete} />
                     </UnmountClosed>
-                    {(collapseComplete && state.value.settingsOpen) ||
-                    refreshPrint ? (
+                    {(collapseComplete && state.value.settingsOpen) || refreshPrint ? (
                         <div className="print-load">
                             <CircularProgress size={30} />
                         </div>

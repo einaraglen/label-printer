@@ -177,9 +177,9 @@ const State = ({ children }) => {
     const [settingsOpen, setSettingsOpen] = React.useState(false);
     const [dymoError, setDymoError] = React.useState(false);
     const [noFileFound, setNoFileFound] = React.useState(false);
-    const [testPath, setTestPath] = React.useState(testPaths[3]);
+    const [testPath, setTestPath] = React.useState(testPaths[2]);
     //set to false before build
-    const inDevMode = true;
+    const inDevMode = false;
 
     const usableProperties = [
         "_Number",

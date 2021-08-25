@@ -62,7 +62,7 @@ const createWindow = () => {
     );
 
     //for debugging
-    window.webContents.openDevTools();
+    //window.webContents.openDevTools();
 };
 
 ipcMain.handle("export-config", (event, args) => {
@@ -70,10 +70,8 @@ ipcMain.handle("export-config", (event, args) => {
         title: "Export Config",
         defaultPath: "label-config",
         buttonLabel: "Save",
-
         filters: [{ name: "json", extensions: ["json"] }],
     };
-
     return dialog.showSaveDialog(null, options).then(({ filePath }) => {
         fs.writeFileSync(filePath, args, "utf-8");
         return { status: true, message: "Exported successfully" };

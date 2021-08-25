@@ -33,10 +33,7 @@ const PrintView = ({ startPrint }) => {
             if (currentProperty[i] === "EMPTY") return "";
             let currentLine = current[currentProperty[i]];
             lineInfo += currentLine;
-            lineInfo +=
-                i === currentProperty.length - 1 || currentLine.length === 0
-                    ? ""
-                    : " - ";
+            lineInfo += i === currentProperty.length - 1 || currentLine.length === 0 ? "" : " - ";
         }
         return lineInfo;
     }, []);
@@ -46,8 +43,7 @@ const PrintView = ({ startPrint }) => {
             const regex = new RegExp(property, "g");
             const currentProperty = currentConfig[property];
             //if user has selected the empty item, we add dead space
-            if (currentConfig[property] === "EMPTY")
-                return labelXML.toString().replace(regex, "");
+            if (currentConfig[property] === "EMPTY") return labelXML.toString().replace(regex, "");
             //handle "_Info" and "_Extra"
             if (property === "_Info" || property === "_Extra") {
                 let lineInfo = handleInfo(currentProperty, current);
@@ -59,15 +55,11 @@ const PrintView = ({ startPrint }) => {
                     .toString()
                     .replace(
                         regex,
-                        currentMode !== "single"
-                            ? `${current[currentConfig[property]]} pcs`
-                            : "1 pcs"
+                        currentMode !== "single" ? `${current[currentConfig[property]]} pcs` : "1 pcs"
                     );
             }
             //defualt return
-            return labelXML
-                .toString()
-                .replace(regex, current[currentConfig[property]]);
+            return labelXML.toString().replace(regex, current[currentConfig[property]]);
         },
         [handleInfo]
     );
@@ -79,21 +71,12 @@ const PrintView = ({ startPrint }) => {
             //loop every label
             for (let i = 0; i < currentData.length; i++) {
                 let current = currentData[i];
-                let limit =
-                    currentMode === "single"
-                        ? current[currentConfig._Quantity]
-                        : 1;
+                let limit = currentMode === "single" ? current[currentConfig._Quantity] : 1;
                 //extra loop for quantity if singles is enabled
                 for (let j = 0; j < limit; j++) {
                     //loop for the display info on the label
                     for (const property in currentConfig) {
-                        labelXML = handleProperty(
-                            currentMode,
-                            property,
-                            current,
-                            labelXML,
-                            currentConfig
-                        );
+                        labelXML = handleProperty(currentMode, property, current, labelXML, currentConfig);
                     }
                     currentLabels.push(labelXML);
                     //reset the template string
@@ -105,20 +88,15 @@ const PrintView = ({ startPrint }) => {
         [handleProperty]
     );
 
-    const handleGroupProperty = React.useCallback(
-        (property, current, labelXML, currentConfig) => {
-            const regex = new RegExp(property, "g");
-            //add "pcs" for quantity
-            if (property === "_Quantity") {
-                return labelXML
-                    .toString()
-                    .replace(regex, current[property] + " pcs");
-            }
-            //defualt return
-            return labelXML.toString().replace(regex, current[property]);
-        },
-        []
-    );
+    const handleGroupProperty = React.useCallback((property, current, labelXML, currentConfig) => {
+        const regex = new RegExp(property, "g");
+        //add "pcs" for quantity
+        if (property === "_Quantity") {
+            return labelXML.toString().replace(regex, current[property] + " pcs");
+        }
+        //defualt return
+        return labelXML.toString().replace(regex, current[property]);
+    }, []);
 
     const buildGroups = React.useCallback(
         (currentData, currentConfig, templateXML) => {
@@ -128,12 +106,7 @@ const PrintView = ({ startPrint }) => {
             for (let i = 0; i < currentData.length; i++) {
                 let current = currentData[i];
                 for (const property in currentData[0]) {
-                    labelXML = handleGroupProperty(
-                        property,
-                        current,
-                        labelXML,
-                        currentConfig
-                    );
+                    labelXML = handleGroupProperty(property, current, labelXML, currentConfig);
                 }
                 currentLabels.push(labelXML);
                 //reset the template string
@@ -148,13 +121,9 @@ const PrintView = ({ startPrint }) => {
     const getImages = React.useCallback(async (currentLabels) => {
         let images = [];
         if (!currentLabels) {
-            stateRef.current.method.setOutput((o) => [
-                ...o,
-                buildResponse(true, "No images loaded"),
-            ]);
+            stateRef.current.method.setOutput((o) => [...o, buildResponse(true, "No images loaded")]);
             return [];
         }
-        let response = {};
         stateRef.current.method.setOutput((o) => [
             ...o,
             buildResponse(true, "Starting to load images..", true),
@@ -163,30 +132,19 @@ const PrintView = ({ startPrint }) => {
         for (let i = 0; i < currentLabels.length; i++) {
             //fix for xml error "Line 1 containes no data" removes all space between tags
             let currentXML = cleanXMLString(currentLabels[i]);
-            response = await ipcRenderer.invoke("image-preview", currentXML);
+            let response = await ipcRenderer.invoke("image-preview", currentXML);
             //this is only false when a dymo error is thrown, usually when Dymo Connect is not installed!
             if (!response.status) {
                 stateRef.current.method.setDymoError(true);
                 stateRef.current.method.setOutput((o) => [
                     ...o,
-                    buildResponse(
-                        false,
-                        response.error.message +
-                            " from " +
-                            response.printer.hostname
-                    ),
+                    buildResponse(false, response.error.message),
                 ]);
                 return null;
             }
             images.push(response.image.replace(/"/g, ""));
         }
-        stateRef.current.method.setOutput((o) => [
-            ...o,
-            buildResponse(
-                true,
-                "Image previews loaded from " + response.printer.hostname
-            ),
-        ]);
+        stateRef.current.method.setOutput((o) => [...o, buildResponse(true, "Image previews loaded")]);
         return images;
     }, []);
 
@@ -206,7 +164,7 @@ const PrintView = ({ startPrint }) => {
             setUnknownConfig(false);
             let currentConfig = getCurrentConfig();
             //if config is unknown
-            if (stateRef.current.value.config) {
+            if (!currentConfig) {
                 setIsBuilding(false);
                 return setUnknownConfig(true);
             }
@@ -223,11 +181,7 @@ const PrintView = ({ startPrint }) => {
             }
             let builtLabels =
                 currentMode === "group"
-                    ? buildGroups(
-                          groups,
-                          currentConfig,
-                          await readFile(stateRef.current.value.template)
-                      )
+                    ? buildGroups(groups, currentConfig, await readFile(stateRef.current.value.template))
                     : buildLabels(
                           currentMode,
                           currentData,
@@ -262,16 +216,12 @@ const PrintView = ({ startPrint }) => {
         for (let i = 0; i < jsonData.length; i++) {
             if (jsonData[i][currentConfig._Quantity] > 1) hasMoreThanOne = true;
         }
-        return (
-            hasMoreThanOne &&
-            (jsonData.length !== 1 || jsonData[0][currentConfig._Quantity] > 1)
-        );
+        return hasMoreThanOne && (jsonData.length !== 1 || jsonData[0][currentConfig._Quantity] > 1);
     };
 
     const getGroups = (currentConfig, jsonData) => {
         //if no "_Info" is picked, or is "EMPTY" return default data
-        if (!currentConfig._Info[0] || currentConfig._Info[0] === "EMPTY")
-            return jsonData;
+        if (!currentConfig._Info[0] || currentConfig._Info[0] === "EMPTY") return jsonData;
         //detect that there are more than one instance of any partnumber in given data
         let frequency = [];
         for (let i = 0; i < jsonData.length; i++) {
@@ -280,26 +230,20 @@ const PrintView = ({ startPrint }) => {
                     entry._Number === jsonData[i][currentConfig._Number] &&
                     entry._Info1 === jsonData[i][currentConfig._Info[0]]
             );
-            let moreInfo = !jsonData[i][currentConfig._Info[1]]
-                ? ""
-                : jsonData[i][currentConfig._Info[1]];
+            let moreInfo = !jsonData[i][currentConfig._Info[1]] ? "" : jsonData[i][currentConfig._Info[1]];
             if (index === -1) {
                 frequency.push({
                     _Number: jsonData[i][currentConfig._Number],
                     _Info1: jsonData[i][currentConfig._Info[0]],
                     _Description: jsonData[i][currentConfig._Description],
-                    _Info: `${
-                        jsonData[i][currentConfig._Info[0]]
-                    } - ${moreInfo}`,
+                    _Info: `${jsonData[i][currentConfig._Info[0]]} - ${moreInfo}`,
                     _Quantity: `${jsonData[i][currentConfig._Quantity]}`,
                 });
             } else {
                 frequency[index] = {
                     ...frequency[index],
                     _Info: `${frequency[index]._Info}, ${moreInfo}`,
-                    _Quantity: `${frequency[index]._Quantity}, ${
-                        jsonData[i][currentConfig._Quantity]
-                    }`,
+                    _Quantity: `${frequency[index]._Quantity}, ${jsonData[i][currentConfig._Quantity]}`,
                 };
             }
         }
@@ -308,9 +252,7 @@ const PrintView = ({ startPrint }) => {
 
     //had to be extracted into method, very unreadable without..
     const getCurrentConfig = () => {
-        return stateRef.current.value.config[
-            getConfigName(stateRef.current.value.currentPath)
-        ];
+        return stateRef.current.value.config[getConfigName(stateRef.current.value.currentPath)];
     };
 
     const print = async () => {
@@ -320,12 +262,9 @@ const PrintView = ({ startPrint }) => {
         for (let i = 0; i < labels.length; i++) {
             let currentLabel = cleanXMLString(labels[i]);
             setPrintIndex(i);
-            state.method.setButtonText(
-                `Printing Label ${i + 1} of ${labels.length}`
-            );
+            state.method.setButtonText(`Printing Label ${i + 1} of ${labels.length}`);
             let result = await ipcRenderer.invoke("print-label", currentLabel);
-            if (!result.status)
-                return state.method.setButtonText("Printer Error!");
+            if (!result.status) return state.method.setButtonText("Printer Error!");
             await new Promise((resolve) => setTimeout(resolve, 2000));
         }
         //complete print with close
@@ -337,9 +276,7 @@ const PrintView = ({ startPrint }) => {
 
     const toggleSingles = (event) => {
         //if same as prev = default, if not = event.target.value
-        setCurrentMode((mode) =>
-            mode === event.target.value ? "default" : event.target.value
-        );
+        setCurrentMode((mode) => (mode === event.target.value ? "default" : event.target.value));
     };
 
     const openDymoDownload = async () => {
@@ -350,17 +287,23 @@ const PrintView = ({ startPrint }) => {
         );
     };
 
+    const switchesDisabled = () => {
+        return (
+            !specialCases.single ||
+            unknowConfig ||
+            state.value.noFileFound ||
+            state.value.dymoError ||
+            !stateRef.current.value.template ||
+            isLoading
+        );
+    };
+
     return (
         <>
             {state.value.dymoError ? (
                 <div className="preview">
-                    <p>Missing: [DYMO Connect]</p>
-                    <p>Download, Install, Restart</p>
-                    <Button
-                        color="primary"
-                        variant="contained"
-                        onClick={openDymoDownload}
-                    >
+                    <p>Install DYMO Connect</p>
+                    <Button color="primary" variant="contained" onClick={openDymoDownload}>
                         DYMO Connect
                     </Button>
                 </div>
@@ -390,13 +333,7 @@ const PrintView = ({ startPrint }) => {
                         control={
                             <Switch
                                 value="single"
-                                disabled={
-                                    !specialCases.single ||
-                                    unknowConfig ||
-                                    state.value.noFileFound ||
-                                    state.value.dymoError ||
-                                    !stateRef.current.value.template
-                                }
+                                disabled={switchesDisabled()}
                                 checked={currentMode === "single"}
                                 onChange={toggleSingles}
                                 color="primary"
@@ -411,10 +348,9 @@ const PrintView = ({ startPrint }) => {
                         unknowConfig ||
                         state.value.dymoError ||
                         state.value.noFileFound ||
-                        isLoading ||
                         !stateRef.current.value.template
                     }
-                    onClick={print}
+                    onClick={isLoading ? null : print}
                     color={"primary"}
                     variant="outlined"
                     style={{ width: "56%" }}
@@ -427,13 +363,7 @@ const PrintView = ({ startPrint }) => {
                         control={
                             <Switch
                                 value="group"
-                                disabled={
-                                    !specialCases.group ||
-                                    unknowConfig ||
-                                    state.value.noFileFound ||
-                                    state.value.dymoError ||
-                                    !stateRef.current.value.template
-                                }
+                                disabled={switchesDisabled()}
                                 checked={currentMode === "group"}
                                 onChange={toggleSingles}
                                 color="primary"
