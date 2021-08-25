@@ -15,6 +15,15 @@ export const readFile = async (path) => {
     });
 };
 
+export const isConfigGood = (config, usableProperties) => {
+    //a blank config will work
+    if (!config || !config[Object.keys(config)[0]]) return true;
+    for (let property in config[Object.keys(config)[0]]) {
+        if (usableProperties.indexOf(property) === -1) return false;
+    }
+    return true;
+};
+
 export const getConfigName = (filePath) => {
     //get our capital letter words into an array ["Customer", "Order"]
     let words = path

@@ -8,6 +8,8 @@ const store = new Store();
 const isDev = require("electron-is-dev");
 const devEnv = /electron/.test(process.argv[0]);
 const shell = require("electron").shell;
+const { dialog } = require("electron");
+const fs = require("fs");
 
 require("@electron/remote/main").initialize();
 
@@ -60,8 +62,23 @@ const createWindow = () => {
     );
 
     //for debugging
-    window.webContents.openDevTools();
+    //window.webContents.openDevTools();
 };
+
+ipcMain.handle("export-config", (event, args) => {
+    let options = {
+        title: "Export Config",
+        defaultPath: "label-config",
+        buttonLabel: "Save",
+
+        filters: [{ name: "json", extensions: ["json"] }],
+    };
+
+    return dialog.showSaveDialog(null, options).then(({ filePath }) => {
+        fs.writeFileSync(filePath, args, "utf-8");
+        return { status: true, message: "Exported successfully" };
+    });
+});
 
 ipcMain.handle("open-browser", async (event, args) => {
     shell.openExternal(args);
@@ -82,7 +99,8 @@ ipcMain.handle("image-preview", async (event, arg) => {
 //print method that renderer can acces vi   a ipcRenderer
 ipcMain.handle("print-label", async (event, arg) => {
     let result = await printer.print(store.get("printer"), arg);
-    if (!JSON.parse(result).exceptionMessage) return { status: true, message: "Success!" };
+    if (!JSON.parse(result).exceptionMessage)
+        return { status: true, message: "Success!" };
     return { status: false, message: JSON.parse(result).exceptionMessage };
 });
 

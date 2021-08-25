@@ -14,9 +14,10 @@ import PrintView from "components/PrintView";
 import CloseIcon from "@material-ui/icons/Close";
 import Settings from "components/Settings";
 import Badge from "@material-ui/core/Badge";
-import { readFile } from "utils";
+import { readFile, isConfigGood } from "utils";
 import DevTools from "components/DevTools";
-import { UnmountClosed } from 'react-collapse';
+import { UnmountClosed } from "react-collapse";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 //we can now amazingly access awsome shit in our render!
 const fs = window.require("fs");
@@ -29,6 +30,7 @@ const App = () => {
     const [isLoading, setIsLoading] = React.useState(true);
     const [toolTipText, setToolTipText] = React.useState("");
     const [collapseComplete, setCollapseComplete] = React.useState(false);
+    const [refreshPrint, setRefreshPrint] = React.useState(false);
 
     const state = React.useContext(Context);
     const stateRef = React.useRef(state);
@@ -36,9 +38,14 @@ const App = () => {
     const checkConfigKeys = React.useCallback((xml) => {
         //checks if the template choosen has the right key values, except "_Extra"
         let result = { status: true, missing: [] };
-        for (let i = 0; i < stateRef.current.value.usableProperties.length; i++) {
+        for (
+            let i = 0;
+            i < stateRef.current.value.usableProperties.length;
+            i++
+        ) {
             if (
-                xml.indexOf(stateRef.current.value.usableProperties[i]) === -1 &&
+                xml.indexOf(stateRef.current.value.usableProperties[i]) ===
+                    -1 &&
                 stateRef.current.value.usableProperties[i] !== "_Extra"
             ) {
                 result.missing.push(stateRef.current.value.usableProperties[i]);
@@ -71,16 +78,8 @@ const App = () => {
         return true;
     }, [checkConfigKeys]);
 
-    const isConfigGood = React.useCallback((config) => {
-        //a blank config will work
-        if (!config || !config[Object.keys(config)[0]]) return true;
-        for (let property in config[Object.keys(config)[0]]) {
-            if (stateRef.current.value.usableProperties.indexOf(property) === -1) return false;
-        }
-        return true;
-    }, []);
-
     React.useEffect(() => {
+        setIsLoading(true);
         //guard setup
         let isMounted = true;
         //loads in the template file and stores it into state
@@ -96,7 +95,9 @@ const App = () => {
         const getFilePath = async () => {
             let filePath = await ipcRenderer.invoke("get-file");
             //testing / release
-            filePath = !filePath ? stateRef.current.method.handleFileResult(filePath) : filePath;
+            filePath = !filePath
+                ? stateRef.current.method.handleFileResult(filePath)
+                : filePath;
             if (!filePath || !isMounted) {
                 stateRef.current.method.setNoFileFound(true);
                 return true;
@@ -110,12 +111,14 @@ const App = () => {
             let config = await ipcRenderer.invoke("get-config");
             if (!isMounted) return true;
             //bad old config (from earlier builds)
-            if (!isConfigGood(config)) {
+            if (
+                !isConfigGood(config, stateRef.current.value.usableProperties)
+            ) {
                 //wipe old config, since it does not fit anymore
                 await ipcRenderer.invoke("set-config", {});
                 stateRef.current.method.setConfig(config);
                 return true;
-            } 
+            }
             //normal execution
             stateRef.current.method.setConfig(config);
             return true;
@@ -130,7 +133,9 @@ const App = () => {
             //get printer stored as our printer in-use, if none stored: use [0]
             let printer = await ipcRenderer.invoke("get-printer");
             if (!printer || !isMounted) return true;
-            stateRef.current.method.setPrinter(!printer ? printers[0].name : printer);
+            stateRef.current.method.setPrinter(
+                !printer ? printers[0].name : printer
+            );
             return true;
         };
 
@@ -152,13 +157,17 @@ const App = () => {
         return () => {
             isMounted = false;
         };
-    }, [isTemplateGood, isConfigGood]);
+    }, [isTemplateGood]);
 
     const handleInputChange = async (event) => {
         if (!event.target.value) return;
         state.method.setTemplate(event.target.files[0].path);
         await ipcRenderer.invoke("set-template", event.target.files[0].path);
         stateRef.current.method.setIsTemplateGood(await isTemplateGood());
+        //refresh print
+        setRefreshPrint(true);
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        setRefreshPrint(false);
     };
 
     const handleFormEvent = async (event) => {
@@ -171,8 +180,14 @@ const App = () => {
         state.method.setSettingsOpen((s) => !s);
     };
 
-    const toggleDevTools = () => {
-        setDevTools(!devTools);
+    const toggleDevTools = async () => {
+        setDevTools((d) => !d);
+        //refresh printview
+        if (devTools) {
+            setRefreshPrint(true);
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+            setRefreshPrint(false);
+        }
     };
 
     //devtools controlls
@@ -189,9 +204,7 @@ const App = () => {
     return (
         <ThemeProvider theme={state.theme}>
             {devTools ? <DevTools /> : null}
-            {isLoading ? (
-                null
-            ) : (
+            {isLoading ? null : (
                 <div className="main">
                     <div className="tools">
                         <div className="template-picker">
@@ -206,17 +219,24 @@ const App = () => {
                             />
                             <label htmlFor="file-button">
                                 <Button
-                                    disabled={isPrinting || state.value.dymoError}
+                                    disabled={
+                                        isPrinting || state.value.dymoError
+                                    }
                                     component="span"
                                     variant="text"
                                     color="primary"
                                     startIcon={<FolderOpenIcon />}
                                     endIcon={
-                                        <Tooltip title={toolTipText} placement="bottom">
+                                        <Tooltip
+                                            title={toolTipText}
+                                            placement="bottom"
+                                        >
                                             {!state.value.isTemplateGood ? (
                                                 <ErrorOutlineIcon color="secondary" />
                                             ) : (
-                                                <CheckIcon style={{ color: "#8bc34a" }} />
+                                                <CheckIcon
+                                                    style={{ color: "#8bc34a" }}
+                                                />
                                             )}
                                         </Tooltip>
                                     }
@@ -226,7 +246,11 @@ const App = () => {
                             </label>
                         </div>
                         <FormControl
-                            style={{ width: "46%", marginLeft: "2%", marginRight: "2%" }}
+                            style={{
+                                width: "46%",
+                                marginLeft: "2%",
+                                marginRight: "2%",
+                            }}
                             size="small"
                             variant="filled"
                             elevation={1}
@@ -238,7 +262,10 @@ const App = () => {
                                 value={state.value.printer}
                             >
                                 {printers.map((printer) => (
-                                    <MenuItem key={printer.name} value={printer.name}>
+                                    <MenuItem
+                                        key={printer.name}
+                                        value={printer.name}
+                                    >
                                         {printer.name}
                                     </MenuItem>
                                 ))}
@@ -246,7 +273,11 @@ const App = () => {
                         </FormControl>
                         <div className="settings-button">
                             <IconButton
-                                disabled={isPrinting || state.value.dymoError || state.value.noFileFound}
+                                disabled={
+                                    isPrinting ||
+                                    state.value.dymoError ||
+                                    state.value.noFileFound
+                                }
                                 onClick={toggleSettings}
                                 size="medium"
                                 color="primary"
@@ -255,17 +286,36 @@ const App = () => {
                                 <Badge
                                     color="secondary"
                                     variant="dot"
-                                    invisible={state.value.allPicked || state.value.noFileFound}
+                                    invisible={
+                                        state.value.allPicked ||
+                                        state.value.noFileFound
+                                    }
                                 >
-                                    {state.value.settingsOpen ? <CloseIcon /> : <SettingsIcon />}
+                                    {state.value.settingsOpen ? (
+                                        <CloseIcon />
+                                    ) : (
+                                        <SettingsIcon />
+                                    )}
                                 </Badge>
                             </IconButton>
                         </div>
                     </div>
-                    <UnmountClosed onRest={() => setCollapseComplete(state.value.settingsOpen)} isOpened={state.value.settingsOpen}>
+                    <UnmountClosed
+                        onRest={() =>
+                            setCollapseComplete(state.value.settingsOpen)
+                        }
+                        isOpened={state.value.settingsOpen}
+                    >
                         <Settings collapseComplete={collapseComplete} />
                     </UnmountClosed>
-                    {collapseComplete && state.value.settingsOpen ? null : <PrintView startPrint={() => setIsPrinting(true)} />}
+                    {(collapseComplete && state.value.settingsOpen) ||
+                    refreshPrint ? (
+                        <div className="print-load">
+                            <CircularProgress size={30} />
+                        </div>
+                    ) : (
+                        <PrintView startPrint={() => setIsPrinting(true)} />
+                    )}
                     <div className="bottom unselectable">
                         <div>Created by Einar Aglen</div>
                         <div>{`Version ${packageJson.version}`}</div>
