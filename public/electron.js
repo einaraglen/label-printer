@@ -62,7 +62,7 @@ const createWindow = () => {
     );
 
     //for debugging
-    //window.webContents.openDevTools();
+    window.webContents.openDevTools();
 };
 
 ipcMain.handle("export-config", (event, args) => {
@@ -89,10 +89,10 @@ ipcMain.handle("image-preview", async (event, arg) => {
     return printer
         .renderLabel(arg)
         .then((imageData) => {
-            return { status: true, image: imageData };
+            return { status: true, image: imageData, printer: printer };
         })
         .catch((err) => {
-            return { status: false, error: err };
+            return { status: false, error: err, printer: printer };
         });
 });
 

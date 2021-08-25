@@ -43,7 +43,7 @@ const LineInfoPicker = ({ options, text, currentPicked, setInfo }) => {
     return (
         <div>
             <ListItem style={{ height: "4rem" }} button onClick={handleClickListItem}>
-                <ListItemText primary={!text ? "Pick LineInfo" : text} />
+                <ListItemText primary={!text ? "Pick Info" : text} />
                 {!text ? <ErrorOutlineIcon color="secondary" /> : null}
             </ListItem>
             <Menu onClose={handleClose} anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)}>

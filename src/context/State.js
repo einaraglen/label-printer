@@ -172,15 +172,14 @@ const State = ({ children }) => {
     const [output, setOutput] = React.useState([]);
     //extras
     const [printer, setPrinter] = React.useState("");
-    const [isTemplateGood, setIsTemplateGood] = React.useState(true);
     const [buttonText, setButtonText] = React.useState("Print");
     const [allPicked, setAllPicked] = React.useState(true);
     const [settingsOpen, setSettingsOpen] = React.useState(false);
     const [dymoError, setDymoError] = React.useState(false);
     const [noFileFound, setNoFileFound] = React.useState(false);
-    const [testPath, setTestPath] = React.useState(testPaths[2]);
+    const [testPath, setTestPath] = React.useState(testPaths[3]);
     //set to false before build
-    const inDevMode = false;
+    const inDevMode = true;
 
     const usableProperties = [
         "_Number",
@@ -211,7 +210,6 @@ const State = ({ children }) => {
         value: {
             template: template,
             printer: printer,
-            isTemplateGood: isTemplateGood,
             buttonText: buttonText,
             currentPath: currentPath,
             test: testPath,
@@ -227,8 +225,6 @@ const State = ({ children }) => {
         method: {
             setTemplate,
             setPrinter,
-            isTemplateGood,
-            setIsTemplateGood,
             setButtonText,
             setCurrentPath,
             setAllPicked,

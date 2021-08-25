@@ -41,6 +41,19 @@ export const getConfigName = (filePath) => {
 
 export const cleanXMLString = (xml) => {
     //remove all space between tags
-    //let cleanXML = xml.replace(/>\s*/g, ">");
     return xml.replace(/\s*</g, "<")
+};
+
+export const buildResponse = (valid = null, message, loading = false) => {
+    let date = new Date();
+    let time = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+    let text = loading ? "[Loading..] " : valid ? "[Success] " : "[Failure] ";
+    return (
+        <p>
+            <span className={loading ? "loading" : valid ? "good" : "bad"}>
+                {`${time} ${text}`}
+            </span>
+            {message}
+        </p>
+    );
 };

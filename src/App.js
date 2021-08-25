@@ -14,7 +14,7 @@ import PrintView from "components/PrintView";
 import CloseIcon from "@material-ui/icons/Close";
 import Settings from "components/Settings";
 import Badge from "@material-ui/core/Badge";
-import { readFile, isConfigGood } from "utils";
+import { readFile, isConfigGood, buildResponse, getConfigName } from "utils";
 import DevTools from "components/DevTools";
 import { UnmountClosed } from "react-collapse";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -31,6 +31,7 @@ const App = () => {
     const [toolTipText, setToolTipText] = React.useState("");
     const [collapseComplete, setCollapseComplete] = React.useState(false);
     const [refreshPrint, setRefreshPrint] = React.useState(false);
+    const [templateIsGood, setTemplateIsGood] = React.useState(false);
 
     const state = React.useContext(Context);
     const stateRef = React.useRef(state);
@@ -85,9 +86,20 @@ const App = () => {
         //loads in the template file and stores it into state
         const getTemplate = async () => {
             let template = await ipcRenderer.invoke("get-template");
-            if (!template || !isMounted) return true;
+            if (!template || !isMounted) {
+                stateRef.current.method.setOutput((o) => [
+                    ...o,
+                    buildResponse(false, "Could not load previous template"),
+                ]);
+                setTemplateIsGood(false);
+                return true;
+            }
+            stateRef.current.method.setOutput((o) => [
+                ...o,
+                buildResponse(true, "Previous template loaded"),
+            ]);
             stateRef.current.method.setTemplate(template);
-            stateRef.current.method.setIsTemplateGood(await isTemplateGood());
+            setTemplateIsGood(await isTemplateGood());
             return true;
         };
 
@@ -100,8 +112,16 @@ const App = () => {
                 : filePath;
             if (!filePath || !isMounted) {
                 stateRef.current.method.setNoFileFound(true);
+                stateRef.current.method.setOutput((o) => [
+                    ...o,
+                    buildResponse(false, "No file loaded"),
+                ]);
                 return true;
             }
+            stateRef.current.method.setOutput((o) => [
+                ...o,
+                buildResponse(true, "Opened file loaded"),
+            ]);
             stateRef.current.method.setCurrentPath(filePath);
             return true;
         };
@@ -116,11 +136,23 @@ const App = () => {
             ) {
                 //wipe old config, since it does not fit anymore
                 await ipcRenderer.invoke("set-config", {});
-                stateRef.current.method.setConfig(config);
+                stateRef.current.method.setConfig({});
+                stateRef.current.method.setOutput((o) => [
+                    ...o,
+                    buildResponse(false, "Bad config, config set to {}"),
+                ]);
                 return true;
             }
+            stateRef.current.method.setOutput((o) => [
+                ...o,
+                buildResponse(true, !config ? "Empty config loaded" : "Previous config loaded"),
+            ]);
             //normal execution
-            stateRef.current.method.setConfig(config);
+            stateRef.current.method.setConfig(!config ? {} : config);
+            if (config) {
+                let noCurrentConfig = !config[getConfigName(stateRef.current.value.currentPath)];
+                stateRef.current.method.setAllPicked(noCurrentConfig)
+            }
             return true;
         };
 
@@ -128,14 +160,33 @@ const App = () => {
         const getPrinters = async () => {
             //get all printers
             let printers = await ipcRenderer.invoke("get-printers");
-            if (!printers || !isMounted) return true;
+            if (!printers || !isMounted) {
+                stateRef.current.method.setOutput((o) => [
+                    ...o,
+                    buildResponse(false, "Could not load printers"),
+                ]);
+                return true;
+            }
+            stateRef.current.method.setOutput((o) => [
+                ...o,
+                buildResponse(true, "Printers loaded"),
+            ]);
             setPrinters(printers);
             //get printer stored as our printer in-use, if none stored: use [0]
             let printer = await ipcRenderer.invoke("get-printer");
-            if (!printer || !isMounted) return true;
-            stateRef.current.method.setPrinter(
-                !printer ? printers[0].name : printer
-            );
+            if (!printer || !isMounted) {
+                stateRef.current.method.setPrinter(printers[0].name);
+                stateRef.current.method.setOutput((o) => [
+                    ...o,
+                    buildResponse(false, "Could not load previous printer"),
+                ]);
+                return true;
+            }
+            stateRef.current.method.setOutput((o) => [
+                ...o,
+                buildResponse(true, "Previous printer loaded"),
+            ]);
+            stateRef.current.method.setPrinter(printer);
             return true;
         };
 
@@ -163,7 +214,7 @@ const App = () => {
         if (!event.target.value) return;
         state.method.setTemplate(event.target.files[0].path);
         await ipcRenderer.invoke("set-template", event.target.files[0].path);
-        stateRef.current.method.setIsTemplateGood(await isTemplateGood());
+        setTemplateIsGood(await isTemplateGood());
         //refresh print
         setRefreshPrint(true);
         await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -231,7 +282,7 @@ const App = () => {
                                             title={toolTipText}
                                             placement="bottom"
                                         >
-                                            {!state.value.isTemplateGood ? (
+                                            {!templateIsGood ? (
                                                 <ErrorOutlineIcon color="secondary" />
                                             ) : (
                                                 <CheckIcon

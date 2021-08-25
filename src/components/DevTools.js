@@ -1,7 +1,7 @@
 import React from "react";
 import { TextField } from "@material-ui/core";
 import { Context } from "context/State";
-import { readFile, isConfigGood } from "utils";
+import { readFile, isConfigGood, buildResponse } from "utils";
 
 const { ipcRenderer } = window.require("electron");
 
@@ -23,17 +23,6 @@ const DevTools = () => {
 
     const handleKeyDown = (event) => {
         if (event.code === "Enter") return handleCommand();
-    };
-
-    const buildResponse = (valid, message) => {
-        return (
-            <p>
-                <span className={valid ? "good" : "bad"}>
-                    {valid ? "[Success] " : "[Error] "}
-                </span>
-                {message}
-            </p>
-        );
     };
 
     const checkInput = (keyword, value) => {

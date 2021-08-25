@@ -1,16 +1,14 @@
 import React from "react";
 import Carousel from "react-material-ui-carousel";
-import { Context } from "context/State";
 import ReportProblemIcon from '@material-ui/icons/ReportProblem';
 
-const LabelCarousel = ({ images, isPrinting, index }) => {
-    const state = React.useContext(Context);
+const LabelCarousel = ({ images, isPrinting, index, noTemplate }) => {
 
     return (
         <>
-            {!state.value.isTemplateGood ? (
+            {noTemplate ? (
                 <div className="image-error">
-                    <p>Image Error</p>
+                    <p>Select Template</p>
                     <ReportProblemIcon color="secondary" />
                 </div>
             ) : (

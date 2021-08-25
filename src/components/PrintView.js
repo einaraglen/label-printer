@@ -5,7 +5,7 @@ import { Context } from "context/State";
 import LabelCarousel from "./LabelCarousel";
 import Switch from "@material-ui/core/Switch";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import { readFile, getConfigName, cleanXMLString } from "utils";
+import { readFile, getConfigName, cleanXMLString, buildResponse } from "utils";
 
 //we can now amazingly access awsome shit in our render!
 const parser = window.require("fast-xml-parser");
@@ -147,21 +147,46 @@ const PrintView = ({ startPrint }) => {
     //has to be called async
     const getImages = React.useCallback(async (currentLabels) => {
         let images = [];
-        if (!currentLabels) return [];
+        if (!currentLabels) {
+            stateRef.current.method.setOutput((o) => [
+                ...o,
+                buildResponse(true, "No images loaded"),
+            ]);
+            return [];
+        }
+        let response = {};
+        stateRef.current.method.setOutput((o) => [
+            ...o,
+            buildResponse(true, "Starting to load images..", true),
+        ]);
+
         for (let i = 0; i < currentLabels.length; i++) {
             //fix for xml error "Line 1 containes no data" removes all space between tags
             let currentXML = cleanXMLString(currentLabels[i]);
-            let response = await ipcRenderer.invoke(
-                "image-preview",
-                currentXML
-            );
+            response = await ipcRenderer.invoke("image-preview", currentXML);
             //this is only false when a dymo error is thrown, usually when Dymo Connect is not installed!
             if (!response.status) {
                 stateRef.current.method.setDymoError(true);
+                stateRef.current.method.setOutput((o) => [
+                    ...o,
+                    buildResponse(
+                        false,
+                        response.error.message +
+                            " from " +
+                            response.printer.hostname
+                    ),
+                ]);
                 return null;
             }
             images.push(response.image.replace(/"/g, ""));
         }
+        stateRef.current.method.setOutput((o) => [
+            ...o,
+            buildResponse(
+                true,
+                "Image previews loaded from " + response.printer.hostname
+            ),
+        ]);
         return images;
     }, []);
 
@@ -172,12 +197,17 @@ const PrintView = ({ startPrint }) => {
         const getLabels = async () => {
             //init build loading
             setIsBuilding(true);
+            //if config is empty
+            if (Object.keys(stateRef.current.value.config).length === 0) {
+                setIsBuilding(false);
+                return setUnknownConfig(true);
+            }
             //for when we save a new config
             setUnknownConfig(false);
             let currentConfig = getCurrentConfig();
-
-            //if the opened file is not recognized
-            if (!currentConfig) {
+            //if config is unknown
+            if (stateRef.current.value.config) {
+                setIsBuilding(false);
                 return setUnknownConfig(true);
             }
 
@@ -187,6 +217,10 @@ const PrintView = ({ startPrint }) => {
             let currentData = !rows.length ? [rows] : [...rows];
             //build print data for dymo printer
             let groups = getGroups(currentConfig, currentData);
+            //if template is not yet selected
+            if (!stateRef.current.value.template) {
+                return setIsBuilding(false);
+            }
             let builtLabels =
                 currentMode === "group"
                     ? buildGroups(
@@ -204,7 +238,7 @@ const PrintView = ({ startPrint }) => {
             let builtImages = await getImages(builtLabels);
 
             //async guard
-            if (!isMounted) return;
+            if (!isMounted) return setIsBuilding(false);
             setSpecialCases({
                 single: singlesDetected(currentConfig, currentData),
                 group: groups.length !== currentData.length,
@@ -246,23 +280,23 @@ const PrintView = ({ startPrint }) => {
                     entry._Number === jsonData[i][currentConfig._Number] &&
                     entry._Info1 === jsonData[i][currentConfig._Info[0]]
             );
-            let moreInfo = !jsonData[i][currentConfig._Info[1]] ? "" : jsonData[i][currentConfig._Info[1]]
+            let moreInfo = !jsonData[i][currentConfig._Info[1]]
+                ? ""
+                : jsonData[i][currentConfig._Info[1]];
             if (index === -1) {
                 frequency.push({
                     _Number: jsonData[i][currentConfig._Number],
                     _Info1: jsonData[i][currentConfig._Info[0]],
                     _Description: jsonData[i][currentConfig._Description],
-                    _Info: `${jsonData[i][currentConfig._Info[0]]} - ${
-                        moreInfo
-                    }`,
+                    _Info: `${
+                        jsonData[i][currentConfig._Info[0]]
+                    } - ${moreInfo}`,
                     _Quantity: `${jsonData[i][currentConfig._Quantity]}`,
                 });
             } else {
                 frequency[index] = {
                     ...frequency[index],
-                    _Info: `${frequency[index]._Info}, ${
-                        moreInfo
-                    }`,
+                    _Info: `${frequency[index]._Info}, ${moreInfo}`,
                     _Quantity: `${frequency[index]._Quantity}, ${
                         jsonData[i][currentConfig._Quantity]
                     }`,
@@ -345,6 +379,7 @@ const PrintView = ({ startPrint }) => {
                             images={images}
                             isPrinting={isLoading}
                             index={printIndex}
+                            noTemplate={!stateRef.current.value.template}
                         />
                     )}
                 </div>
@@ -358,7 +393,9 @@ const PrintView = ({ startPrint }) => {
                                 disabled={
                                     !specialCases.single ||
                                     unknowConfig ||
-                                    state.value.noFileFound
+                                    state.value.noFileFound ||
+                                    state.value.dymoError ||
+                                    !stateRef.current.value.template
                                 }
                                 checked={currentMode === "single"}
                                 onChange={toggleSingles}
@@ -370,17 +407,15 @@ const PrintView = ({ startPrint }) => {
                     />
                 </div>
                 <Button
-                    disabled={unknowConfig || state.value.dymoError}
-                    onClick={
-                        !state.value.isTemplateGood ||
+                    disabled={
+                        unknowConfig ||
+                        state.value.dymoError ||
+                        state.value.noFileFound ||
                         isLoading ||
-                        state.value.noFileFound
-                            ? null
-                            : print
+                        !stateRef.current.value.template
                     }
-                    color={
-                        !state.value.isTemplateGood ? "secondary" : "primary"
-                    }
+                    onClick={print}
+                    color={"primary"}
                     variant="outlined"
                     style={{ width: "56%" }}
                     endIcon={isLoading ? <CircularProgress size={20} /> : null}
@@ -395,7 +430,9 @@ const PrintView = ({ startPrint }) => {
                                 disabled={
                                     !specialCases.group ||
                                     unknowConfig ||
-                                    state.value.noFileFound
+                                    state.value.noFileFound ||
+                                    state.value.dymoError ||
+                                    !stateRef.current.value.template
                                 }
                                 checked={currentMode === "group"}
                                 onChange={toggleSingles}
