@@ -179,7 +179,7 @@ const State = ({ children }) => {
     const [noFileFound, setNoFileFound] = React.useState(false);
     const [testPath, setTestPath] = React.useState(testPaths[2]);
     //set to false before build
-    const inDevMode = false;
+    const inDevMode = true;
 
     const usableProperties = [
         "_Number",
