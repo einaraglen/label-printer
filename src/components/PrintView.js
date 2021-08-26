@@ -10,6 +10,7 @@ import { readFile, getConfigName, cleanXMLString, buildResponse } from "utils";
 //we can now amazingly access awsome shit in our render!
 const parser = window.require("fast-xml-parser");
 const { ipcRenderer } = window.require("electron");
+const path = window.require("path");
 
 const PrintView = ({ startPrint }) => {
     const [images, setImages] = React.useState([]);
@@ -300,6 +301,7 @@ const PrintView = ({ startPrint }) => {
 
     return (
         <>
+            <p className="template-info">{!state.value.template ? "No Template Found" : path.parse(state.value.template).base}</p>
             {state.value.dymoError ? (
                 <div className="preview">
                     <p>Install DYMO Connect</p>

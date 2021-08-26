@@ -62,7 +62,7 @@ const createWindow = () => {
     );
 
     //for debugging
-    //window.webContents.openDevTools();
+    window.webContents.openDevTools();
 };
 
 ipcMain.handle("export-config", (event, args) => {
