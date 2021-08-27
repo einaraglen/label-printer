@@ -73,8 +73,14 @@ ipcMain.handle("export-config", (event, args) => {
         filters: [{ name: "json", extensions: ["json"] }],
     };
     return dialog.showSaveDialog(null, options).then(({ filePath }) => {
-        fs.writeFileSync(filePath, args, "utf-8");
-        return { status: true, message: "Exported successfully" };
+        if (filePath.length === 0) return { status: false, message: "Config was not exported" };
+        try {
+            fs.writeFileSync(filePath, args, "utf-8");
+            return { status: true, message: "Exported successfully", path: filePath };
+
+        } catch (err) {
+            return { status: false, message: "File error while exporting" };
+        }
     });
 });
 
@@ -84,6 +90,12 @@ ipcMain.handle("open-browser", async (event, args) => {
 
 ipcMain.handle("image-preview", async (event, arg) => {
     // returns imageData as base64 encoded png.
+    /*let printers = await printer.getPrinters()
+    let status = await printer.getStatus()
+    
+    console.log(printers)
+    console.log(status)*/
+
     return printer
         .renderLabel(arg)
         .then((imageData) => {

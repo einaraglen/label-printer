@@ -108,7 +108,7 @@ const DevTools = () => {
             "export-config",
             JSON.stringify(state.value.config)
         );
-        if (!result) return state.method.setOutput((o) => [
+        if (!result || result.path === undefined) return state.method.setOutput((o) => [
             ...o,
             buildResponse(false, "Could not export, try again"),
         ]);

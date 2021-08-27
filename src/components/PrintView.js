@@ -134,6 +134,7 @@ const PrintView = ({ startPrint }) => {
             //fix for xml error "Line 1 containes no data" removes all space between tags
             let currentXML = cleanXMLString(currentLabels[i]);
             let response = await ipcRenderer.invoke("image-preview", currentXML);
+            //console.log(response.)
             //this is only false when a dymo error is thrown, usually when Dymo Connect is not installed!
             if (!response.status) {
                 stateRef.current.method.setDymoError(true);
