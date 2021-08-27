@@ -39,9 +39,14 @@ const App = () => {
     const checkConfigKeys = React.useCallback((xml) => {
         //checks if the template choosen has the right key values, except "_Extra"
         let result = { status: true, missing: [] };
-        for (let i = 0; i < stateRef.current.value.usableProperties.length; i++) {
+        for (
+            let i = 0;
+            i < stateRef.current.value.usableProperties.length;
+            i++
+        ) {
             if (
-                xml.indexOf(stateRef.current.value.usableProperties[i]) === -1 &&
+                xml.indexOf(stateRef.current.value.usableProperties[i]) ===
+                    -1 &&
                 stateRef.current.value.usableProperties[i] !== "_Extra"
             ) {
                 result.missing.push(stateRef.current.value.usableProperties[i]);
@@ -78,6 +83,43 @@ const App = () => {
         setIsLoading(true);
         //guard setup
         let isMounted = true;
+        //check to see if DYMO is connected, and that the endpoint 127.0.0.1 is working
+        const getDYMOStatus = async () => {
+            let result = await ipcRenderer.invoke("dymo-status");
+            //if we are not connected
+            if (!result.status && !result.error) {
+                stateRef.current.method.setOutput((o) => [
+                    ...o,
+                    buildResponse(
+                        false,
+                        "Could not connect with DYMO Software"
+                    ),
+                ]);
+                return true;
+            }
+            //if DYMO sofware has error
+            if (!result.status) {
+                stateRef.current.method.setDymoError(true);
+                stateRef.current.method.setOutput((o) => [
+                    ...o,
+                    buildResponse(
+                        false,
+                        "Could not get DYMO status: " + result.error.toString()
+                    ),
+                ]);
+                return true;
+            }
+            //if status is good
+            stateRef.current.method.setOutput((o) => [
+                ...o,
+                buildResponse(
+                    true,
+                    "Connection to DYMO Software has been made"
+                ),
+            ]);
+            return true;
+        };
+
         //loads in the template file and stores it into state
         const getTemplate = async () => {
             let template = await ipcRenderer.invoke("get-template");
@@ -89,7 +131,10 @@ const App = () => {
                 setTemplateIsGood(false);
                 return true;
             }
-            stateRef.current.method.setOutput((o) => [...o, buildResponse(true, "Previous template loaded")]);
+            stateRef.current.method.setOutput((o) => [
+                ...o,
+                buildResponse(true, "Previous template loaded"),
+            ]);
             stateRef.current.method.setTemplate(template);
             setTemplateIsGood(await isTemplateGood());
             return true;
@@ -99,17 +144,25 @@ const App = () => {
         const getFilePath = async () => {
             let filePath = await ipcRenderer.invoke("get-file");
             //testing / release
-            filePath = !filePath ? stateRef.current.method.handleFileResult(filePath) : filePath;
+            filePath = !filePath
+                ? stateRef.current.method.handleFileResult(filePath)
+                : filePath;
             if (!filePath || !isMounted) {
                 //set title
                 document.title = "LabelPrinter - No File Found";
                 stateRef.current.method.setNoFileFound(true);
-                stateRef.current.method.setOutput((o) => [...o, buildResponse(false, "No file loaded")]);
+                stateRef.current.method.setOutput((o) => [
+                    ...o,
+                    buildResponse(false, "No file loaded"),
+                ]);
                 return true;
             }
             //set title
             document.title = "LabelPrinter - " + getConfigName(filePath);
-            stateRef.current.method.setOutput((o) => [...o, buildResponse(true, "Opened file loaded")]);
+            stateRef.current.method.setOutput((o) => [
+                ...o,
+                buildResponse(true, "Opened file loaded"),
+            ]);
             stateRef.current.method.setCurrentPath(filePath);
             return true;
         };
@@ -119,7 +172,9 @@ const App = () => {
             let config = await ipcRenderer.invoke("get-config");
             if (!isMounted) return true;
             //bad old config (from earlier builds)
-            if (!isConfigGood(config, stateRef.current.value.usableProperties)) {
+            if (
+                !isConfigGood(config, stateRef.current.value.usableProperties)
+            ) {
                 //wipe old config, since it does not fit anymore
                 await ipcRenderer.invoke("set-config", {});
                 stateRef.current.method.setConfig({});
@@ -131,7 +186,10 @@ const App = () => {
             }
             stateRef.current.method.setOutput((o) => [
                 ...o,
-                buildResponse(true, !config ? "Empty config loaded" : "Previous config loaded"),
+                buildResponse(
+                    true,
+                    !config ? "Empty config loaded" : "Previous config loaded"
+                ),
             ]);
             //normal execution
             stateRef.current.method.setConfig(!config ? {} : config);
@@ -143,27 +201,39 @@ const App = () => {
         //loads in the printers and printer-in-use, then stores it into state
         const getPrinters = async () => {
             //get all printers
-            let printers = await ipcRenderer.invoke("get-printers");
+            let result = await ipcRenderer.invoke("get-printers");
+            let printers = !result.Printers.length
+                ? [result.Printers]
+                : [...result.Printers];
             if (!printers || !isMounted) {
+                setPrinters(["No Printers Found"]);
                 stateRef.current.method.setOutput((o) => [
                     ...o,
                     buildResponse(false, "Could not load printers"),
                 ]);
                 return true;
             }
-            stateRef.current.method.setOutput((o) => [...o, buildResponse(true, "Printers loaded")]);
+            stateRef.current.method.setOutput((o) => [
+                ...o,
+                buildResponse(true, "Printers loaded"),
+            ]);
             setPrinters(printers);
             //get printer stored as our printer in-use, if none stored: use [0]
             let printer = await ipcRenderer.invoke("get-printer");
             if (!printer || !isMounted) {
-                stateRef.current.method.setPrinter(printers[0].name);
+                stateRef.current.method.setPrinter(
+                    printers[0].LabelWriterPrinter.Name
+                );
                 stateRef.current.method.setOutput((o) => [
                     ...o,
                     buildResponse(false, "Could not load previous printer"),
                 ]);
                 return true;
             }
-            stateRef.current.method.setOutput((o) => [...o, buildResponse(true, "Previous printer loaded")]);
+            stateRef.current.method.setOutput((o) => [
+                ...o,
+                buildResponse(true, "Previous printer loaded"),
+            ]);
             stateRef.current.method.setPrinter(printer);
             return true;
         };
@@ -172,6 +242,7 @@ const App = () => {
         const completeLoad = async () => {
             if (!isMounted) return;
             let result =
+                (await getDYMOStatus()) &&
                 (await getTemplate()) &&
                 (await getFilePath()) &&
                 (await getConfig()) &&
@@ -220,7 +291,8 @@ const App = () => {
     };
 
     const hideBadge = () => {
-        let current = state.value.config[getConfigName(state.value.currentPath)];
+        let current =
+            state.value.config[getConfigName(state.value.currentPath)];
         return !(!current || !state.value.allPicked);
     };
 
@@ -253,17 +325,24 @@ const App = () => {
                             />
                             <label htmlFor="file-button">
                                 <Button
-                                    disabled={isPrinting || state.value.dymoError}
+                                    disabled={
+                                        isPrinting || state.value.dymoError
+                                    }
                                     component="span"
                                     variant="text"
                                     color="primary"
                                     startIcon={<FolderOpenIcon />}
                                     endIcon={
-                                        <Tooltip title={toolTipText} placement="bottom">
+                                        <Tooltip
+                                            title={toolTipText}
+                                            placement="bottom"
+                                        >
                                             {!templateIsGood ? (
                                                 <ErrorOutlineIcon color="secondary" />
                                             ) : (
-                                                <CheckIcon style={{ color: "#8bc34a" }} />
+                                                <CheckIcon
+                                                    style={{ color: "#8bc34a" }}
+                                                />
                                             )}
                                         </Tooltip>
                                     }
@@ -289,33 +368,51 @@ const App = () => {
                                 value={state.value.printer}
                             >
                                 {printers.map((printer) => (
-                                    <MenuItem key={printer.name} value={printer.name}>
-                                        {printer.name}
+                                    <MenuItem
+                                        key={printer.LabelWriterPrinter.Name}
+                                        value={printer.LabelWriterPrinter.Name}
+                                    >
+                                        {printer.LabelWriterPrinter.Name}
                                     </MenuItem>
                                 ))}
                             </Select>
                         </FormControl>
                         <div className="settings-button">
                             <IconButton
-                                disabled={isPrinting || state.value.dymoError || state.value.noFileFound}
+                                disabled={
+                                    isPrinting ||
+                                    state.value.dymoError ||
+                                    state.value.noFileFound
+                                }
                                 onClick={toggleSettings}
                                 size="medium"
                                 color="primary"
                                 variant="outlined"
                             >
-                                <Badge color="secondary" variant="dot" invisible={hideBadge()}>
-                                    {state.value.settingsOpen ? <CloseIcon /> : <SettingsIcon />}
+                                <Badge
+                                    color="secondary"
+                                    variant="dot"
+                                    invisible={hideBadge()}
+                                >
+                                    {state.value.settingsOpen ? (
+                                        <CloseIcon />
+                                    ) : (
+                                        <SettingsIcon />
+                                    )}
                                 </Badge>
                             </IconButton>
                         </div>
                     </div>
                     <UnmountClosed
-                        onRest={() => setCollapseComplete(state.value.settingsOpen)}
+                        onRest={() =>
+                            setCollapseComplete(state.value.settingsOpen)
+                        }
                         isOpened={state.value.settingsOpen}
                     >
                         <Settings collapseComplete={collapseComplete} />
                     </UnmountClosed>
-                    {(collapseComplete && state.value.settingsOpen) || refreshPrint ? (
+                    {(collapseComplete && state.value.settingsOpen) ||
+                    refreshPrint ? (
                         <div className="print-load">
                             <CircularProgress size={30} />
                         </div>

@@ -10,6 +10,7 @@ const devEnv = /electron/.test(process.argv[0]);
 const shell = require("electron").shell;
 const { dialog } = require("electron");
 const fs = require("fs");
+const parser = require("fast-xml-parser");
 
 require("@electron/remote/main").initialize();
 
@@ -73,11 +74,15 @@ ipcMain.handle("export-config", (event, args) => {
         filters: [{ name: "json", extensions: ["json"] }],
     };
     return dialog.showSaveDialog(null, options).then(({ filePath }) => {
-        if (filePath.length === 0) return { status: false, message: "Config was not exported" };
+        if (filePath.length === 0)
+            return { status: false, message: "Config was not exported" };
         try {
             fs.writeFileSync(filePath, args, "utf-8");
-            return { status: true, message: "Exported successfully", path: filePath };
-
+            return {
+                status: true,
+                message: "Exported successfully",
+                path: filePath,
+            };
         } catch (err) {
             return { status: false, message: "File error while exporting" };
         }
@@ -88,14 +93,19 @@ ipcMain.handle("open-browser", async (event, args) => {
     shell.openExternal(args);
 });
 
+ipcMain.handle("dymo-status", (event, args) => {
+    return printer
+        .getStatus()
+        .then((result) => {
+            return  { status: result }
+        })
+        .catch((err) => {
+            return { status: false, error: err };
+        });
+});
+
 ipcMain.handle("image-preview", async (event, arg) => {
     // returns imageData as base64 encoded png.
-    /*let printers = await printer.getPrinters()
-    let status = await printer.getStatus()
-    
-    console.log(printers)
-    console.log(status)*/
-
     return printer
         .renderLabel(arg)
         .then((imageData) => {
@@ -143,7 +153,18 @@ ipcMain.handle("complete", async (event, arg) => {
 
 //returns printers connected to computer
 ipcMain.handle("get-printers", async (event, arg) => {
-    return window.webContents.getPrinters();
+    //old way, we got every printer in system
+    //return window.webContents.getPrinters();
+    //new way, we get all printers recognized by DYMO Software
+    return printer
+        .getPrinters()
+        .then((result) => {
+            //here we need to parse XML to JSON and return array
+            return parser.parse(result);
+        })
+        .catch((err) => {
+            return { status: false, error: err };
+        });
 });
 
 //returns printer stored in electron-store
