@@ -1,5 +1,5 @@
 {
-    "name": "LabelPrinter",
+    "name": "label-printer",
     "description": "Printing Plug-In for IFS",
     "author": "Einar A. Aglen",
     "version": "0.3.6",
