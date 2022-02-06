@@ -11,6 +11,7 @@ const ConfigList = ({ config, next }: Props) => {
     <List component="nav" sx={{ maxHeight: "13rem" }}>
       {config.map((entry: Config, idx: number) => (
         <ListItem
+        key={idx}
           onClick={() => next()}
           sx={{
             height: "3.5rem",

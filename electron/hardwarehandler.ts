@@ -13,7 +13,8 @@ const parser = require("fast-xml-parser");
 enum StoreKey {
   Printer = "lable.printer",
   Template = "label.template",
-  Config = "label.config",
+  Templates = "label.templates",
+  Configs = "label.configs",
 }
 
 export const handleIPC = (accessor: string, event: any, args: any) => {
@@ -32,10 +33,14 @@ export const handleIPC = (accessor: string, event: any, args: any) => {
       return handleGetTemplate(event, args);
     case IPC.SET_TEMPLATE:
       return handleSetTemplate(event, args);
-    case IPC.GET_CONFIG:
-      return handleGetConfig(event, args);
-    case IPC.SET_CONFIG:
-      return handleSetConfig(event, args);
+      case IPC.GET_TEMPLATES:
+      return handleGetTemplates(event, args);
+    case IPC.SET_TEMPLATES:
+      return handleSetTemplates(event, args);
+    case IPC.GET_CONFIGS:
+      return handleGetConfigs(event, args);
+    case IPC.SET_CONFIGS:
+      return handleSetConfigs(event, args);
     case IPC.GET_PRINTERS:
       return handleGetPrinters(event, args);
     case IPC.GET_PRINTER:
@@ -125,14 +130,26 @@ const handleSetTemplate = async (event: any, args: any): Promise<LabelResponse> 
   return handleResponse({ payload: { template: args } });
 };
 
-const handleGetConfig = async (event: any, args: any): Promise<LabelResponse> => {
-  let config = store.get(StoreKey.Config, args);
+const handleGetTemplates = async (event: any, args: any): Promise<LabelResponse> => {
+  let templates = store.get(StoreKey.Templates);
+  if (!templates) return handleResponse({ type: StatusType.Missing, message: formatFailure("fetching templates", "Could not find templates") });
+  return handleResponse({ payload: { templates } });
+};
+
+const handleSetTemplates = async (event: any, args: any): Promise<LabelResponse> => {
+  if (!args) return handleResponse({ type: StatusType.Missing, message: formatFailure("fetching templates", "Could not find templates") });
+  store.set(StoreKey.Templates, args);
+  return handleResponse({ payload: { templates: args } });
+};
+
+const handleGetConfigs = async (event: any, args: any): Promise<LabelResponse> => {
+  let config = store.get(StoreKey.Configs, args);
   if (!config) return handleResponse({ type: StatusType.Missing, message: formatFailure("fetching config", "Could not find config") });
   return handleResponse({ payload: { config } });
 };
 
-const handleSetConfig = async (event: any, args: any): Promise<LabelResponse> => {
-  store.set(StoreKey.Config, args);
+const handleSetConfigs = async (event: any, args: any): Promise<LabelResponse> => {
+  store.set(StoreKey.Configs, args);
   return handleResponse({ payload: { config: args } });
 };
 

@@ -50,6 +50,16 @@ export const _setConfig = (payload: any) => {
   };
 };
 
+export const _setConfigs = (payload: any) => {
+  const action: SetConfigAction = {
+    type: actionTypes.SET_CONFIGS,
+    payload,
+  };
+  return (dispatch: DispatchType) => {
+    dispatch(action);
+  };
+};
+
 export const _addConfig = (payload: any) => {
   const action: AddConfigAction = {
     type: actionTypes.ADD_CONFIG,
@@ -63,6 +73,26 @@ export const _addConfig = (payload: any) => {
 export const _addTemplate = (payload: any) => {
   const action: AddTemplateAction = {
     type: actionTypes.ADD_TEMPLATE,
+    payload,
+  };
+  return (dispatch: DispatchType) => {
+    dispatch(action);
+  };
+};
+
+export const _setTemplates = (payload: any) => {
+  const action: SetTemplatesAction = {
+    type: actionTypes.SET_TEMPLATES,
+    payload,
+  };
+  return (dispatch: DispatchType) => {
+    dispatch(action);
+  };
+};
+
+export const _setTemplate = (payload: any) => {
+  const action: SetTemplateAction = {
+    type: actionTypes.SET_TEMPLATE,
     payload,
   };
   return (dispatch: DispatchType) => {

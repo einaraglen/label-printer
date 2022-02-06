@@ -17,6 +17,7 @@ const KeyList = ({ config, next }: Props) => {
     <List component="nav" sx={{ maxHeight: "10rem", overflowY: "scroll" }}>
       {handledKeys().map((key: string, idx: number) => (
         <ListItem
+        key={idx}
           onClick={() => next(2)}
           sx={{
             height: "3.5rem",

@@ -13,7 +13,7 @@ const testPaths = [
 const { ipcRenderer } = window.require("electron");
 
 const InvokeHandler = () => {
-  const { log, setStatus } = ReduxAccessor();
+  const { log, logs, setStatus } = ReduxAccessor();
 
   interface InvokeParams {
     args?: any;
@@ -39,11 +39,13 @@ const InvokeHandler = () => {
 
   const handleSuccess = (key: IPC, response: LabelResponse) => {
     log(LogType.Success, `${key} ${response.message}`);
+    console.log(logs)
   };
 
   const handleFailure = (key: IPC, response: LabelResponse) => {
     log(LogType.Failure, response.message);
     setStatusOf(key, false)
+    console.log(logs)
   };
 
   const checkStatus = (statuscode: number): boolean => {
@@ -61,7 +63,7 @@ const InvokeHandler = () => {
       case IPC.GET_FILE:
         setStatus({ key: "isFile", value });
         break;
-      case IPC.GET_CONFIG:
+      case IPC.GET_CONFIGS:
         setStatus({ key: "isConfig", value });
         break;
     }

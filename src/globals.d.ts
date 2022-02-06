@@ -14,7 +14,6 @@ declare interface ProgramStatus {
 
 declare interface Template {
     filepath: string;
-    selected: boolean;
 }
 
 declare interface ConfigKey {
@@ -34,8 +33,10 @@ declare interface ReduxState {
     state: ProgramState;
     status: ProgramStatus
     filepath: string | null,
+    template: Template | null;
     templates: Template[];
-    config: Config[];
+    config: Config | null;
+    configs: Config[];
     logs: ProgramLog[];
 }
 
@@ -64,6 +65,12 @@ declare interface PrintLabelResponse extends LabelResponse {}
 declare interface TemplateResponse extends LabelResponse {
     payload?: {
         template: any
+    }
+}
+
+declare interface TemplatesResponse extends LabelResponse {
+    payload?: {
+        templates: any
     }
 }
 

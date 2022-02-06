@@ -69,8 +69,11 @@ ipcMain.handle(IPC.PRINT_LABEL, async (event: any, arg: any) => handleIPC(IPC.PR
 ipcMain.handle(IPC.GET_TEMPLATE, async (event: any, arg: any) => handleIPC(IPC.GET_TEMPLATE, event, arg));
 ipcMain.handle(IPC.SET_TEMPLATE, async (event: any, arg: any) => handleIPC(IPC.SET_TEMPLATE, event, arg));
 
-ipcMain.handle(IPC.GET_CONFIG, async (event: any, arg: any) => handleIPC(IPC.GET_CONFIG, event, arg));
-ipcMain.handle(IPC.SET_CONFIG, async (event: any, arg: any) => handleIPC(IPC.SET_CONFIG, event, arg));
+ipcMain.handle(IPC.GET_TEMPLATES, async (event: any, arg: any) => handleIPC(IPC.GET_TEMPLATES, event, arg));
+ipcMain.handle(IPC.SET_TEMPLATES, async (event: any, arg: any) => handleIPC(IPC.SET_TEMPLATES, event, arg));
+
+ipcMain.handle(IPC.GET_CONFIGS, async (event: any, arg: any) => handleIPC(IPC.GET_CONFIGS, event, arg));
+ipcMain.handle(IPC.SET_CONFIGS, async (event: any, arg: any) => handleIPC(IPC.SET_CONFIGS, event, arg));
 
 ipcMain.handle(IPC.GET_PRINTERS, async (event: any, arg: any) => handleIPC(IPC.GET_PRINTERS, event, arg));
 ipcMain.handle(IPC.GET_PRINTER, async (event: any, arg: any) => handleIPC(IPC.GET_PRINTER, event, arg));

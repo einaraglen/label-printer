@@ -38,6 +38,7 @@ const AccessorList = ({ searchkey }: Props) => {
       <List component="nav" sx={{ maxHeight: "10rem", overflowY: "scroll" }}>
         {handledAccessors().map((accessor: string, idx: number) => (
             <ListItem
+            key={idx}
             onClick={() => setValue(accessor)}
               sx={{
                 height: "3.5rem",

@@ -12,8 +12,10 @@ const initialState: ReduxState = {
     isPrinter: false
   },
   filepath: null,
+  template: null,
   templates: [],
-  config: [],
+  config: null,
+  configs: [],
   logs: []
 };
 
@@ -33,11 +35,20 @@ const reducer = createReducer(initialState, {
   [actionTypes.SET_CONFIG]: (state: ReduxState, action: ConfigAction) => {
     state.config = action.payload;
   },
+  [actionTypes.SET_CONFIGS]: (state: ReduxState, action: SetConfigAction) => {
+    state.configs = action.payload;
+  },
   [actionTypes.ADD_CONFIG]: (state: ReduxState, action: AddConfigAction) => {
-    state.config.push(action.payload)
+    state.configs.push(action.payload)
+  },
+  [actionTypes.SET_TEMPLATES]: (state: ReduxState, action: SetTemplatesAction) => {
+    state.templates = action.payload;
+  },
+  [actionTypes.SET_TEMPLATE]: (state: ReduxState, action: SetTemplateAction) => {
+    state.template = action.payload;
   },
   [actionTypes.ADD_TEMPLATE]: (state: ReduxState, action: AddTemplateAction) => {
-    state.templates.push({ filepath: action.payload, selected: false })
+    state.templates.push({ filepath: action.payload })
   },
 });
 

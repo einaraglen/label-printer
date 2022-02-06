@@ -26,6 +26,10 @@ export const readFile = async (path: any) => {
   });
 };
 
+export const parseFilename = (filepath: string) => {
+ return path.parse(filepath).base
+}
+
 export const parseIFSPage = (filePath: any) => {
   //get our capital letter words into an array ["Customer", "Order"]
   let words = path

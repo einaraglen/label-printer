@@ -16,7 +16,7 @@ import ReduxAccessor from "./store/accessor";
 
 const App = () => {
   const { theme } = MuiTheme();
-  const { setState, setStatus, setFilePath, setConfig } = ReduxAccessor();
+  const { setState, setStatus, setFilePath, setConfigs, setTemplates, setTemplate } = ReduxAccessor();
   const { invoke } = InvokeHandler();
 
   useEffect((): any => {
@@ -24,22 +24,28 @@ const App = () => {
       await invoke(IPC.DYMO_STATUS, {
         next: (data: any) => setStatus({ key: "isDYMO", value: JSON.parse(data) }),
       });
+      await invoke(IPC.GET_TEMPLATES, {
+        next: (data: any) => {
+          console.log(data)
+          setTemplates(JSON.parse(data.templates));
+        },
+      });
       await invoke(IPC.GET_TEMPLATE, {
         next: (data: any) => {
           setStatus({ key: "isTemplate", value: true });
-          //setFilePath(data.template);
+          setTemplate(data.template);
+        },
+      });
+      await invoke(IPC.GET_CONFIGS, {
+        next: (data: any) => {
+          setStatus({ key: "isConfig", value: true });
+          setConfigs(data.config);
         },
       });
       await invoke(IPC.GET_FILE, {
         next: async (data: any) => {
           setStatus({ key: "isFile", value: true });
           setFilePath(data.filepath);
-        },
-      });
-      await invoke(IPC.GET_CONFIG, {
-        next: (data: any) => {
-          setStatus({ key: "isConfig", value: true });
-          setConfig(data.config);
         },
       });
       setState(ProgramState.Ready);
