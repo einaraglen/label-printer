@@ -1,58 +1,114 @@
-import { app, BrowserWindow } from 'electron';
-import * as path from 'path';
-import * as isDev from 'electron-is-dev';
+import { app, BrowserWindow, ipcMain } from "electron";
+import * as path from "path";
+import * as isDev from "electron-is-dev";
 import installExtension, { REACT_DEVELOPER_TOOLS } from "electron-devtools-installer";
+import { IPC } from "./handletypes";
+import { handleIPC } from "./hardwarehandler";
 
-let win: BrowserWindow | null = null;
+const devEnv = /electron/.test(process.argv[0]);
 
-function createWindow() {
-  win = new BrowserWindow({
-    width: 800,
-    height: 600,
-    webPreferences: {
-      nodeIntegration: true
+let window: BrowserWindow | null = null;
+
+//check if already open
+/*const gotTheLock = app.requestSingleInstanceLock();
+if (!gotTheLock) {
+  app.quit();
+} else {
+  app.on("second-instance", (event, commandLine, workingDirectory) => {
+    // Someone tried to run a second instance, we should focus our window.
+    if (window) {
+      if (window.isMinimized()) window.restore();
+      window.focus();
     }
-  })
+  });
+}*/
 
-  if (isDev) {
-    win.loadURL('http://localhost:3000/index.html');
-  } else {
-    // 'build/index.html'
-    win.loadURL(`file://${__dirname}/../index.html`);
-  }
+//build our renderer
+const createWindow = () => {
+  window = new BrowserWindow({
+    width: 550,
+    height: 320,
+    fullscreenable: false,
+    //frame: false,
+    resizable: false,
+    transparent: false,
+    webPreferences: {
+      nodeIntegration: true,
+      //enableRemoteModule: true,
+      contextIsolation: false,
+      nodeIntegrationInWorker: true,
+      nodeIntegrationInSubFrames: true,
+    },
+  });
 
-  win.on('closed', () => win = null);
+  window.removeMenu();
 
-  // Hot Reloading
-  if (isDev) {
-    // 'node_modules/.bin/electronPath'
-    require('electron-reload')(__dirname, {
-      electron: path.join(__dirname, '..', '..', 'node_modules', '.bin', 'electron'),
-      forceHardReset: true,
-      hardResetMethod: 'exit'
-    });
-  }
+  window.on("close", () => {
+    window = null;
+  });
+
+  window.loadURL(isDev ? "http://localhost:3000" : `file://${path.join(__dirname, "../build/index.html")}`);
 
   // DevTools
   installExtension(REACT_DEVELOPER_TOOLS)
     .then((name) => console.log(`Added Extension:  ${name}`))
-    .catch((err) => console.log('An error occurred: ', err));
+    .catch((err) => console.log("An error occurred: ", err));
 
   if (isDev) {
-    win.webContents.openDevTools();
+    window.webContents.openDevTools();
   }
-}
+};
 
-app.on('ready', createWindow);
+ipcMain.handle(IPC.EXPORT_CONFIG, async (event: any, arg: any) => handleIPC(IPC.EXPORT_CONFIG, event, arg));
+ipcMain.handle(IPC.DYMO_STATUS, async (event: any, arg: any) => handleIPC(IPC.DYMO_STATUS, event, arg));
+ipcMain.handle(IPC.IMAGE_PREVIEW, async (event: any, arg: any) => handleIPC(IPC.IMAGE_PREVIEW, event, arg));
+ipcMain.handle(IPC.OPEN_BROWSER, async (event: any, arg: any) => handleIPC(IPC.OPEN_BROWSER, event, arg));
+ipcMain.handle(IPC.PRINT_LABEL, async (event: any, arg: any) => handleIPC(IPC.PRINT_LABEL, event, arg));
 
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
+ipcMain.handle(IPC.GET_TEMPLATE, async (event: any, arg: any) => handleIPC(IPC.GET_TEMPLATE, event, arg));
+ipcMain.handle(IPC.SET_TEMPLATE, async (event: any, arg: any) => handleIPC(IPC.SET_TEMPLATE, event, arg));
+
+ipcMain.handle(IPC.GET_CONFIG, async (event: any, arg: any) => handleIPC(IPC.GET_CONFIG, event, arg));
+ipcMain.handle(IPC.SET_CONFIG, async (event: any, arg: any) => handleIPC(IPC.SET_CONFIG, event, arg));
+
+ipcMain.handle(IPC.GET_PRINTERS, async (event: any, arg: any) => handleIPC(IPC.GET_PRINTERS, event, arg));
+ipcMain.handle(IPC.GET_PRINTER, async (event: any, arg: any) => handleIPC(IPC.GET_PRINTER, event, arg));
+ipcMain.handle(IPC.SET_PRINTER, async (event: any, arg: any) => handleIPC(IPC.SET_PRINTER, event, arg));
+
+ipcMain.handle(IPC.QUIT, async (event: any, arg: any) => handleIPC(IPC.QUIT, event, { app }));
+
+//when ready
+app.whenReady().then(() => {
+  if (process.platform.startsWith("win") && !devEnv && process.argv.length >= 2) {
+    //if app is opened with file
+    const filePath = process.argv[1];
+    ipcMain.handle("get-file", (event, arg) => {
+      return filePath;
+    });
+  } else {
+    //opened default method
+    ipcMain.handle("get-file", (event, arg) => {
+      return "";
+    });
+  }
+
+  createWindow();
+
+  app.on("activate", () => {
+    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+  });
+});
+
+app.on("ready", createWindow);
+
+app.on("window-all-closed", () => {
+  if (process.platform !== "darwin") {
     app.quit();
   }
 });
 
-app.on('activate', () => {
-  if (win === null) {
+app.on("activate", () => {
+  if (window === null) {
     createWindow();
   }
 });
