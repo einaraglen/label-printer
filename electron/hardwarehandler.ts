@@ -1,4 +1,5 @@
 import { IPC } from "./handletypes";
+import { handleResponse, StatusType } from "./responsehandler";
 
 const Dymo = require("dymojs");
 const printer = new Dymo();
@@ -12,7 +13,7 @@ const parser = require("fast-xml-parser");
 enum StoreKey {
   Printer = "lable.printer",
   Template = "label.template",
-  Config = "label.config"
+  Config = "label.config",
 }
 
 export const handleIPC = (accessor: string, event: any, args: any) => {
@@ -46,7 +47,7 @@ export const handleIPC = (accessor: string, event: any, args: any) => {
   }
 };
 
-const handleExportConfig = (event: any, args: any) => {
+const handleExportConfig = (event: any, args: any): Promise<LabelResponse> => {
   let options = {
     title: "Export Config",
     defaultPath: "label-config",
@@ -54,74 +55,88 @@ const handleExportConfig = (event: any, args: any) => {
     filters: [{ name: "json", extensions: ["json"] }],
   };
   return dialog.showSaveDialog(null as any, options).then(({ filePath }) => {
-    if (!filePath) return { status: false, message: "Config was not exported" };
-    if (filePath.length === 0) return { status: false, message: "Config was not exported" };
+    if (!filePath) return handleResponse({ type: StatusType.Missing, message: formatFailure("exporting Config File", "Missing filepath") });
+    if (filePath.length === 0) return handleResponse({ type: StatusType.Error, message: formatFailure("exporting Config File", "filepath length cannot be 0") });
     try {
       fs.writeFileSync(filePath, args, "utf-8");
-      return {
-        status: true,
-        message: "Exported successfully",
-        path: filePath,
-      };
-    } catch (err) {
-      return { status: false, message: "File error while exporting" };
+      return handleResponse({ payload: { filePath } });
+    } catch (err: any) {
+      return handleResponse({ type: StatusType.Error, message: formatFailure("exporting Config File", err) });
     }
   });
 };
 
-const handleDYMOStatus = (event: any, args: any) => {
+const handleDYMOStatus = (event: any, args: any): Promise<LabelResponse> => {
   return printer
     .getStatus()
     .then((result: any) => {
-      return { status: result };
+      return handleResponse({ payload: result });
     })
     .catch((err: any) => {
-      return { status: false, error: err };
+      let message = err.message ?? "No message";
+      return handleResponse({ type: StatusType.Error, message: formatFailure("checking DYMO status", message) });
     });
 };
 
-const handleImagePreview = (event: any, args: any) => {
+const handleImagePreview = (event: any, args: any): Promise<LabelResponse> => {
   // returns imageData as base64 encoded png.
   return printer
     .renderLabel(args)
     .then((imageData: any) => {
-      return { status: true, image: imageData, printer: printer };
+      return handleResponse({ payload: { image: imageData } });
     })
     .catch((err: any) => {
-      return { status: false, error: err, printer: printer };
+      let message = err.message ?? "No message";
+      return handleResponse({ type: StatusType.Error, message: formatFailure("fetching Image Preview", message) });
     });
 };
 
-const handleOpenBrowser = (event: any, args: any) => {
-  shell.openExternal(args);
+const handleOpenBrowser = async (event: any, args: any): Promise<LabelResponse> => {
+  try {
+    shell.openExternal(args);
+    return handleResponse({});
+  } catch (err: any) {
+    return handleResponse({ type: StatusType.Error, message: formatFailure("opening browser", err) });
+  }
 };
 
-const handlePrintLabel = async (event: any, args: any) => {
+const handlePrintLabel = async (event: any, args: any): Promise<LabelResponse> => {
   let printer = store.get(StoreKey.Printer);
+  if (!printer) return handleResponse({ type: StatusType.Missing, message: formatFailure("printing", "Missing printer") });
   let result = await printer.print(printer, args);
-  if (!JSON.parse(result).exceptionMessage) return { status: true, message: "Success!" };
-  return { status: false, message: JSON.parse(result).exceptionMessage };
+  try {
+    if (!JSON.parse(result).exceptionMessage) return handleResponse({});
+    let message = JSON.parse(result).exceptionMessage ?? "No message";
+    return handleResponse({ type: StatusType.Error, message: formatFailure("printing", message) });
+  } catch (err: any) {
+    return handleResponse({ type: StatusType.Error, message: formatFailure("printing", err) });
+  }
 };
 
-const handleGetTemplate = async (event: any, args: any) => {
-  return store.get("template");
+const handleGetTemplate = async (event: any, args: any): Promise<LabelResponse> => {
+  let template = store.get(StoreKey.Template);
+  if (!template) return handleResponse({ type: StatusType.Missing, message: formatFailure("fetching template", "Could not find template") });
+  return handleResponse({ payload: { template } });
 };
 
-const handleSetTemplate = async (event: any, args: any) => {
+const handleSetTemplate = async (event: any, args: any): Promise<LabelResponse> => {
+  if (!args) return handleResponse({ type: StatusType.Missing, message: formatFailure("fetching template", "Could not find template") });
   store.set(StoreKey.Template, args);
-  return { status: true, message: "Template set!" };
+  return handleResponse({ payload: { template: args } });
 };
 
-const handleGetConfig = async (event: any, args: any) => {
-  return store.get(StoreKey.Config, args);
+const handleGetConfig = async (event: any, args: any): Promise<LabelResponse> => {
+  let config = store.get(StoreKey.Config, args);
+  if (!config) return handleResponse({ type: StatusType.Missing, message: formatFailure("fetching config", "Could not find config") });
+  return handleResponse({ payload: { config } });
 };
 
-const handleSetConfig = async (event: any, args: any) => {
+const handleSetConfig = async (event: any, args: any): Promise<LabelResponse> => {
   store.set(StoreKey.Config, args);
-  return { status: true, config: args };
+  return handleResponse({ payload: { config: args } });
 };
 
-const handleGetPrinters = async (event: any, args: any) => {
+const handleGetPrinters = async (event: any, args: any): Promise<LabelResponse> => {
   //old way, we got every printer in system
   //return window.webContents.getPrinters();
   //new way, we get all printers recognized by DYMO Software
@@ -129,22 +144,29 @@ const handleGetPrinters = async (event: any, args: any) => {
     .getPrinters()
     .then((result: any) => {
       //here we need to parse XML to JSON and return array
-      return parser.parse(result);
+      return handleResponse({ payload: { printers: parser.parse(result) } });
     })
     .catch((err: any) => {
-      return { status: false, error: err };
+      return handleResponse({ type: StatusType.Missing, message: formatFailure("fetching printers", err) });
     });
 };
 
-const handleGetPrinter = async (event: any, args: any) => {
-  return store.get(StoreKey.Printer);
+const handleGetPrinter = async (event: any, args: any): Promise<LabelResponse> => {
+  let _printer = store.get(StoreKey.Printer);
+  if (!_printer) return handleResponse({ type: StatusType.Missing, message: formatFailure("fetching printer", "Could not find printer") });
+  return handleResponse({ payload: { printer: _printer } });
 };
 
-const handleSetPrinter = async (event: any, args: any) => {
+const handleSetPrinter = async (event: any, args: any): Promise<LabelResponse> => {
   store.set(StoreKey.Printer, args);
-  return { status: true, message: "Template set!" };
+  return handleResponse({ payload: { printer: args } });
 };
 
-const handleQuit = async (event: any, args: any) => {
+const handleQuit = async (event: any, args: any): Promise<LabelResponse> => {
   args.app.quit();
+  return handleResponse({});
+};
+
+export const formatFailure = (when: string, message: string) => {
+  return `Failure when ${when}: ${message}`;
 };

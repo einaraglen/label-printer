@@ -1,0 +1,255 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Table xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3.org/2001/XMLSchema file://C://Users//einar.aglen//AppData//Local//Temp//InventoryPartInStock%20210802-155209.xsd" xmlns="http://www.w3.org/2001/XMLSchema">
+  <Row>
+    <Site>SE</Site>
+    <PartNo>16701014</PartNo>
+    <PartDescription>Maneuvering valve</PartDescription>
+    <ConfigurationID>*</ConfigurationID>
+    <LocationNo>HQ-CR</LocationNo>
+    <LotBatchNo>*</LotBatchNo>
+    <SerialNo>*</SerialNo>
+    <OnHandQty>1</OnHandQty>
+    <ReservedQty>1</ReservedQty>
+    <Warehouse>HQ</Warehouse>
+    <ActivityID>26</ActivityID>
+    <ProjectID>101353</ProjectID>
+    <SubProjectID>11100B</SubProjectID>
+    <ActivitySequence>100926894</ActivitySequence>
+    <Bay>CR</Bay>
+    <Row>  -</Row>
+    <Tier>  -</Tier>
+    <Bin>  -</Bin>
+    <ConditionCode />
+    <ConditionCodeDescription />
+    <RevNo>1</RevNo>
+    <WDRNo>*</WDRNo>
+    <RotablePartPoolID />
+    <OnHandCatchQty />
+    <UnifiedOnHandQty>1</UnifiedOnHandQty>
+    <UnifiedCatchOnHandQty />
+    <UnifiedReservedQty>1</UnifiedReservedQty>
+    <InTransitQty>0</InTransitQty>
+    <CatchQtyinTransit />
+    <UnifiedQtyinTransit>0</UnifiedQtyinTransit>
+    <UnifiedCatchQtyinTransit />
+    <AvailableQty>0</AvailableQty>
+    <UoM>Each</UoM>
+    <CatchUoM />
+    <UnifiedUoM>Each</UnifiedUoM>
+    <UnifiedCatchUoM />
+    <Frozen>N</Frozen>
+    <LastActivityDate>2021-01-04T11:45:19</LastActivityDate>
+    <LatestCount>2021-01-04</LatestCount>
+    <LocationType>Picking</LocationType>
+    <ReceiptDate>2020-07-23T12:29:41</ReceiptDate>
+    <AvailabilityControlID />
+    <AvailabilityControlDescription />
+    <AvgUnitTransitCost>0</AvgUnitTransitCost>
+    <CountVariance>0</CountVariance>
+    <ExpirationDate />
+    <UnitCost>23 085,00</UnitCost>
+    <TotalInventoryValue>23 085,00</TotalInventoryValue>
+    <BaseCurr>NOK</BaseCurr>
+    <Ownership>Company Owned</Ownership>
+    <Owner />
+    <OwnerName />
+    <PartAcquisitionValue />
+    <TotalAcquisitionValue />
+    <AcquisitionCurrency />
+    <ProgramID />
+    <ProgramDescription />
+    <ProjectName>Equip. for Coast Guard Vessel NB912</ProjectName>
+    <SubProjectDescription>Hydr. Windlass, 54mm k3 chain, right execution, DNV certif, 1 off, Dwg 2102566</SubProjectDescription>
+    <ActivityDescription>Purchasing</ActivityDescription>
+    <Remote>FALSE</Remote>
+  </Row>
+  <Row>
+    <Site>SE</Site>
+    <PartNo>16101715</PartNo>
+    <PartDescription>Seaonics name plate</PartDescription>
+    <ConfigurationID>*</ConfigurationID>
+    <LocationNo>HQ-F-01-05</LocationNo>
+    <LotBatchNo>*</LotBatchNo>
+    <SerialNo>*</SerialNo>
+    <OnHandQty>3</OnHandQty>
+    <ReservedQty>0</ReservedQty>
+    <Warehouse>HQ</Warehouse>
+    <ActivityID>26</ActivityID>
+    <ProjectID>101353</ProjectID>
+    <SubProjectID>11100C</SubProjectID>
+    <ActivitySequence>100926897</ActivitySequence>
+    <Bay>F</Bay>
+    <Row>01</Row>
+    <Tier>05</Tier>
+    <Bin>  -</Bin>
+    <ConditionCode />
+    <ConditionCodeDescription />
+    <RevNo>1</RevNo>
+    <WDRNo>*</WDRNo>
+    <RotablePartPoolID />
+    <OnHandCatchQty />
+    <UnifiedOnHandQty>3</UnifiedOnHandQty>
+    <UnifiedCatchOnHandQty />
+    <UnifiedReservedQty>0</UnifiedReservedQty>
+    <InTransitQty>0</InTransitQty>
+    <CatchQtyinTransit />
+    <UnifiedQtyinTransit>0</UnifiedQtyinTransit>
+    <UnifiedCatchQtyinTransit />
+    <AvailableQty>3</AvailableQty>
+    <UoM>Each</UoM>
+    <CatchUoM />
+    <UnifiedUoM>Each</UnifiedUoM>
+    <UnifiedCatchUoM />
+    <Frozen>N</Frozen>
+    <LastActivityDate>2021-01-07T17:38:16</LastActivityDate>
+    <LatestCount>2021-01-07</LatestCount>
+    <LocationType>Picking</LocationType>
+    <ReceiptDate>2019-10-29T15:16:36</ReceiptDate>
+    <AvailabilityControlID />
+    <AvailabilityControlDescription />
+    <AvgUnitTransitCost>0</AvgUnitTransitCost>
+    <CountVariance>0</CountVariance>
+    <ExpirationDate />
+    <UnitCost>34,17</UnitCost>
+    <TotalInventoryValue>102,50</TotalInventoryValue>
+    <BaseCurr>NOK</BaseCurr>
+    <Ownership>Company Owned</Ownership>
+    <Owner />
+    <OwnerName />
+    <PartAcquisitionValue />
+    <TotalAcquisitionValue />
+    <AcquisitionCurrency />
+    <ProgramID />
+    <ProgramDescription />
+    <ProjectName>Equip. for Coast Guard Vessel NB912</ProjectName>
+    <SubProjectDescription>Chain stopper, 54mm k3 chain, DNV certif, 2 off, Dwg xxxxxxx</SubProjectDescription>
+    <ActivityDescription>Purchasing</ActivityDescription>
+    <Remote>FALSE</Remote>
+  </Row>
+  <Row>
+    <Site>SE</Site>
+    <PartNo>16104544</PartNo>
+    <PartDescription>Logo plate</PartDescription>
+    <ConfigurationID>*</ConfigurationID>
+    <LocationNo>HQ-PRJ</LocationNo>
+    <LotBatchNo>*</LotBatchNo>
+    <SerialNo>*</SerialNo>
+    <OnHandQty>3</OnHandQty>
+    <ReservedQty>0</ReservedQty>
+    <Warehouse>HQ</Warehouse>
+    <ActivityID>26</ActivityID>
+    <ProjectID>101353</ProjectID>
+    <SubProjectID>11100D</SubProjectID>
+    <ActivitySequence>100926900</ActivitySequence>
+    <Bay>PRJ</Bay>
+    <Row>  -</Row>
+    <Tier>  -</Tier>
+    <Bin>  -</Bin>
+    <ConditionCode />
+    <ConditionCodeDescription />
+    <RevNo>1</RevNo>
+    <WDRNo>*</WDRNo>
+    <RotablePartPoolID />
+    <OnHandCatchQty />
+    <UnifiedOnHandQty>1</UnifiedOnHandQty>
+    <UnifiedCatchOnHandQty />
+    <UnifiedReservedQty>0</UnifiedReservedQty>
+    <InTransitQty>0</InTransitQty>
+    <CatchQtyinTransit />
+    <UnifiedQtyinTransit>0</UnifiedQtyinTransit>
+    <UnifiedCatchQtyinTransit />
+    <AvailableQty>1</AvailableQty>
+    <UoM>Each</UoM>
+    <CatchUoM />
+    <UnifiedUoM>Each</UnifiedUoM>
+    <UnifiedCatchUoM />
+    <Frozen>N</Frozen>
+    <LastActivityDate>2021-06-14T12:51:31</LastActivityDate>
+    <LatestCount />
+    <LocationType>Picking</LocationType>
+    <ReceiptDate>2018-12-11T08:52:21</ReceiptDate>
+    <AvailabilityControlID />
+    <AvailabilityControlDescription />
+    <AvgUnitTransitCost>0</AvgUnitTransitCost>
+    <CountVariance>0</CountVariance>
+    <ExpirationDate />
+    <UnitCost>55,03</UnitCost>
+    <TotalInventoryValue>55,03</TotalInventoryValue>
+    <BaseCurr>NOK</BaseCurr>
+    <Ownership>Company Owned</Ownership>
+    <Owner />
+    <OwnerName />
+    <PartAcquisitionValue />
+    <TotalAcquisitionValue />
+    <AcquisitionCurrency />
+    <ProgramID />
+    <ProgramDescription />
+    <ProjectName>Equip. for Coast Guard Vessel NB912</ProjectName>
+    <SubProjectDescription>Hydr. Mooring winch, left, 2 off, Dwg 2101359</SubProjectDescription>
+    <ActivityDescription>Purchasing</ActivityDescription>
+    <Remote>FALSE</Remote>
+  </Row>
+  <Row>
+    <Site>SE</Site>
+    <PartNo>16700992</PartNo>
+    <PartDescription>Winch motor load holding valve block - left</PartDescription>
+    <ConfigurationID>*</ConfigurationID>
+    <LocationNo>HQ-PRJ</LocationNo>
+    <LotBatchNo>*</LotBatchNo>
+    <SerialNo>*</SerialNo>
+    <OnHandQty>2</OnHandQty>
+    <ReservedQty>0</ReservedQty>
+    <Warehouse>HQ</Warehouse>
+    <ActivityID>26</ActivityID>
+    <ProjectID>101353</ProjectID>
+    <SubProjectID>11100D</SubProjectID>
+    <ActivitySequence>100926900</ActivitySequence>
+    <Bay>PRJ</Bay>
+    <Row>  -</Row>
+    <Tier>  -</Tier>
+    <Bin>  -</Bin>
+    <ConditionCode />
+    <ConditionCodeDescription />
+    <RevNo>1</RevNo>
+    <WDRNo>*</WDRNo>
+    <RotablePartPoolID />
+    <OnHandCatchQty />
+    <UnifiedOnHandQty>1</UnifiedOnHandQty>
+    <UnifiedCatchOnHandQty />
+    <UnifiedReservedQty>0</UnifiedReservedQty>
+    <InTransitQty>0</InTransitQty>
+    <CatchQtyinTransit />
+    <UnifiedQtyinTransit>0</UnifiedQtyinTransit>
+    <UnifiedCatchQtyinTransit />
+    <AvailableQty>1</AvailableQty>
+    <UoM>Each</UoM>
+    <CatchUoM />
+    <UnifiedUoM>Each</UnifiedUoM>
+    <UnifiedCatchUoM />
+    <Frozen>N</Frozen>
+    <LastActivityDate>2021-06-01T11:44:44</LastActivityDate>
+    <LatestCount />
+    <LocationType>Picking</LocationType>
+    <ReceiptDate>2021-06-01T11:44:35</ReceiptDate>
+    <AvailabilityControlID />
+    <AvailabilityControlDescription />
+    <AvgUnitTransitCost>0</AvgUnitTransitCost>
+    <CountVariance>0</CountVariance>
+    <ExpirationDate />
+    <UnitCost>7 150,00</UnitCost>
+    <TotalInventoryValue>7 150,00</TotalInventoryValue>
+    <BaseCurr>NOK</BaseCurr>
+    <Ownership>Company Owned</Ownership>
+    <Owner />
+    <OwnerName />
+    <PartAcquisitionValue />
+    <TotalAcquisitionValue />
+    <AcquisitionCurrency />
+    <ProgramID />
+    <ProgramDescription />
+    <ProjectName>Equip. for Coast Guard Vessel NB912</ProjectName>
+    <SubProjectDescription>Hydr. Mooring winch, left, 2 off, Dwg 2101359</SubProjectDescription>
+    <ActivityDescription>Purchasing</ActivityDescription>
+    <Remote>FALSE</Remote>
+  </Row>
+</Table>

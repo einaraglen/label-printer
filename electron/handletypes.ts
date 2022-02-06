@@ -12,4 +12,5 @@ export enum IPC {
     GET_PRINTER = "GET_PRINTER",
     SET_PRINTER = "SET_PRINTER",
     QUIT = "QUIT",
+    GET_FILE = "GET_FILE"
 }

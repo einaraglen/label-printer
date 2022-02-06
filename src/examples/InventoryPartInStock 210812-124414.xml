@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Table xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3.org/2001/XMLSchema file://C://Users//einar.aglen//AppData//Local//Temp//InventoryPartInStock%20210812-124414.xsd" xmlns="http://www.w3.org/2001/XMLSchema">
+  <Row>
+    <Site>SE</Site>
+    <PartNo>SE1701.17</PartNo>
+    <PartDescription>Collegegenser Collie Size L</PartDescription>
+    <ConfigurationID>*</ConfigurationID>
+    <LocationNo>HQ-WS</LocationNo>
+    <LotBatchNo>*</LotBatchNo>
+    <SerialNo>*</SerialNo>
+    <OnHandQty>3</OnHandQty>
+    <ReservedQty>0</ReservedQty>
+    <Warehouse>HQ</Warehouse>
+    <ActivityID />
+    <ProjectID />
+    <SubProjectID />
+    <ActivitySequence>0</ActivitySequence>
+    <Bay>WS</Bay>
+    <Row>  -</Row>
+    <Tier>  -</Tier>
+    <Bin>  -</Bin>
+    <ConditionCode />
+    <ConditionCodeDescription />
+    <RevNo>1</RevNo>
+    <WDRNo>*</WDRNo>
+    <RotablePartPoolID />
+    <OnHandCatchQty />
+    <UnifiedOnHandQty>3</UnifiedOnHandQty>
+    <UnifiedCatchOnHandQty />
+    <UnifiedReservedQty>0</UnifiedReservedQty>
+    <InTransitQty>0</InTransitQty>
+    <CatchQtyinTransit />
+    <UnifiedQtyinTransit>0</UnifiedQtyinTransit>
+    <UnifiedCatchQtyinTransit />
+    <AvailableQty>3</AvailableQty>
+    <UoM>Each</UoM>
+    <CatchUoM />
+    <UnifiedUoM>Each</UnifiedUoM>
+    <UnifiedCatchUoM />
+    <Frozen>N</Frozen>
+    <LastActivityDate>2021-08-12T12:43:11</LastActivityDate>
+    <LatestCount>2021-08-11</LatestCount>
+    <LocationType>Picking</LocationType>
+    <ReceiptDate>2021-08-12T11:51:57</ReceiptDate>
+    <AvailabilityControlID />
+    <AvailabilityControlDescription />
+    <AvgUnitTransitCost>0</AvgUnitTransitCost>
+    <CountVariance>0</CountVariance>
+    <ExpirationDate />
+    <UnitCost>108,00</UnitCost>
+    <TotalInventoryValue>324,00</TotalInventoryValue>
+    <BaseCurr>NOK</BaseCurr>
+    <Ownership>Company Owned</Ownership>
+    <Owner />
+    <OwnerName />
+    <PartAcquisitionValue />
+    <TotalAcquisitionValue />
+    <AcquisitionCurrency />
+    <ProgramID />
+    <ProgramDescription />
+    <ProjectName />
+    <SubProjectDescription />
+    <ActivityDescription />
+    <Remote>FALSE</Remote>
+  </Row>
+</Table>

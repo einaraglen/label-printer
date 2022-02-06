@@ -3,7 +3,8 @@ import * as path from "path";
 import * as isDev from "electron-is-dev";
 import installExtension, { REACT_DEVELOPER_TOOLS } from "electron-devtools-installer";
 import { IPC } from "./handletypes";
-import { handleIPC } from "./hardwarehandler";
+import { formatFailure, handleIPC } from "./hardwarehandler";
+import { handleResponse, StatusType } from "./responsehandler";
 
 const devEnv = /electron/.test(process.argv[0]);
 
@@ -81,34 +82,28 @@ ipcMain.handle(IPC.QUIT, async (event: any, arg: any) => handleIPC(IPC.QUIT, eve
 app.whenReady().then(() => {
   if (process.platform.startsWith("win") && !devEnv && process.argv.length >= 2) {
     //if app is opened with file
-    const filePath = process.argv[1];
-    ipcMain.handle("get-file", (event, arg) => {
-      return filePath;
+    const filepath = process.argv[1];
+    ipcMain.handle(IPC.GET_FILE, (event, arg) => {
+      return handleResponse({ payload: { filepath } });
     });
   } else {
     //opened default method
-    ipcMain.handle("get-file", (event, arg) => {
-      return "";
+    ipcMain.handle(IPC.GET_FILE, (event, arg) => {
+      return handleResponse({ type: StatusType.Missing, message: formatFailure("fetching FilePath", "No file found on-open") });
     });
   }
 
   createWindow();
 
   app.on("activate", () => {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+    //if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
 });
 
-app.on("ready", createWindow);
+//app.on("ready", createWindow);
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
     app.quit();
-  }
-});
-
-app.on("activate", () => {
-  if (window === null) {
-    createWindow();
   }
 });

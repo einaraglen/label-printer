@@ -12,4 +12,19 @@ export enum IPC {
     GET_PRINTER = "GET_PRINTER",
     SET_PRINTER = "SET_PRINTER",
     QUIT = "QUIT",
+    GET_FILE = "GET_FILE"
+}
+
+export enum ProgramState {
+    Loading,
+    Empty,
+    Ready,
+    Printing
+}
+
+export enum LogType {
+    Success,
+    Error,
+    Failure,
+    Info
 }

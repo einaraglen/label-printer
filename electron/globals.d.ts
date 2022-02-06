@@ -1,0 +1,45 @@
+declare interface LabelResponse {
+    statuscode: number;
+    message: string;
+    payload?: any;
+}
+
+declare interface ExportConfigResponse extends LabelResponse {
+    payload?: {
+        filepath: string;
+    }
+}
+
+declare interface DYMOStatusResponse extends LabelResponse {}
+
+declare interface ImagePreviewResponse extends LabelResponse {
+    payload?: {
+        image: string
+    }
+}
+
+declare interface PrintLabelResponse extends LabelResponse {}
+
+declare interface TemplateResponse extends LabelResponse {
+    payload?: {
+        template: any
+    }
+}
+
+declare interface ConfigResponse extends LabelResponse {
+    payload?: {
+        config: any
+    }
+}
+
+declare interface DYMOPrintersResponse extends LabelResponse {
+    payload?: {
+        printers: any
+    }
+}
+
+declare interface PrinterResponse extends LabelResponse {
+    payload?: {
+        printer: any
+    }
+}

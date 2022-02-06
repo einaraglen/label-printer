@@ -1,1 +1,6 @@
-export const SET_LOCATIONS = "SET_LOCATIONS"
+export const SET_STATE = "SET_STATE"
+export const LOG = "LOG"
+export const SET_STATUS = "SET_STATUS"
+export const SET_FILEPATH = "SET_FILEPATH"
+export const SET_CONFIG = "SET_CONFIG"
+export const ADD_TEMPLATE = "ADD_TEMPLATE"
