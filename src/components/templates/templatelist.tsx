@@ -5,15 +5,13 @@ import { useNavigate } from "react-router-dom";
 import InvokeHandler from "../../utils/invoke";
 import { IPC } from "../../utils/enums";
 import ReduxAccessor from "../../store/accessor";
-import { useState } from "react";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { parseFilename } from "../../utils/tools";
 
 const TemplatesList = () => {
   const navigate = useNavigate();
   const { invoke } = InvokeHandler();
-  const { setTemplates, templates, template } = ReduxAccessor();
-  const [value, setValue] = useState<string>(template?.filepath ?? "");
+  const { setTemplates, setTemplate, templates, template } = ReduxAccessor();
 
   const exists = (filepath: string) => {
     let pathmatch = templates.find((template: Template) => template.filepath === filepath)
@@ -34,15 +32,35 @@ const TemplatesList = () => {
 
   const handleDeleteTemplate = async (filepath: string) => {
     let _templates = templates.filter((template: Template) => template.filepath !== filepath)
+    await handleDeleteTemplateEffect(filepath)
     await invoke(IPC.SET_TEMPLATES, {
       args: JSON.stringify(_templates),
       next: (data: any) => setTemplates(JSON.parse(data.templates)),
     });
   }
 
-  const handleChange = (e: any) => {
-    setValue(e.target.value);
+  const handleDeleteTemplateEffect = async (filepath: string) => {
+    if (template !== filepath) return;
+    await invoke(IPC.SET_TEMPLATE, {
+      args: "",
+      next: (data: any) => {
+        setTemplate(data.template)
+      },
+    });
+  }
+
+  const handleChange = async (e: any) => {
+    await handleSetTemplate(e.target.value)
   };
+
+  const handleSetTemplate = async (filepath: string) => {
+    await invoke(IPC.SET_TEMPLATE, {
+      args: filepath,
+      next: (data: any) => {
+        setTemplate(data.template)
+      },
+    });
+  }
 
   return (
     <Box>
@@ -70,12 +88,12 @@ const TemplatesList = () => {
           </label>
         </Box>
       </Box>
-      <RadioGroup value={value} onChange={handleChange}>
+      <RadioGroup value={template ?? ""} onChange={handleChange}>
         <List component="nav" sx={{ maxHeight: "10rem", overflowY: "scroll" }}>
           {templates.map((_template: Template, idx: number) => (
             <ListItem
             key={idx}
-              onClick={() => setValue(_template.filepath)}
+              onClick={() => handleSetTemplate(_template.filepath)}
               sx={{
                 height: "3.5rem",
               }}

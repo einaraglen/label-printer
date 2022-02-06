@@ -5,7 +5,7 @@ import { parseIFSPage, parseFile } from "../utils/tools";
 import { Helmet } from 'react-helmet'
 
 const PrintPage = () => {
-    const [IFS, setIFS] = useState<string>("");
+    const [IFS, setIFS] = useState<string | null>(null);
     const { filepath } = ReduxAccessor();
 
   useEffect(() => {
@@ -14,12 +14,12 @@ const PrintPage = () => {
       if (filepath) console.log(await parseFile(filepath));
     };
     parse();
-  }, []);
+  }, [filepath]);
 
   return (
     <Box sx={{ display: "flex", flexGrow: 1, flexDirection: "column" }}>
         <Helmet>
-          <title>{`LabelPrinter+ | ${IFS} | Print`}</title>
+          <title>{`LabelPrinter+ | ${IFS ?? "Loading ..."} | Print`}</title>
         </Helmet>
       <Button variant="outlined" sx={{ mx: 10 }}>
         Print

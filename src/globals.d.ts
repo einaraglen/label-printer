@@ -33,7 +33,7 @@ declare interface ReduxState {
     state: ProgramState;
     status: ProgramStatus
     filepath: string | null,
-    template: Template | null;
+    template: string | null;
     templates: Template[];
     config: Config | null;
     configs: Config[];
@@ -76,7 +76,7 @@ declare interface TemplatesResponse extends LabelResponse {
 
 declare interface ConfigResponse extends LabelResponse {
     payload?: {
-        config: any
+        configs: any
     }
 }
 

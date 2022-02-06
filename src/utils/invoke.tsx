@@ -39,13 +39,11 @@ const InvokeHandler = () => {
 
   const handleSuccess = (key: IPC, response: LabelResponse) => {
     log(LogType.Success, `${key} ${response.message}`);
-    console.log(logs)
   };
 
   const handleFailure = (key: IPC, response: LabelResponse) => {
     log(LogType.Failure, response.message);
     setStatusOf(key, false)
-    console.log(logs)
   };
 
   const checkStatus = (statuscode: number): boolean => {
@@ -73,7 +71,7 @@ const InvokeHandler = () => {
     return {
       statuscode: 200,
       message: "Success",
-      payload: { filepath: `src/examples/${testPaths[1]}` },
+      payload: { filepath: `src/examples/${testPaths[2]}` },
     };
   };
 

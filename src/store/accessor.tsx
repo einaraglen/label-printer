@@ -12,7 +12,7 @@ const ReduxAccessor = () => {
   const setStatus = useCallback((status: { key: string; value: boolean }) => dispatch(_setStatus(status)), [dispatch]);
   const setFilePath = useCallback((filePath: string) => dispatch(_setFilePath(filePath)), [dispatch]);
   const addConfig = useCallback((config: Config) => dispatch(_addConfig(config)), [dispatch]);
-  const setConfig = useCallback((config: Config[]) => dispatch(_setConfig(config)), [dispatch]);
+  const setConfig = useCallback((config: Config) => dispatch(_setConfig(config)), [dispatch]);
   const setConfigs = useCallback((config: Config[]) => dispatch(_setConfigs(config)), [dispatch]);
   const addTemplate = useCallback((template: string) => dispatch(_addTemplate(template)), [dispatch]);
   const setTemplates = useCallback((templates: Template[]) => dispatch(_setTemplates(templates)), [dispatch]);
@@ -26,7 +26,7 @@ const ReduxAccessor = () => {
   const config: Config | null = useSelector((state: ReduxState) => state.config, shallowEqual);
   const logs: ProgramLog[] = useSelector((state: ReduxState) => state.logs, shallowEqual);
   const templates: Template[] = useSelector((state: ReduxState) => state.templates, shallowEqual);
-  const template: Template | null = useSelector((state: ReduxState) => state.template, shallowEqual);
+  const template: string | null = useSelector((state: ReduxState) => state.template, shallowEqual);
 
   const log = (type: LogType, message: string) => {
     let now = new Date();

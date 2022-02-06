@@ -2,17 +2,23 @@ import { List, ListItem, ListItemText, IconButton } from "@mui/material";
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
 
 interface Props {
-  config: Config[];
+  configs: Config[];
   next: Function;
+  setSelected: Function;
 }
 
-const ConfigList = ({ config, next }: Props) => {
+const ConfigList = ({ configs, next, setSelected }: Props) => {
+  const handleListClick = (entry: Config) => {
+    setSelected(entry);
+    next();
+  };
+
   return (
     <List component="nav" sx={{ maxHeight: "13rem" }}>
-      {config.map((entry: Config, idx: number) => (
+      {configs.map((entry: Config, idx: number) => (
         <ListItem
-        key={idx}
-          onClick={() => next()}
+          key={idx}
+          onClick={() => handleListClick(entry)}
           sx={{
             height: "3.5rem",
           }}
@@ -24,7 +30,7 @@ const ConfigList = ({ config, next }: Props) => {
             </IconButton>
           }
         >
-          <ListItemText sx={{pl: 2}} primary={entry.name} />
+          <ListItemText sx={{ pl: 2 }} primary={entry.name} />
         </ListItem>
       ))}
     </List>

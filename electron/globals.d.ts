@@ -26,9 +26,15 @@ declare interface TemplateResponse extends LabelResponse {
     }
 }
 
+declare interface TemplatesResponse extends LabelResponse {
+    payload?: {
+        templates: any
+    }
+}
+
 declare interface ConfigResponse extends LabelResponse {
     payload?: {
-        config: any
+        configs: any
     }
 }
 

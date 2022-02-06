@@ -2,19 +2,33 @@ import { List, ListItem, ListItemText, Radio, RadioGroup } from "@mui/material";
 import ReduxAccessor from "../../store/accessor";
 import { parseFile } from "../../utils/tools";
 import { useEffect, useState } from "react";
-import { AnyArray } from "immer/dist/internal";
-
 interface Props {
-    searchkey: string
+    searchkey: string,
+    objectkey: string;
+    configkey: ConfigKey | null;
+    selected: Config | null;
+    handleUpdateAccessor: Function;
 }
 
-const AccessorList = ({ searchkey }: Props) => {
+const AccessorList = ({ searchkey, objectkey, configkey, selected, handleUpdateAccessor }: Props) => {
   const [accessors, setAccessors] = useState<string[]>([]);
-  const [value, setValue] = useState<string>("");
   const { filepath } = ReduxAccessor();
+  const [current, setCurrent] = useState<string>(configkey?.accessor ?? "");
 
-  const handleChange = (e: any) => {
-    setValue(e.target.value);
+  const handleChange = async  (e: any) => {
+    await changeAccessor(e.target.value)
+  }
+
+  const changeAccessor = async (accessor: string) => {
+    //TODO: payload has to be { [object key]: {...} } for spread to work
+    setCurrent(accessor)
+    let key: any = {
+      ...configkey,
+      accessor
+    }
+    await handleUpdateAccessor({ 
+      [objectkey]: { ...key  }
+    })
   }
 
   const handledAccessors = () => {
@@ -27,19 +41,18 @@ const AccessorList = ({ searchkey }: Props) => {
       if (!filepath) return;
       let data = await parseFile(filepath);
       if (!data) return;
-      console.log(Object.keys(data[0]));
       setAccessors(Object.keys(data[0]));
     };
     parse();
   }, []);
 
   return (
-    <RadioGroup value={value} onChange={handleChange}>
+    <RadioGroup value={current} onChange={handleChange}>
       <List component="nav" sx={{ maxHeight: "10rem", overflowY: "scroll" }}>
         {handledAccessors().map((accessor: string, idx: number) => (
             <ListItem
             key={idx}
-            onClick={() => setValue(accessor)}
+            onClick={async () => await changeAccessor(accessor)}
               sx={{
                 height: "3.5rem",
               }}

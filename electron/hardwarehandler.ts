@@ -143,14 +143,14 @@ const handleSetTemplates = async (event: any, args: any): Promise<LabelResponse>
 };
 
 const handleGetConfigs = async (event: any, args: any): Promise<LabelResponse> => {
-  let config = store.get(StoreKey.Configs, args);
-  if (!config) return handleResponse({ type: StatusType.Missing, message: formatFailure("fetching config", "Could not find config") });
-  return handleResponse({ payload: { config } });
+  let configs = store.get(StoreKey.Configs, args);
+  if (!configs) return handleResponse({ type: StatusType.Missing, message: formatFailure("fetching config", "Could not find config") });
+  return handleResponse({ payload: { configs } });
 };
 
 const handleSetConfigs = async (event: any, args: any): Promise<LabelResponse> => {
   store.set(StoreKey.Configs, args);
-  return handleResponse({ payload: { config: args } });
+  return handleResponse({ payload: { confisg: args } });
 };
 
 const handleGetPrinters = async (event: any, args: any): Promise<LabelResponse> => {

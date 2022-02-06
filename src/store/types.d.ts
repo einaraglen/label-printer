@@ -31,7 +31,7 @@ interface SetTemplatesAction extends IAction {
 }
 
 interface SetTemplateAction extends IAction {
-  payload: Template
+  payload: string
 }
 
 interface AddTemplateAction extends IAction {

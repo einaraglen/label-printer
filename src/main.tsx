@@ -13,11 +13,14 @@ import { IPC, ProgramState } from "./utils/enums";
 import Templates from "./pages/templates";
 import InvokeHandler from "./utils/invoke";
 import ReduxAccessor from "./store/accessor";
+import ConfigHandler from "./utils/handlers/confighandler";
+import { parseIFSPage } from "./utils/tools";
 
 const App = () => {
   const { theme } = MuiTheme();
-  const { setState, setStatus, setFilePath, setConfigs, setTemplates, setTemplate } = ReduxAccessor();
+  const { setState, setStatus, setFilePath, setConfigs, setConfig, setTemplates, setTemplate } = ReduxAccessor();
   const { invoke } = InvokeHandler();
+  const { checkForExistingConfig } = ConfigHandler();
 
   useEffect((): any => {
     const setup = async () => {
@@ -26,7 +29,6 @@ const App = () => {
       });
       await invoke(IPC.GET_TEMPLATES, {
         next: (data: any) => {
-          console.log(data)
           setTemplates(JSON.parse(data.templates));
         },
       });
@@ -39,13 +41,15 @@ const App = () => {
       await invoke(IPC.GET_CONFIGS, {
         next: (data: any) => {
           setStatus({ key: "isConfig", value: true });
-          setConfigs(data.config);
+          setConfigs(JSON.parse(data.configs));
         },
       });
       await invoke(IPC.GET_FILE, {
         next: async (data: any) => {
+          if (!data.filepath) return;
           setStatus({ key: "isFile", value: true });
           setFilePath(data.filepath);
+          setConfig(await checkForExistingConfig(parseIFSPage(data.filepath) ?? ""))
         },
       });
       setState(ProgramState.Ready);
