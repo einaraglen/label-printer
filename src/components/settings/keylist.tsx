@@ -28,7 +28,7 @@ const KeyList = ({ config, next, setKey, setObjectkey }: Props) => {
     let current = configs.find((entry: Config) => entry.name === config.name);
     if (!current) return;
     setCurrent(current)
-  }, [configs]);  
+  }, [configs, config]);  
 
   return (
     <List component="nav" sx={{ maxHeight: "10rem", overflowY: "scroll" }}>
