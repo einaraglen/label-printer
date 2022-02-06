@@ -4,7 +4,7 @@ import packageJson from "../../package.json";
 
 const Footer = () => {
   return (
-    <Container sx={{ display: "flex", justifyContent: "space-between", py: 0.5 }}>
+    <Container sx={{ position: "fixed", bottom: 0, backdropFilter: "blur(5px)", display: "flex", justifyContent: "space-between", py: 0.5 }}>
       <Typography variant="body1" display="block" gutterBottom fontWeight={600} color="gray">
         {`Created by ${packageJson.author}`}
       </Typography>

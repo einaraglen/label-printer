@@ -50,6 +50,16 @@ export const _setConfig = (payload: any) => {
   };
 };
 
+export const _addConfig = (payload: any) => {
+  const action: AddConfigAction = {
+    type: actionTypes.ADD_CONFIG,
+    payload,
+  };
+  return (dispatch: DispatchType) => {
+    dispatch(action);
+  };
+};
+
 export const _addTemplate = (payload: any) => {
   const action: AddTemplateAction = {
     type: actionTypes.ADD_TEMPLATE,

@@ -53,7 +53,7 @@ const App = () => {
       <Router>
         <Box sx={{ height: "100vh", display: "flex", px: 0, flexDirection: "column" }} bgcolor="dark">
           <TopBar />
-          <Container sx={{ flexGrow: 1 }}>
+          <Container sx={{ flexGrow: 1, display: "flex", p: 0 }}>
             <Routes>
               <Route path="/settings" element={<SettingsPage />} />
               <Route path="/templates" element={<Templates />} />

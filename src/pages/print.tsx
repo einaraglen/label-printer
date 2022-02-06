@@ -1,16 +1,31 @@
-import { Box } from "@mui/material";
-import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Box, Button } from "@mui/material";
+import React, { useEffect, useState } from "react";
 import ReduxAccessor from "../store/accessor";
+import { parseIFSPage, parseFile } from "../utils/tools";
+import { Helmet } from 'react-helmet'
 
-const PrintPage = () => {  
-    const { status } = ReduxAccessor();
-    
-    useEffect(() => {
-        console.log(status)
-    }, [status]);
-    
-    return (<Box sx={{ display: 'flex', flexGrow: 1 }}><Link to="/settings">Settings</Link></Box>)
-}
+const PrintPage = () => {
+    const [IFS, setIFS] = useState<string>("");
+    const { filepath } = ReduxAccessor();
+
+  useEffect(() => {
+    if (filepath) setIFS(parseIFSPage(filepath) ?? "No File Found")
+    const parse = async () => {
+      if (filepath) console.log(await parseFile(filepath));
+    };
+    parse();
+  }, []);
+
+  return (
+    <Box sx={{ display: "flex", flexGrow: 1, flexDirection: "column" }}>
+        <Helmet>
+          <title>{`LabelPrinter+ | ${IFS} | Print`}</title>
+        </Helmet>
+      <Button variant="outlined" sx={{ mx: 10 }}>
+        Print
+      </Button>
+    </Box>
+  );
+};
 
 export default PrintPage;

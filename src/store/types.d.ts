@@ -15,7 +15,11 @@ interface FilePathAction extends IAction {
   payload: string
 }
 interface ConfigAction extends IAction {
-  payload: any
+  payload: Config[]
+}
+
+interface AddConfigAction extends IAction {
+  payload: Config
 }
 
 interface AddTemplateAction extends IAction {

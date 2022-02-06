@@ -13,7 +13,7 @@ const initialState: ReduxState = {
   },
   filepath: null,
   templates: [],
-  config: null,
+  config: [],
   logs: []
 };
 
@@ -32,6 +32,9 @@ const reducer = createReducer(initialState, {
   },
   [actionTypes.SET_CONFIG]: (state: ReduxState, action: ConfigAction) => {
     state.config = action.payload;
+  },
+  [actionTypes.ADD_CONFIG]: (state: ReduxState, action: AddConfigAction) => {
+    state.config.push(action.payload)
   },
   [actionTypes.ADD_TEMPLATE]: (state: ReduxState, action: AddTemplateAction) => {
     state.templates.push({ filepath: action.payload, selected: false })

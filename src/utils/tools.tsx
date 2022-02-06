@@ -26,16 +26,7 @@ export const readFile = async (path: any) => {
   });
 };
 
-export const isConfigGood = (config: any, usableProperties: any) => {
-  //a blank config will work
-  if (!config || !config[Object.keys(config)[0]]) return true;
-  for (let property in config[Object.keys(config)[0]]) {
-    if (usableProperties.indexOf(property) === -1) return false;
-  }
-  return true;
-};
-
-export const getConfigName = (filePath: any) => {
+export const parseIFSPage = (filePath: any) => {
   //get our capital letter words into an array ["Customer", "Order"]
   let words = path
     .parse(filePath)
@@ -55,14 +46,6 @@ export const cleanXMLString = (xml: any) => {
   return xml.replace(/\s*</g, "<");
 };
 
-export const buildResponse = (valid = null, message: any, loading = false) => {
-  let date = new Date();
-  let time = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
-  let text = loading ? "[Loading..] " : valid ? "[Success] " : "[Failure] ";
-  return (
-    <p>
-      <span className={loading ? "loading" : valid ? "good" : "bad"}>{`${time} ${text}`}</span>
-      {message}
-    </p>
-  );
+export const capitalize = (str: string) => {
+  return str.charAt(0).toUpperCase() + str.slice(1);
 };

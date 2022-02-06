@@ -117,10 +117,10 @@ const MuiTheme = () => {
       MuiListItemText: {
         styleOverrides: {
           root: {
-            color: "hsl(0, 0%, 86%)",
+            color: "hsl(0, 0%, 96%)",
           },
           secondary: {
-            color: "#29b6f6",
+            color: "hsl(0, 0%, 66%)",
           },
         },
       },

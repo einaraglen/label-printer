@@ -37,9 +37,12 @@
     "history": "^5.2.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-helmet": "^6.1.0",
+    "react-material-ui-carousel": "^3.1.1",
     "react-redux": "^7.2.6",
     "react-router-dom": "^6.2.1",
     "react-scripts": "5.0.0",
+    "react-swipeable-views": "^0.14.0",
     "redux": "^4.1.2",
     "redux-starter-kit": "^2.0.0",
     "redux-thunk": "^2.4.1",
@@ -74,6 +77,8 @@
     ]
   },
   "devDependencies": {
+    "@types/react-helmet": "^6.1.5",
+    "@types/react-swipeable-views": "^0.13.1",
     "concurrently": "^7.0.0",
     "cross-env": "^7.0.3",
     "electron": "^17.0.0",

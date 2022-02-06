@@ -17,12 +17,25 @@ declare interface Template {
     selected: boolean;
 }
 
+declare interface ConfigKey {
+    key: string;
+    accessor: string;
+}
+
+declare interface Config {
+    name: string; 
+    number?: ConfigKey;
+    description?: ConfigKey;
+    quantity?: ConfigKey;
+    info?: ConfigKey;
+}
+
 declare interface ReduxState {
     state: ProgramState;
     status: ProgramStatus
     filepath: string | null,
     templates: Template[];
-    config: any | null;
+    config: Config[];
     logs: ProgramLog[];
 }
 
