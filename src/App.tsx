@@ -10,8 +10,8 @@ import "./app.css";
 import TopBar from "./components/topbar";
 import { Box, Container } from "@mui/material";
 import Footer from "./components/footer";
-import { IPC } from "./utils/handletypes";
 import CssBaseline from '@mui/material/CssBaseline';
+import { IPC } from "./utils/enums";
 
 const { ipcRenderer } = window.require("electron");
 
