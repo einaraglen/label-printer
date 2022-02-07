@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import MuiTheme from "./theme/mui.theme";
 import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
@@ -18,12 +18,20 @@ import { parseIFSPage } from "./utils/tools";
 
 const App = () => {
   const { theme } = MuiTheme();
-  const { setState, setStatus, setFilePath, setConfigs, setConfig, setTemplates, setTemplate } = ReduxAccessor();
+  const { setState, setStatus, filepath, setFilePath, setConfigs, setConfig, setTemplates, setTemplate } = ReduxAccessor();
   const { invoke } = InvokeHandler();
   const { checkForExistingConfig } = ConfigHandler();
+  const [isConfigSet, setIsConfigSet] = useState(false);
 
   useEffect((): any => {
     const setup = async () => {
+      await invoke(IPC.GET_FILE, {
+        next: async (data: any) => {
+          if (!data.filepath) return;
+          setStatus({ key: "isFile", value: true });
+          setFilePath(data.filepath);
+        },
+      });
       await invoke(IPC.DYMO_STATUS, {
         next: (data: any) => setStatus({ key: "isDYMO", value: JSON.parse(data) }),
       });
@@ -42,14 +50,7 @@ const App = () => {
         next: (data: any) => {
           setStatus({ key: "isConfig", value: true });
           setConfigs(JSON.parse(data.configs));
-        },
-      });
-      await invoke(IPC.GET_FILE, {
-        next: async (data: any) => {
-          if (!data.filepath) return;
-          setStatus({ key: "isFile", value: true });
-          setFilePath(data.filepath);
-          setConfig(await checkForExistingConfig(parseIFSPage(data.filepath) ?? ""))
+          setIsConfigSet(true); // trigger load of config based on filepath
         },
       });
       setState(ProgramState.Ready);
@@ -57,13 +58,22 @@ const App = () => {
     setup();
   }, []);
 
+  useEffect(() => {
+    if (!isConfigSet) return;
+    const config = async () => {
+      let IFS = parseIFSPage(filepath);
+      if (IFS) setConfig(await checkForExistingConfig(IFS));
+    };
+    config();
+  }, [isConfigSet]);
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Router>
-        <Box sx={{ height: "100vh", display: "flex", px: 0, flexDirection: "column" }} bgcolor="dark">
+        <Box sx={{ height: "100vh", display: "flex", px: 0, flexDirection: "column", overflowX: "hidden" }} bgcolor="dark">
           <TopBar />
-          <Container sx={{ flexGrow: 1, display: "flex", p: 0 }}>
+          <Container sx={{ flexGrow: 1, display: "flex", p: 0, overflowX: "hidden" }}>
             <Routes>
               <Route path="/settings" element={<SettingsPage />} />
               <Route path="/templates" element={<Templates />} />

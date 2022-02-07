@@ -38,6 +38,9 @@ const reducer = createReducer(initialState, {
   [actionTypes.SET_CONFIGS]: (state: ReduxState, action: SetConfigAction) => {
     state.configs = action.payload;
   },
+  [actionTypes.UPDATE_CONFIG]: (state: ReduxState, action: UpdateConfigAction) => {
+    handleUpdateConfig(state.configs, action.payload.name, action.payload.payload)
+  },
   [actionTypes.ADD_CONFIG]: (state: ReduxState, action: AddConfigAction) => {
     state.configs.push(action.payload)
   },
@@ -51,5 +54,16 @@ const reducer = createReducer(initialState, {
     state.templates.push({ filepath: action.payload })
   },
 });
+
+const handleUpdateConfig = (configs: Config[], name: string, payload: any) => {
+  let configindex = configs.findIndex((entry: Config) => entry.name === name);
+  if (configindex === -1) return;
+  let config = configs[configindex];
+  let keyindex = config.keys.findIndex((key: ConfigKey) => key.name === payload.name);
+  if (keyindex === -1) return;
+  let keys = [ ...config.keys]
+  keys[keyindex] = payload;
+  configs[configindex] = { ...config, keys };
+}
 
 export default reducer;

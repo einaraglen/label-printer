@@ -8,7 +8,8 @@ const fs = require("fs");
 const shell = require("electron").shell;
 const Store = require("electron-store");
 const store = new Store();
-const parser = require("fast-xml-parser");
+const { XMLParser } = require("fast-xml-parser");
+const parser = new XMLParser();
 
 enum StoreKey {
   Printer = "lable.printer",
@@ -161,7 +162,10 @@ const handleGetPrinters = async (event: any, args: any): Promise<LabelResponse> 
     .getPrinters()
     .then((result: any) => {
       //here we need to parse XML to JSON and return array
-      return handleResponse({ payload: { printers: parser.parse(result) } });
+      let printers = parser.parse(result).Printers;
+      if (!printer) printers = [];
+      if (printers === "" || printers.length === 0) printers = []; 
+      return handleResponse({ payload: { printers } });
     })
     .catch((err: any) => {
       return handleResponse({ type: StatusType.Missing, message: formatFailure("fetching printers", err) });

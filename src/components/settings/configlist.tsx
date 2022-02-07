@@ -1,16 +1,17 @@
 import { List, ListItem, ListItemText, IconButton } from "@mui/material";
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
+import ReduxAccessor from "../../store/accessor";
 
 interface Props {
-  configs: Config[];
-  next: Function;
+  navigate: Function;
   setSelected: Function;
 }
 
-const ConfigList = ({ configs, next, setSelected }: Props) => {
+const ConfigList = ({ navigate, setSelected }: Props) => {
+  const { configs } = ReduxAccessor();
   const handleListClick = (entry: Config) => {
     setSelected(entry);
-    next();
+    navigate(1);
   };
 
   return (

@@ -17,16 +17,15 @@ declare interface Template {
 }
 
 declare interface ConfigKey {
+    name: string;
     key: string;
-    accessor: string;
+    multiple: boolean;
+    value: any;
 }
 
 declare interface Config {
-    name: string; 
-    number?: ConfigKey;
-    description?: ConfigKey;
-    quantity?: ConfigKey;
-    info?: ConfigKey;
+    name: string;
+    keys: ConfigKey[];
 }
 
 declare interface ReduxState {

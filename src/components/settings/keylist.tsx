@@ -1,38 +1,26 @@
 import { List, ListItem, ListItemText, IconButton } from "@mui/material";
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
-import { capitalize } from "../../utils/tools";
-import { useEffect, useState } from "react";
-import ReduxAccessor from "../../store/accessor";
 
 interface Props {
-  config: Config;
-  next: Function;
-  setKey: Function;
-  setObjectkey: Function;
+  selected: Config;
+  setConfigkey: Function;
+  navigate: Function
 }
 
-const KeyList = ({ config, next, setKey, setObjectkey }: Props) => {
-  const [current, setCurrent] = useState<Config>(config);
-  const { configs } = ReduxAccessor();
-  const handledKeys = () => {
-    return Object.keys(config).filter((key: string) => key !== "name");
+const KeyList = ({ selected, setConfigkey, navigate }: Props) => {
+  const handleListClick = (key: ConfigKey) => {
+    setConfigkey(key);
+    navigate(2);
   };
 
-  const handleListClick = (key: any) => {
-    setObjectkey(key)
-    setKey(((config as any)[key] as ConfigKey));
-    next(2);
-  };
-
-  useEffect(() => {
-    let current = configs.find((entry: Config) => entry.name === config.name);
-    if (!current) return;
-    setCurrent(current)
-  }, [configs, config]);  
+  const getSecondaryText = (key: ConfigKey) => {
+    if (key.multiple) return key.value.toString();
+    return key.value;
+  }
 
   return (
     <List component="nav" sx={{ maxHeight: "10rem", overflowY: "scroll" }}>
-      {handledKeys().map((key: string, idx: number) => (
+      {selected.keys.map((key: ConfigKey, idx: number) => (
         <ListItem
           key={idx}
           onClick={() => handleListClick(key)}
@@ -47,7 +35,7 @@ const KeyList = ({ config, next, setKey, setObjectkey }: Props) => {
             </IconButton>
           }
         >
-          <ListItemText primary={capitalize(key)} sx={{ pl: 2 }} secondary={((current as any)[key] as ConfigKey).accessor || "Not Set"} />
+          <ListItemText primary={key.name} sx={{ pl: 2 }} secondary={getSecondaryText(key) || "Not Set"} />
         </ListItem>
       ))}
     </List>

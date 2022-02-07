@@ -4,41 +4,35 @@ import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import KeyList from "./keylist";
 
 interface Props {
-  config: Config | null;
-  back: Function;
-  next: Function;
-  setKey: Function;
-  setObjectkey: Function;
+  selected: Config | null;
+  setConfigkey: Function;
+  navigate: Function
 }
 
-const ConfigEditor = ({ config, back, next, setKey, setObjectkey }: Props) => {
+const ConfigEditor = ({ selected, navigate, setConfigkey }: Props) => {
 
   return (
     <Box sx={{ postition: "relative" }}>
-      {!config ? null : (
+      {!selected ? null : (
         <>
           <Box sx={{ display: "flex", justifyContent: "space-between", px: 2, pt: 1 }}>
-            <Box sx={{ width: "10%" }}>
+            <Box sx={{ width: "75%", display: "flex" }}>
               <Tooltip title="Back">
-                <IconButton onClick={() => back()} size="large">
+                <IconButton onClick={() => navigate(0)} size="large">
                   <ArrowBackIosRoundedIcon fontSize="small" />
                 </IconButton>
               </Tooltip>
-            </Box>
-            <Box sx={{ width: "50%", textAlign: "center", display: "flex" }}>
-              <Typography variant="h6" gutterBottom sx={{ my: "auto" }}>
-                {config.name}
+              <Typography gutterBottom sx={{ my: "auto", fontSize: 15 }}>
+                {selected.name}
               </Typography>
             </Box>
             <Box sx={{ width: "25%", display: "flex", justifyContent: "end" }}>
-              <Tooltip title="Delete">
-                <IconButton disabled onClick={() => back()} size="large">
+                <IconButton disabled onClick={() => navigate(0)} size="large">
                   <DeleteRoundedIcon fontSize="small" />
                 </IconButton>
-              </Tooltip>
             </Box>
           </Box>
-          <KeyList {...{ config, next, setKey, setObjectkey }} />
+          <KeyList {...{ selected, navigate, setConfigkey }} />
         </>
       )}
     </Box>

@@ -1,4 +1,4 @@
-import { Box, IconButton, Tooltip, TextField } from "@mui/material";
+import { Box, IconButton, Tooltip, TextField, FormGroup, FormControlLabel, Switch, Typography } from "@mui/material";
 import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
 import AccessorList from "./accessorlist";
 import { useState } from "react";
@@ -6,35 +6,71 @@ import { useState } from "react";
 interface Props {
   configkey: ConfigKey | null;
   selected: Config | null;
-  back: Function;
   handleUpdateAccessor: Function;
-  objectkey: string;
+  navigate: Function;
+  setConfigkey: Function
 }
 
-const KeyEditor = ({ configkey, back, selected, handleUpdateAccessor, objectkey }: Props) => {
+const KeyEditor = ({ configkey, selected, navigate, handleUpdateAccessor, setConfigkey }: Props) => {
   const [searchkey, setSearchkey] = useState("");
-  
 
   const handleChange = (e: any) => {
     setSearchkey(e.target.value);
   };
 
+  const handleSwitch = () => {
+    if (!configkey) return;
+    let _configkey =  configkey.multiple ? convertToString(configkey) : convertToStringList(configkey);
+    setConfigkey(_configkey)
+    handleUpdateAccessor(_configkey);
+  };
+
+  const convertToString = (_congfigkey: ConfigKey): ConfigKey => {
+    let value = _congfigkey.value.length === 0 ? "" : _congfigkey.value[0];
+    return {
+      name: _congfigkey.name,
+      key: _congfigkey.key,
+      multiple: false,
+      value,
+    };
+  };
+
+  const convertToStringList = (_congfigkey: ConfigKey): ConfigKey => {
+    return {
+      name: _congfigkey.name,
+      key: _congfigkey.key,
+      multiple: true,
+      value: [_congfigkey.value],
+    };
+  };
+
   return (
     <Box sx={{ postition: "relative" }}>
-      <Box sx={{ display: "flex", justifyContent: "space-between", pl: 2, pt: 1 }}>
-        <Box sx={{ width: "25%" }}>
-          <Tooltip title="Back">
-            <IconButton onClick={() => back(1)} size="large">
-              <ArrowBackIosRoundedIcon fontSize="small" />
-            </IconButton>
-          </Tooltip>
-        </Box>
-        <Box sx={{ width: "50%", textAlign: "center", display: "flex" }}>
-          <TextField variant="standard" placeholder="Search" value={searchkey} onChange={handleChange} sx={{ my: "auto", mx: "auto" }} />
-        </Box>
-        <Box sx={{ width: "25%", display: "flex", justifyContent: "end" }}></Box>
-      </Box>
-      <AccessorList {...{ searchkey, configkey, selected, handleUpdateAccessor, objectkey }} />
+      {!configkey ? null : (
+        <>
+          <Box sx={{ display: "flex", justifyContent: "space-between", pl: 2, pt: 1 }}>
+            <Box sx={{ width: "25%", display: "flex" }}>
+              <Tooltip title="Back">
+                <IconButton onClick={() => navigate(1)} size="large">
+                  <ArrowBackIosRoundedIcon fontSize="small" />
+                </IconButton>
+              </Tooltip>
+              <Typography gutterBottom sx={{ my: "auto", fontSize: 15 }}>
+                {configkey.name}
+              </Typography>
+            </Box>
+            <Box sx={{ width: "50%", textAlign: "center", display: "flex" }}>
+              <TextField variant="standard" placeholder="Search" value={searchkey} onChange={handleChange} sx={{ my: "auto", mx: "auto" }} />
+            </Box>
+            <Box sx={{ width: "25%", display: "flex", justifyContent: "end" }}>
+              <FormGroup>
+                <FormControlLabel control={<Switch onClick={handleSwitch} checked={configkey.multiple} />} label="Multiple" />
+              </FormGroup>
+            </Box>
+          </Box>
+          <AccessorList {...{ searchkey, configkey, selected, handleUpdateAccessor, setConfigkey }} />
+        </>
+      )}
     </Box>
   );
 };

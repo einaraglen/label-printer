@@ -12,37 +12,48 @@ import ConfigHandler from "../utils/handlers/confighandler";
 const SettingsPage = () => {
   const [index, setIndex] = useState(0);
   const [IFS, setIFS] = useState<string | null>(null);
-  const { filepath, configs } = ReduxAccessor();
+  const { filepath } = ReduxAccessor();
   const [selected, setSelected] = useState<Config | null>(null);
-  const [key, setKey] = useState<ConfigKey | null>(null);
-  const [objectkey, setObjectkey] = useState<string>("");
+  const [configkey, setConfigkey] = useState<ConfigKey | null>(null);
   const { updateAccessorOfKey } = ConfigHandler();
 
   const handleChangeIndex = (_index: number) => {
     setIndex(_index);
   };
 
-  const next = (index: number = 1) => setIndex(index);
-  const back = (index: number = 0) => setIndex(index);
+  const navigate = (index: number = 1) => setIndex(index);
 
-  const handleUpdateAccessor = async (payload: any) => {
+  const handleUpdateAccessor = async (payload: ConfigKey) => {
     if (!selected) return;
-    await updateAccessorOfKey(selected.name, payload)
-  }
+    await updateAccessorOfKey(selected.name, payload);
+  };
+
+  useEffect(() => {
+    if (!selected || !configkey) return;
+    let keys = [...selected.keys];
+    let index = keys.findIndex((key: ConfigKey) => key.name === configkey.name);
+    if (index === -1) return;
+    keys[index] = configkey;
+    let config = {
+      ...selected,
+      keys,
+    };
+    setSelected(config);
+  }, [configkey]);
 
   useEffect(() => {
     if (filepath) setIFS(parseIFSPage(filepath) ?? "No File Found");
   }, [filepath]);
 
   return (
-    <Box sx={{ display: "flex", flexGrow: 1, flexDirection: "column", overflow: "hidden" }}>
+    <Box sx={{ display: "flex", flexGrow: 1, flexDirection: "column", overflowX: "hidden" }}>
       <Helmet>
         <title>{`LabelPrinter+ | ${IFS ?? "Loading ..."} | Settings`}</title>
       </Helmet>
       <SwipeableViews axis={"x"} index={index} onChangeIndex={handleChangeIndex}>
-        <ConfigList {...{ configs, next, setSelected }} />
-        <ConfigEditor config={selected} {...{ back, next, setKey, setObjectkey }} />
-        <KeyEditor configkey={key} selected={selected} back={back} handleUpdateAccessor={handleUpdateAccessor} objectkey={objectkey} />
+        <ConfigList {...{ navigate, setSelected }} />
+        <ConfigEditor {...{ setConfigkey, navigate, selected }} />
+        <KeyEditor {...{ configkey, selected, navigate, handleUpdateAccessor, setConfigkey }} />
       </SwipeableViews>
     </Box>
   );

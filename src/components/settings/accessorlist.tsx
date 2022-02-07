@@ -1,39 +1,54 @@
-import { List, ListItem, ListItemText, Radio, RadioGroup } from "@mui/material";
+import { List, ListItem, ListItemText, Radio, RadioGroup, Checkbox } from "@mui/material";
 import ReduxAccessor from "../../store/accessor";
 import { parseFile } from "../../utils/tools";
 import { useEffect, useState } from "react";
 interface Props {
     searchkey: string,
-    objectkey: string;
     configkey: ConfigKey | null;
     selected: Config | null;
     handleUpdateAccessor: Function;
+    setConfigkey: Function
 }
 
-const AccessorList = ({ searchkey, objectkey, configkey, selected, handleUpdateAccessor }: Props) => {
+const AccessorList = ({ searchkey, configkey, selected, handleUpdateAccessor, setConfigkey }: Props) => {
   const [accessors, setAccessors] = useState<string[]>([]);
   const { filepath } = ReduxAccessor();
-  const [current, setCurrent] = useState<string>(configkey?.accessor ?? "");
-
   const handleChange = async  (e: any) => {
-    await changeAccessor(e.target.value)
+    await changeValue(e.target.value)
   }
 
-  const changeAccessor = async (accessor: string) => {
-    //TODO: payload has to be { [object key]: {...} } for spread to work
-    setCurrent(accessor)
-    let key: any = {
+  const changeValue = (value: any) => {
+    if (!configkey) return;
+    let _value = value;
+    if (configkey.multiple) _value = handleStringList(value)
+    //TODO: set configkey 
+    //setCurrent(_value)
+    let _configkey: ConfigKey = {
       ...configkey,
-      accessor
+      value: _value
     }
-    await handleUpdateAccessor({ 
-      [objectkey]: { ...key  }
-    })
+    setConfigkey(_configkey)
+    handleUpdateAccessor(_configkey)
   }
+
+  const handleStringList  = (value: string) => {
+    if (!configkey) return []
+    if (!configkey.multiple) return [];
+    let values = [ ...configkey.value ];
+    let index = values.indexOf(value);
+    if (index > -1) values.splice(index, 1); 
+    if (index === -1) values.push(value);
+    return values;
+  } 
 
   const handledAccessors = () => {
     if (searchkey === "") return accessors.sort((a, b) => a.localeCompare(b));
     return accessors.filter((accessor: string) => accessor.toLowerCase().includes(searchkey));
+  }
+
+  const isChecked = (value: string) => {
+    if (!configkey) return false;
+    return configkey.value.includes(value)
   }
 
   useEffect(() => {
@@ -46,20 +61,25 @@ const AccessorList = ({ searchkey, objectkey, configkey, selected, handleUpdateA
     parse();
   }, []);
 
+  const getStringValue = (value: any) => {
+    if (Array.isArray(value)) return "";
+    return value;
+  }
+
   return (
-    <RadioGroup value={current} onChange={handleChange}>
+    <RadioGroup value={getStringValue(configkey?.value)} onChange={handleChange}>
       <List component="nav" sx={{ maxHeight: "10rem", overflowY: "scroll" }}>
-        {handledAccessors().map((accessor: string, idx: number) => (
+        {handledAccessors().map((value: string, idx: number) => (
             <ListItem
             key={idx}
-            onClick={async () => await changeAccessor(accessor)}
+            onClick={() => changeValue(value)}
               sx={{
                 height: "3.5rem",
               }}
               button
             >
-              <Radio value={accessor} inputProps={{ "aria-label": "A" }} />
-              <ListItemText primary={accessor} />
+              {configkey?.multiple ? <Checkbox checked={isChecked(value)} onClick={() => changeValue(value)} /> : <Radio value={value}  />}
+              <ListItemText primary={value} />
             </ListItem>
           ))}
       </List>

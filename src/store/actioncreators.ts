@@ -70,6 +70,16 @@ export const _addConfig = (payload: any) => {
   };
 };
 
+export const _updateConfig = (payload: any) => {
+  const action: UpdateConfigAction = {
+    type: actionTypes.UPDATE_CONFIG,
+    payload,
+  };
+  return (dispatch: DispatchType) => {
+    dispatch(action);
+  };
+};
+
 export const _addTemplate = (payload: any) => {
   const action: AddTemplateAction = {
     type: actionTypes.ADD_TEMPLATE,
