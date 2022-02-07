@@ -1,6 +1,10 @@
 import Carousel from "react-material-ui-carousel";
 
-const LabelCarousel = () => {
+interface Props {
+  images: string[];
+}
+
+const LabelCarousel = ({ images }: Props) => {
   return (
     <Carousel
       autoPlay={false}
@@ -31,17 +35,13 @@ const LabelCarousel = () => {
         },
       }}
     >
-      {/*!images
-                            ? "No Image Found"
-                            : images.map((image) => (
-                                  <div key={image} className="image-wrapper">
-                                      <img
-                                          style={{ height: "8rem" }}
-                                          alt="label preview"
-                                          src={`data:image/png;base64,${image}`}
-                                      />
-                                  </div>
-                            ))*/}
+      {!images
+        ? "No Image Found"
+        : images.map((image) => (
+            <div key={image} className="image-wrapper">
+              <img style={{ height: "8rem" }} alt="label preview" src={`data:image/png;base64,${image}`} />
+            </div>
+          ))}
     </Carousel>
   );
 };

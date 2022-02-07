@@ -34,7 +34,7 @@ declare interface ReduxState {
     filepath: string | null,
     template: string | null;
     templates: Template[];
-    config: Config | null;
+    config: string | null;
     configs: Config[];
     logs: ProgramLog[];
 }

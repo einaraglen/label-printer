@@ -1,5 +1,6 @@
 import { List, ListItem, ListItemText, IconButton } from "@mui/material";
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
+import ReduxAccessor from "../../store/accessor";
 
 interface Props {
   selected: Config;
@@ -8,6 +9,7 @@ interface Props {
 }
 
 const KeyList = ({ selected, setConfigkey, navigate }: Props) => {
+  const { config } = ReduxAccessor();
   const handleListClick = (key: ConfigKey) => {
     setConfigkey(key);
     navigate(2);
@@ -22,6 +24,7 @@ const KeyList = ({ selected, setConfigkey, navigate }: Props) => {
     <List component="nav" sx={{ maxHeight: "10rem", overflowY: "scroll" }}>
       {selected.keys.map((key: ConfigKey, idx: number) => (
         <ListItem
+        disabled={config !== selected.name}
           key={idx}
           onClick={() => handleListClick(key)}
           sx={{

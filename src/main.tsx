@@ -48,7 +48,6 @@ const App = () => {
       });
       await invoke(IPC.GET_CONFIGS, {
         next: (data: any) => {
-          setStatus({ key: "isConfig", value: true });
           setConfigs(JSON.parse(data.configs));
           setIsConfigSet(true); // trigger load of config based on filepath
         },
@@ -62,7 +61,10 @@ const App = () => {
     if (!isConfigSet) return;
     const config = async () => {
       let IFS = parseIFSPage(filepath);
-      if (IFS) setConfig(await checkForExistingConfig(IFS));
+      if (IFS) {
+        let config = await checkForExistingConfig(IFS);
+        setConfig(config.name);
+      }
     };
     config();
   }, [isConfigSet]);
