@@ -1,8 +1,10 @@
-import { Box, IconButton, Tooltip, TextField, FormGroup, FormControlLabel, Switch, Typography } from "@mui/material";
+import { Box, IconButton, Tooltip, TextField, Switch, Typography } from "@mui/material";
 import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
+import AbcIcon from "@mui/icons-material/Abc";
 import AccessorList from "./accessorlist";
 import { useState } from "react";
 import TopBar from "./topbar";
+import UnitModal from "./unitmodal";
 
 interface Props {
   configkey: ConfigKey | null;
@@ -14,6 +16,7 @@ interface Props {
 
 const KeyEditor = ({ configkey, selected, navigate, handleUpdateAccessor, setConfigkey }: Props) => {
   const [searchkey, setSearchkey] = useState("");
+  const [open, setOpen] = useState(false);
 
   const handleChange = (e: any) => {
     setSearchkey(e.target.value);
@@ -63,12 +66,18 @@ const KeyEditor = ({ configkey, selected, navigate, handleUpdateAccessor, setCon
             <Box sx={{ width: "50%", textAlign: "center", display: "flex" }}>
               <TextField variant="standard" placeholder="Search" value={searchkey} onChange={handleChange} sx={{ my: "auto", mx: "auto" }} />
             </Box>
-            <Box sx={{ width: "25%", display: "flex", justifyContent: "end" }}>
-              <FormGroup>
-                <FormControlLabel control={<Switch onClick={handleSwitch} checked={configkey.multiple} />} label="Multiple" />
-              </FormGroup>
+            <Box sx={{ width: "25%", display: "flex", justifyContent: "space-between" }}>
+              <Tooltip title="Units">
+                <IconButton onClick={() => setOpen(true)} size="large">
+                  <AbcIcon fontSize="medium" />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Multiple">
+                <Switch sx={{ my: "auto" }} onClick={handleSwitch} checked={configkey.multiple} />
+              </Tooltip>
             </Box>
           </TopBar>
+          <UnitModal {...{ open, setOpen, handleUpdateAccessor, configkey, setConfigkey }} />
           <AccessorList {...{ searchkey, configkey, selected, handleUpdateAccessor, setConfigkey }} />
         </>
       )}

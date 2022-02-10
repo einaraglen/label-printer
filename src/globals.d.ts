@@ -18,6 +18,7 @@ declare interface Template {
 
 declare interface ConfigKey {
     name: string;
+    unit?: string;
     key: string;
     multiple: boolean;
     value: any;

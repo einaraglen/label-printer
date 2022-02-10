@@ -1,8 +1,10 @@
 import { Box, IconButton, Tooltip, Typography } from "@mui/material";
 import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
-import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
+import FileUploadIcon from '@mui/icons-material/FileUpload';
 import KeyList from "./keylist";
 import TopBar from "./topbar";
+import InvokeHandler from "../../utils/invoke";
+import { IPC } from "../../utils/enums";
 
 interface Props {
   selected: Config | null;
@@ -11,6 +13,18 @@ interface Props {
 }
 
 const ConfigEditor = ({ selected, navigate, setConfigkey }: Props) => {
+  const { invoke } = InvokeHandler();
+  
+  const handleExportClick = async () => {
+    await invoke(IPC.EXPORT_CONFIG, {
+      args: JSON.stringify(selected),
+      next: (data: any) => {
+        console.log(data)
+      },
+      error: (err: string) => console.log(err),
+    });
+  }
+
   return (
     <Box sx={{ postition: "relative" }}>
       {!selected ? null : (
@@ -27,9 +41,11 @@ const ConfigEditor = ({ selected, navigate, setConfigkey }: Props) => {
               </Typography>
             </Box>
             <Box sx={{ width: "25%", display: "flex", justifyContent: "end" }}>
-              <IconButton disabled onClick={() => navigate(0)} size="large">
-                <DeleteRoundedIcon fontSize="small" />
+            <Tooltip title="Export">
+              <IconButton onClick={handleExportClick} size="large">
+                <FileUploadIcon fontSize="medium" />
               </IconButton>
+              </Tooltip>
             </Box>
           </TopBar>
           <KeyList {...{ selected, navigate, setConfigkey }} />

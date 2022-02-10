@@ -1,5 +1,5 @@
-import { Box, Button } from "@mui/material";
-import CircularProgress from '@mui/material/CircularProgress';
+import { Box } from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
 import React, { useEffect, useState } from "react";
 import ReduxAccessor from "../store/accessor";
 import { parseIFSPage, parseFile, readFile, cleanXMLString } from "../utils/tools";
@@ -8,6 +8,7 @@ import InvokeHandler from "../utils/invoke";
 import { IPC } from "../utils/enums";
 import LabelCarousel from "../components/print/carousel";
 import TopBar from "../components/print/topbar";
+import Controls from "../components/print/controls";
 
 const PrintPage = () => {
   const [IFS, setIFS] = useState<string | null>(null);
@@ -17,12 +18,17 @@ const PrintPage = () => {
   const regex = (key: string) => new RegExp(key, "g");
   const [images, setImages] = useState<string[]>([]);
 
-  const getConfig = React.useCallback(
-    (name: string) => {
-      return configs.find((entry: Config) => entry.name === name);
-    },
-    [configs]
-  );
+  const getConfig = React.useCallback((name: string) => configs.find((entry: Config) => entry.name === name), [configs]);
+
+  const handleMultiple = React.useCallback((line: any, value: string[]) => {
+    if (value.length === 0) return "";
+    let result = "";
+    for (let i = 0; i < value.length; i++) {
+      let data = line[value[i]];
+      result += i === value.length - 1 ? data : `${data}, `;
+    }
+    return result;
+  }, []);
 
   const buildLabels = React.useCallback(
     async (ifs_lines) => {
@@ -30,21 +36,23 @@ const PrintPage = () => {
       if (!config) return;
       let _config = getConfig(config);
       if (!_config) return;
-      let label_xml: XMLDocument = template_xml;
+      let label_xml: string = template_xml.toString();
       let _labels: string[] = [];
       for (let i = 0; i < ifs_lines.length; i++) {
         let line = ifs_lines[i];
         for (let j = 0; j < _config.keys.length; j++) {
-          let key = _config.keys[j];
-          let value = line[key.value];
-          label_xml.toString().replace(regex(key.key), value);
+          let configkey: ConfigKey = _config.keys[j];
+          let value = configkey.multiple ? handleMultiple(line, configkey.value) : line[configkey.value];
+          if (configkey.unit) value += ` ${configkey.unit}`;
+          if (value.toString().length > 20) value = `${value.substring(0,20)}..`
+          label_xml = label_xml.replace(regex(configkey.key), value);
         }
-        _labels.push(label_xml.toString());
-        label_xml = template_xml;
+        _labels.push(label_xml);
+        label_xml = template_xml.toString();
       }
       return _labels;
     },
-    [config, getConfig, template]
+    [config, getConfig, template, handleMultiple]
   );
 
   const buildPreview = React.useCallback(async (_labels) => {
@@ -63,7 +71,7 @@ const PrintPage = () => {
       });
     }
     return images;
-  }, []);
+  }, [invoke]);
 
   useEffect(() => {
     if (filepath) setIFS(parseIFSPage(filepath) ?? "No File Found");
@@ -85,11 +93,9 @@ const PrintPage = () => {
         <title>{`LabelPrinter+ | ${IFS ?? "Loading ..."} | Print`}</title>
       </Helmet>
       <TopBar />
-      <Box sx={{ height: "9.3rem", mt: 1, display: "flex" }}>{isLoading ? <CircularProgress sx={{ mx: "auto", my: "auto" }} /> : <LabelCarousel {...{ images }} />}</Box>
-      <Box sx={{ height: "3.4rem", display: "flex" }}>
-        <Button variant="outlined" sx={{}}>
-          Print
-        </Button>
+      <Box sx={{ height: "9.3rem", mt: 2, display: "flex" }}>{isLoading ? <CircularProgress sx={{ mx: "auto", my: "auto" }} /> : <LabelCarousel {...{ images }} />}</Box>
+      <Box sx={{ height: "2.9rem", display: "flex" }}>
+        <Controls />
       </Box>
     </Box>
   );

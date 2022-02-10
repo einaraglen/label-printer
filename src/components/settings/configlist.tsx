@@ -6,6 +6,7 @@ import ErrorOutlineRoundedIcon from "@mui/icons-material/ErrorOutlineRounded";
 import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
 import TopBar from "./topbar";
 import { useNavigate } from "react-router-dom";
+import DownloadIcon from '@mui/icons-material/Download';
 
 interface Props {
   navigate: Function;
@@ -43,8 +44,15 @@ const ConfigList = ({ navigate, setSelected }: Props) => {
             Settings
           </Typography>
         </Box>
+        <Box>
+        <Tooltip title="Import">
+            <IconButton size="large">
+              <DownloadIcon fontSize="medium" />
+            </IconButton>
+          </Tooltip>
+        </Box>
       </TopBar>
-      <List component="nav" sx={{ maxHeight: "13rem" }}>
+      <List component="nav" sx={{ maxHeight: "13rem", overflowX: "scroll" }}>
         {configs.map((entry: Config, idx: number) => (
           <ListItem
             key={idx}
@@ -55,7 +63,7 @@ const ConfigList = ({ navigate, setSelected }: Props) => {
             button
             aria-controls="config-menu"
             secondaryAction={
-              <IconButton edge="end" aria-label="delete">
+              <IconButton edge="end" aria-label="delete" sx={{mr: 0.5}}>
                 <ArrowForwardIosRoundedIcon fontSize="small" />
               </IconButton>
             }

@@ -24,25 +24,25 @@ const ConfigHandler = () => {
       keys: [
         {
           name:"Number",
-          key: "_number",
+          key: "_Number",
           multiple: false,
           value: "",
         },
         {
           name:"Description",
-          key: "_description",
+          key: "_Description",
           multiple: false,
           value: "",
         },
         {
           name:"Info",
-          key: "_info",
+          key: "_Info",
           multiple: false,
           value: "",
         },
         {
           name:"Quantity",
-          key: "_quantity",
+          key: "_Quantity",
           multiple: false,
           value: "",
         },
