@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { Dispatch } from "redux";
 import { LogType, ProgramState } from "../utils/enums";
-import { _log, _addConfig, _setConfig, _setConfigs, _setFilePath, _setState, _setStatus, _addTemplate, _setTemplates, _setTemplate, _updateConfig } from "./actioncreators";
+import { _log, _addConfig, _setConfig, _setConfigs, _setFilePath, _setState, _setStatus, _addTemplate, _setTemplates, _setTemplate, _updateConfig, _updateAdjustment } from "./actioncreators";
 
 const ReduxAccessor = () => {
   const dispatch: Dispatch<any> = useDispatch();
@@ -18,6 +18,7 @@ const ReduxAccessor = () => {
   const addTemplate = useCallback((template: string) => dispatch(_addTemplate(template)), [dispatch]);
   const setTemplates = useCallback((templates: Template[]) => dispatch(_setTemplates(templates)), [dispatch]);
   const setTemplate = useCallback((_template: Template) => dispatch(_setTemplate(_template)), [dispatch]);
+  const updateAdjustment = useCallback((adjustment: Adjustment) => dispatch(_updateAdjustment(adjustment)), [dispatch]);
 
 
   const state: ProgramState = useSelector((state: ReduxState) => state.state, shallowEqual);
@@ -28,6 +29,7 @@ const ReduxAccessor = () => {
   const logs: ProgramLog[] = useSelector((state: ReduxState) => state.logs, shallowEqual);
   const templates: Template[] = useSelector((state: ReduxState) => state.templates, shallowEqual);
   const template: string | null = useSelector((state: ReduxState) => state.template, shallowEqual);
+  const adjustments: Adjustment[] = useSelector((state: ReduxState) => state.adjustments, shallowEqual);
 
   const log = (type: LogType, message: string) => {
     let now = new Date();
@@ -39,7 +41,7 @@ const ReduxAccessor = () => {
     push_log(entry);
   };
 
-  return { log, setState, setStatus, setFilePath, addConfig, updateConfig, setConfig, setConfigs, addTemplate, setTemplates, setTemplate, state, status, filepath, config, configs, logs, templates, template };
+  return { log, setState, setStatus, setFilePath, addConfig, updateConfig, setConfig, setConfigs, addTemplate, setTemplates, setTemplate, updateAdjustment, state, status, filepath, config, configs, logs, templates, template, adjustments };
 };
 
 export default ReduxAccessor;

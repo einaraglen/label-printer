@@ -109,3 +109,13 @@ export const _setTemplate = (payload: any) => {
     dispatch(action);
   };
 };
+
+export const _updateAdjustment = (payload: any) => {
+  const action: UpdateAdjustmentAction = {
+    type: actionTypes.UPDATE_ADJUSTMENT,
+    payload,
+  };
+  return (dispatch: DispatchType) => {
+    dispatch(action);
+  };
+};

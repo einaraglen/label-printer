@@ -33,9 +33,7 @@ const KeyList = ({ selected, setConfigkey, navigate }: Props) => {
           button
           aria-controls="config-menu"
           secondaryAction={
-            <IconButton edge="end" aria-label="delete">
               <ArrowForwardIosRoundedIcon fontSize="small" />
-            </IconButton>
           }
         >
           <ListItemText primary={key.name} sx={{ pl: 2 }} secondary={getSecondaryText(key) || "Not Set"} />

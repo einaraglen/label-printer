@@ -5,7 +5,7 @@ import ConfigList from "../components/settings/configlist";
 import ConfigEditor from "../components/settings/configeditor";
 import { Helmet } from "react-helmet";
 import ReduxAccessor from "../store/accessor";
-import { parseIFSPage } from "../utils/tools";
+import { clamp, parseIFSPage } from "../utils/tools";
 import KeyEditor from "../components/settings/keyeditor";
 import ConfigHandler from "../utils/handlers/confighandler";
 
@@ -27,7 +27,6 @@ const SettingsPage = () => {
     if (!selected) return;
     await updateAccessorOfKey(selected.name, payload);
   };
-
   useEffect(() => {
     if (!selected || !configkey) return;
     let keys = [...selected.keys];
@@ -50,7 +49,7 @@ const SettingsPage = () => {
       <Helmet>
         <title>{`LabelPrinter+ | ${IFS ?? "Loading ..."} | Settings`}</title>
       </Helmet>
-      <SwipeableViews axis={"x"} index={index} onChangeIndex={handleChangeIndex}>
+      <SwipeableViews axis={"x"} index={clamp(index, 0, 2)} threshold={2} onChangeIndex={handleChangeIndex}>
         <ConfigList {...{ navigate, setSelected }} />
         <ConfigEditor {...{ setConfigkey, navigate, selected }} />
         <KeyEditor {...{ configkey, selected, navigate, handleUpdateAccessor, setConfigkey }} />

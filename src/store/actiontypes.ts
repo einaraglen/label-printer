@@ -9,3 +9,4 @@ export const ADD_CONFIG = "ADD_CONFIG";
 export const ADD_TEMPLATE = "ADD_TEMPLATE";
 export const SET_TEMPLATES = "SET_TEMPLATES";
 export const SET_TEMPLATE = "SET_TEMPLATE";
+export const UPDATE_ADJUSTMENT = "UPDATE_ADJUSTMENT"

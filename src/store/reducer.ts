@@ -16,6 +16,20 @@ const initialState: ReduxState = {
   templates: [],
   config: null,
   configs: [],
+  adjustments: [
+    {
+      name: "Singles",
+      value: false
+    },
+    {
+      name: "Groups",
+      value: false
+    },
+    {
+      name: "Max length",
+      value: false
+    },
+  ],
   logs: []
 };
 
@@ -53,6 +67,9 @@ const reducer = createReducer(initialState, {
   [actionTypes.ADD_TEMPLATE]: (state: ReduxState, action: AddTemplateAction) => {
     state.templates.push({ filepath: action.payload })
   },
+  [actionTypes.UPDATE_ADJUSTMENT]: (state: ReduxState, action: UpdateAdjustmentAction) => {
+    handleUpdateAdjustment(state.adjustments, action.payload.name, action.payload.value)
+  },
 });
 
 const handleUpdateConfig = (configs: Config[], name: string, payload: any) => {
@@ -64,6 +81,12 @@ const handleUpdateConfig = (configs: Config[], name: string, payload: any) => {
   let keys = [ ...config.keys]
   keys[keyindex] = payload;
   configs[configindex] = { ...config, keys };
+}
+
+const handleUpdateAdjustment = (adjustments: Adjustment[], name: string, value: any) => {
+  let adjustmentindex = adjustments.findIndex((adjustment: Adjustment) => adjustment.name === name);
+  if (adjustmentindex === -1) return;
+  adjustments[adjustmentindex] = { name, value }
 }
 
 export default reducer;

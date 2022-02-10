@@ -17,18 +17,18 @@ export const parseFile = async (filepath: string) => {
 };
 
 //makes our file reading async and easy to use
-export const readFile = async (path: any) => {
-  return new Promise((resolve, reject) => {
-    fs.readFile(path, "utf8", (err: any, data: any) => {
-      if (err) reject(err);
-      resolve(data);
-    });
-  });
+export const readFile = async (path: string) => {
+  try {
+    return fs.readFileSync(path, "utf8");
+  } catch (err: any) {
+    console.warn(path, err);
+    return null;
+  }
 };
 
 export const parseFilename = (filepath: string) => {
- return path.parse(filepath).base
-}
+  return path.parse(filepath).base;
+};
 
 export const parseIFSPage = (filePath: any) => {
   //get our capital letter words into an array ["Customer", "Order"]
@@ -43,6 +43,10 @@ export const parseIFSPage = (filePath: any) => {
     configName += words[i];
   }
   return configName;
+};
+
+export const clamp = (value: number, min: number = -Infinity, max: number = Infinity) => {
+  return Math.min(Math.max(value, min), max);
 };
 
 export const cleanXMLString = (xml: any) => {

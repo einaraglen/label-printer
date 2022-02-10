@@ -30,13 +30,13 @@ const UnitModal = ({ open, setOpen, configkey, handleUpdateAccessor, setConfigke
   }
 
   return (
-    <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>Units</DialogTitle>
-      <DialogContent>
+    <Dialog open={open} onClose={handleClose} >
+      <DialogTitle sx={{ bgcolor: "hsl(215, 28%, 14%)" }}>Units</DialogTitle>
+      <DialogContent sx={{ bgcolor: "hsl(215, 28%, 14%)" }}>
         <DialogContentText>{`This text will be displayed in the end of the label ${configkey.name}.`}</DialogContentText>
         <TextField defaultValue={configkey.unit || ""} onChange={(e: any) => setUnit(e.target.value)} autoFocus margin="dense" fullWidth variant="standard" />
       </DialogContent>
-      <DialogActions>
+      <DialogActions sx={{ bgcolor: "hsl(215, 28%, 14%)" }}>
         <Button onClick={handleClose}>Cancel</Button>
         <Button disabled={configkey.unit === unit} onClick={handleSave}>
           Save

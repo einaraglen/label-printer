@@ -64,7 +64,7 @@ const KeyEditor = ({ configkey, selected, navigate, handleUpdateAccessor, setCon
               </Typography>
             </Box>
             <Box sx={{ width: "50%", textAlign: "center", display: "flex" }}>
-              <TextField variant="standard" placeholder="Search" value={searchkey} onChange={handleChange} sx={{ my: "auto", mx: "auto" }} />
+              <TextField autoFocus variant="standard" placeholder="Search" value={searchkey} onChange={handleChange} sx={{ my: "auto", mx: "auto" }} />
             </Box>
             <Box sx={{ width: "25%", display: "flex", justifyContent: "space-between" }}>
               <Tooltip title="Units">

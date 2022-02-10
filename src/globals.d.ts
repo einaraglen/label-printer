@@ -29,6 +29,10 @@ declare interface Config {
     keys: ConfigKey[];
 }
 
+declare interface Adjustment {
+    name: string;
+    value: any
+}
 declare interface ReduxState {
     state: ProgramState;
     status: ProgramStatus
@@ -38,6 +42,7 @@ declare interface ReduxState {
     config: string | null;
     configs: Config[];
     logs: ProgramLog[];
+    adjustments: Adjustment[]
 }
 
 declare interface LabelResponse {

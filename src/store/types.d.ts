@@ -45,6 +45,13 @@ interface AddTemplateAction extends IAction {
   payload: string
 }
 
+interface UpdateAdjustmentAction extends IAction {
+  payload: {
+    name: string;
+    value: any
+  }
+}
+
 interface StatusAction extends IAction {
   payload: {
     key: string,

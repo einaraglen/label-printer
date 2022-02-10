@@ -51,7 +51,7 @@ const App = () => {
           setTemplate(data.template);
         },
       });
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      await new Promise((resolve) => setTimeout(resolve, 500));
       await invoke(IPC.GET_CONFIGS, {
         next: (data: any) => {
           setConfigs(JSON.parse(data.configs));
