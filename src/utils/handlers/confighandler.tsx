@@ -7,11 +7,11 @@ const ConfigHandler = () => {
   const { configs, setStatus, addConfig, updateConfig } = ReduxAccessor();
   const { invoke } = InvokeHandler();
 
-  const checkForExistingConfig = async (name: string): Promise<Config> => {
+  const checkForExistingConfig = async (name: string): Promise<{ created: boolean, config: Config }> => {
     let match = configs.find((entry: Config) => entry.name === name);
-    if (match) return match;
+    if (match) return { created: false, config: match };
     let config = await createNewConfig(name)
-    return config;
+    return { created: true, config };
   };
 
   const updateAccessorOfKey = async (name: string, payload: any) => {

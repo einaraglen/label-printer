@@ -2,13 +2,14 @@ import { Box, IconButton, Tooltip, TextField, FormGroup, FormControlLabel, Switc
 import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
 import AccessorList from "./accessorlist";
 import { useState } from "react";
+import TopBar from "./topbar";
 
 interface Props {
   configkey: ConfigKey | null;
   selected: Config | null;
   handleUpdateAccessor: Function;
   navigate: Function;
-  setConfigkey: Function
+  setConfigkey: Function;
 }
 
 const KeyEditor = ({ configkey, selected, navigate, handleUpdateAccessor, setConfigkey }: Props) => {
@@ -20,8 +21,8 @@ const KeyEditor = ({ configkey, selected, navigate, handleUpdateAccessor, setCon
 
   const handleSwitch = () => {
     if (!configkey) return;
-    let _configkey =  configkey.multiple ? convertToString(configkey) : convertToStringList(configkey);
-    setConfigkey(_configkey)
+    let _configkey = configkey.multiple ? convertToString(configkey) : convertToStringList(configkey);
+    setConfigkey(_configkey);
     handleUpdateAccessor(_configkey);
   };
 
@@ -48,14 +49,14 @@ const KeyEditor = ({ configkey, selected, navigate, handleUpdateAccessor, setCon
     <Box sx={{ postition: "relative" }}>
       {!configkey ? null : (
         <>
-          <Box sx={{ display: "flex", justifyContent: "space-between", pl: 2, pt: 1 }}>
+          <TopBar>
             <Box sx={{ width: "25%", display: "flex" }}>
               <Tooltip title="Back">
                 <IconButton onClick={() => navigate(1)} size="large">
                   <ArrowBackIosRoundedIcon fontSize="small" />
                 </IconButton>
               </Tooltip>
-              <Typography gutterBottom sx={{ my: "auto", fontSize: 15 }}>
+              <Typography gutterBottom sx={{ my: "auto", fontSize: 15, ml: 2 }}>
                 {configkey.name}
               </Typography>
             </Box>
@@ -67,7 +68,7 @@ const KeyEditor = ({ configkey, selected, navigate, handleUpdateAccessor, setCon
                 <FormControlLabel control={<Switch onClick={handleSwitch} checked={configkey.multiple} />} label="Multiple" />
               </FormGroup>
             </Box>
-          </Box>
+          </TopBar>
           <AccessorList {...{ searchkey, configkey, selected, handleUpdateAccessor, setConfigkey }} />
         </>
       )}

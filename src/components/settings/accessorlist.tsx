@@ -3,53 +3,53 @@ import ReduxAccessor from "../../store/accessor";
 import { parseFile } from "../../utils/tools";
 import { useEffect, useState } from "react";
 interface Props {
-    searchkey: string,
-    configkey: ConfigKey | null;
-    selected: Config | null;
-    handleUpdateAccessor: Function;
-    setConfigkey: Function
+  searchkey: string;
+  configkey: ConfigKey | null;
+  selected: Config | null;
+  handleUpdateAccessor: Function;
+  setConfigkey: Function;
 }
 
 const AccessorList = ({ searchkey, configkey, selected, handleUpdateAccessor, setConfigkey }: Props) => {
   const [accessors, setAccessors] = useState<string[]>([]);
   const { filepath } = ReduxAccessor();
-  const handleChange = async  (e: any) => {
-    await changeValue(e.target.value)
-  }
+  const handleChange = async (e: any) => {
+    await changeValue(e.target.value);
+  };
 
   const changeValue = (value: any) => {
     if (!configkey) return;
     let _value = value;
-    if (configkey.multiple) _value = handleStringList(value)
-    //TODO: set configkey 
+    if (configkey.multiple) _value = handleStringList(value);
+    //TODO: set configkey
     //setCurrent(_value)
     let _configkey: ConfigKey = {
       ...configkey,
-      value: _value
-    }
-    setConfigkey(_configkey)
-    handleUpdateAccessor(_configkey)
-  }
+      value: _value,
+    };
+    setConfigkey(_configkey);
+    handleUpdateAccessor(_configkey);
+  };
 
-  const handleStringList  = (value: string) => {
-    if (!configkey) return []
+  const handleStringList = (value: string) => {
+    if (!configkey) return [];
     if (!configkey.multiple) return [];
-    let values = [ ...configkey.value ];
+    let values = [...configkey.value];
     let index = values.indexOf(value);
-    if (index > -1) values.splice(index, 1); 
+    if (index > -1) values.splice(index, 1);
     if (index === -1) values.push(value);
     return values;
-  } 
+  };
 
   const handledAccessors = () => {
     if (searchkey === "") return accessors.sort((a, b) => a.localeCompare(b));
     return accessors.filter((accessor: string) => accessor.toLowerCase().includes(searchkey));
-  }
+  };
 
   const isChecked = (value: string) => {
     if (!configkey) return false;
-    return configkey.value.includes(value)
-  }
+    return configkey.value.includes(value);
+  };
 
   useEffect(() => {
     const parse = async () => {
@@ -64,24 +64,24 @@ const AccessorList = ({ searchkey, configkey, selected, handleUpdateAccessor, se
   const getStringValue = (value: any) => {
     if (Array.isArray(value)) return "";
     return value;
-  }
+  };
 
   return (
     <RadioGroup value={getStringValue(configkey?.value)} onChange={handleChange}>
-      <List component="nav" sx={{ maxHeight: "10rem", overflowY: "scroll" }}>
+      <List component="nav" sx={{ maxHeight: "13rem", overflowY: "scroll" }}>
         {handledAccessors().map((value: string, idx: number) => (
-            <ListItem
+          <ListItem
             key={idx}
             onClick={() => changeValue(value)}
-              sx={{
-                height: "3.5rem",
-              }}
-              button
-            >
-              {configkey?.multiple ? <Checkbox checked={isChecked(value)} onClick={() => changeValue(value)} /> : <Radio value={value}  />}
-              <ListItemText primary={value} />
-            </ListItem>
-          ))}
+            sx={{
+              height: "3.5rem",
+            }}
+            button
+          >
+            {configkey?.multiple ? <Checkbox checked={isChecked(value)} onClick={() => changeValue(value)} /> : <Radio value={value} />}
+            <ListItemText primary={value} />
+          </ListItem>
+        ))}
       </List>
     </RadioGroup>
   );

@@ -21,7 +21,7 @@ const KeyList = ({ selected, setConfigkey, navigate }: Props) => {
   }
 
   return (
-    <List component="nav" sx={{ maxHeight: "10rem", overflowY: "scroll" }}>
+    <List component="nav" sx={{ maxHeight: "13rem", overflowY: "scroll" }}>
       {selected.keys.map((key: ConfigKey, idx: number) => (
         <ListItem
         disabled={config !== selected.name}

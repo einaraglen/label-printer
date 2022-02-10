@@ -1,7 +1,7 @@
 import { IPC } from "./handletypes";
 import { handleResponse, StatusType } from "./responsehandler";
+import Dymo from "./lib/dymojs";
 
-const Dymo = require("dymojs");
 const dymo = new Dymo();
 const { dialog } = require("electron");
 const fs = require("fs");
@@ -34,7 +34,7 @@ export const handleIPC = (accessor: string, event: any, args: any) => {
       return handleGetTemplate(event, args);
     case IPC.SET_TEMPLATE:
       return handleSetTemplate(event, args);
-      case IPC.GET_TEMPLATES:
+    case IPC.GET_TEMPLATES:
       return handleGetTemplates(event, args);
     case IPC.SET_TEMPLATES:
       return handleSetTemplates(event, args);
@@ -72,16 +72,11 @@ const handleExportConfig = (event: any, args: any): Promise<LabelResponse> => {
   });
 };
 
-const handleDYMOStatus = (event: any, args: any): Promise<LabelResponse> => {
-  return dymo
-    .getStatus()
-    .then((result: any) => {
-      return handleResponse({ payload: result });
-    })
-    .catch((err: any) => {
-      let message = err.message ?? "No message";
-      return handleResponse({ type: StatusType.Error, message: formatFailure("checking DYMO status", message) });
-    });
+const handleDYMOStatus = async (event: any, args: any): Promise<LabelResponse> => {
+  let result = await dymo.getStatus();
+  if (checkStatus(result.status)) return handleResponse({ payload: result.data });
+  let message = result.data || "No message";
+  return handleResponse({ type: StatusType.Error, message: formatFailure("checking DYMO status", message) });
 };
 
 var labelXml = `<?xml version="1.0" encoding="utf-8"?>
@@ -131,18 +126,10 @@ var labelXml = `<?xml version="1.0" encoding="utf-8"?>
 `;
 
 const handleImagePreview = async (event: any, args: any): Promise<LabelResponse> => {
-  // returns imageData as base64 encoded png.
-  console.log(dymo)
-  let test = await dymo.renderLabel(labelXml)
-  return handleResponse({ payload: { image: test } });
-   /* .then((imageData: string) => {
-      console.log({imageData})
-      return handleResponse({ payload: { image: imageData } });
-    })
-    .catch((err: any) => {
-      let message = err.message ?? "No message";
-      return handleResponse({ type: StatusType.Error, message: formatFailure("fetching Image Preview", message) });
-    });*/
+  let result = await dymo.renderLabel(args);
+  if (checkStatus(result.status)) return handleResponse({ payload: { image: result.data } });
+  let message = result.data || "No message";
+  return handleResponse({ type: StatusType.Error, message: formatFailure("fetching Image Preview", message) });
 };
 
 const handleOpenBrowser = async (event: any, args: any): Promise<LabelResponse> => {
@@ -157,14 +144,10 @@ const handleOpenBrowser = async (event: any, args: any): Promise<LabelResponse> 
 const handlePrintLabel = async (event: any, args: any): Promise<LabelResponse> => {
   let printer = store.get(StoreKey.Printer);
   if (!printer) return handleResponse({ type: StatusType.Missing, message: formatFailure("printing", "Missing printer") });
-  let result = await printer.print(printer, args);
-  try {
-    if (!JSON.parse(result).exceptionMessage) return handleResponse({});
-    let message = JSON.parse(result).exceptionMessage ?? "No message";
-    return handleResponse({ type: StatusType.Error, message: formatFailure("printing", message) });
-  } catch (err: any) {
-    return handleResponse({ type: StatusType.Error, message: formatFailure("printing", err) });
-  }
+  let result = await dymo.print(printer, args);
+  if (checkStatus(result.status)) return handleResponse({});
+  let message = result.data || "No message";
+  return handleResponse({ type: StatusType.Error, message: formatFailure("printing", message) });
 };
 
 const handleGetTemplate = async (event: any, args: any): Promise<LabelResponse> => {
@@ -206,18 +189,15 @@ const handleGetPrinters = async (event: any, args: any): Promise<LabelResponse> 
   //old way, we got every printer in system
   //return window.webContents.getPrinters();
   //new way, we get all printers recognized by DYMO Software
-  return dymo
-    .getPrinters()
-    .then((result: any) => {
-      //here we need to parse XML to JSON and return array
-      let printers = parser.parse(result).Printers;
-      if (!printers) printers = [];
-      if (printers === "" || printers.length === 0) printers = []; 
-      return handleResponse({ payload: { printers } });
-    })
-    .catch((err: any) => {
-      return handleResponse({ type: StatusType.Missing, message: formatFailure("fetching printers", err) });
-    });
+  let result = await dymo.getPrinters();
+  if (checkStatus(result.status)) {
+    let printers = parser.parse(result).Printers;
+    if (!printers) printers = [];
+    if (printers === "" || printers.length === 0) printers = [];
+    return handleResponse({ payload: { printers } });
+  }
+  let message = result.data || "No message";
+  return handleResponse({ type: StatusType.Error, message: formatFailure("fetching printers", message) });
 };
 
 const handleGetPrinter = async (event: any, args: any): Promise<LabelResponse> => {
@@ -238,4 +218,8 @@ const handleQuit = async (event: any, args: any): Promise<LabelResponse> => {
 
 export const formatFailure = (when: string, message: string) => {
   return `Failure when ${when}: ${message}`;
+};
+
+const checkStatus = (statuscode: number): boolean => {
+  return statuscode >= 200 && statuscode <= 299;
 };
