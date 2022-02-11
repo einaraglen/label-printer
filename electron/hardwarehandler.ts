@@ -97,10 +97,9 @@ const handleOpenBrowser = async (event: any, args: any): Promise<LabelResponse> 
 };
 
 const handlePrintLabel = async (event: any, args: any): Promise<LabelResponse> => {
-  let printer = store.get(StoreKey.Printer);
-  if (!printer) return handleResponse({ status: codes.NOT_FOUND, message: formatFailure("printing", "Missing printer") });
-  let result = await dymo.print(printer, args);
-  if (checkStatus(result.status)) return handleResponse({});
+  let result = await dymo.print(args.printer, args.labels);
+  console.log(result)
+  if (checkStatus(result.status)) return handleResponse({ message: result.data });
   let message = result.data || "No message";
   return handleResponse({ status: result.status, message: formatFailure("printing", message) });
 };

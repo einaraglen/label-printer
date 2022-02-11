@@ -28,7 +28,7 @@ const initialState: ReduxState = {
     },
     {
       name: "Max length",
-      value: false
+      value: true
     },
   ],
   logs: []

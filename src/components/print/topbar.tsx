@@ -10,11 +10,11 @@ import { Tooltip, Select, MenuItem, FormControl, Badge, Typography, Box } from "
 import ReduxAccessor from "../../store/accessor";
 import { useState, useEffect } from "react";
 import InvokeHandler from "../../utils/invoke";
-import { IPC } from "../../utils/enums";
+import { IPC, ProgramState } from "../../utils/enums";
 
 const TopBar = () => {
   const [printers, setPrinters] = useState<DYMOPrinter[]>([]);
-  const { status, setStatus, printer, setPrinter } = ReduxAccessor();
+  const { status, setStatus, state, printer, setPrinter } = ReduxAccessor();
   const navigate = useNavigate();
   const { invoke } = InvokeHandler();
 
@@ -36,7 +36,7 @@ const TopBar = () => {
       <Container>
         <Toolbar disableGutters sx={{ display: "flex", justifyContent: "space-between" }}>
           <Tooltip placement="right" title="Templates">
-            <IconButton onClick={() => navigate("/templates")} size="large">
+            <IconButton onClick={() => navigate("/templates")} size="large" disabled={state === ProgramState.Printing}>
               <Badge color="secondary" variant="dot" invisible={status.isTemplate}>
                 <FolderOpenIcon />
               </Badge>
@@ -58,7 +58,7 @@ const TopBar = () => {
             </FormControl>
           </Box>
           <Tooltip placement="left" title="Settings">
-            <IconButton onClick={() => navigate("/settings")} size="large">
+            <IconButton onClick={() => navigate("/settings")} size="large" disabled={state === ProgramState.Printing}>
               <Badge color="secondary" variant="dot" invisible={status.isConfig}>
                 <SettingsIcon />
               </Badge>

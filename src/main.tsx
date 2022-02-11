@@ -22,6 +22,7 @@ const App = () => {
   const { setState, state, setStatus, filepath, setFilePath, setConfigs, setConfig, setTemplates, setTemplate } = ReduxAccessor();
   const { invoke } = InvokeHandler();
   const { checkForExistingConfig } = ConfigHandler();
+  const [isLoading, setIsLoading] = useState(true);
   const [isConfigSet, setIsConfigSet] = useState<boolean>(false);
   const [progress, setProgress] = useState<number>(10);
 
@@ -57,8 +58,10 @@ const App = () => {
         },
       });
       setProgress(100);
-      await new Promise((resolve) => setTimeout(resolve, 200));
+      await new Promise((resolve) => setTimeout(resolve, 500));
       setState(ProgramState.Ready);
+      await new Promise((resolve) => setTimeout(resolve, 300));
+      setIsLoading(false)
     };
     load();
   }, []);
@@ -81,12 +84,11 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Router>
-        {state === ProgramState.Loading ? (
-          <Box sx={{ height: "100vh", display: "flex" }}>
+        {isLoading ? 
+          <Box sx={{ position: "absolute", top: 0, bottom: 0, left: 0, right: 0, display: "flex", bgcolor: "hsl(215, 28%, 14%)", zIndex: 40 }}>
             <LinearWithValueLabel progress={progress} />
-          </Box>
-        ) : (
-          <Box sx={{ height: "100vh", display: "flex", px: 0, flexDirection: "column", overflowX: "hidden" }} bgcolor="dark">
+          </Box> : null}
+          {state !== ProgramState.Loading ? <Box sx={{ height: "100vh", display: "flex", px: 0, flexDirection: "column", overflowX: "hidden" }} bgcolor="dark">
             <Overlay />
             <Container sx={{ flexGrow: 1, display: "flex", p: 0, overflowX: "hidden" }}>
               <Routes>
@@ -96,8 +98,7 @@ const App = () => {
               </Routes>
             </Container>
             <Footer />
-          </Box>
-        )}
+          </Box> : null}
       </Router>
     </ThemeProvider>
   );

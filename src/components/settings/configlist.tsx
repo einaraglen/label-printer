@@ -2,7 +2,7 @@ import { List, ListItem, ListItemText, IconButton, Chip, Box, Tooltip, Typograph
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
 import ReduxAccessor from "../../store/accessor";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import GppMaybeIcon from "@mui/icons-material/GppMaybe";
+import WarningIcon from "@mui/icons-material/Warning";
 import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
 import TopBar from "./topbar";
 import { useNavigate } from "react-router-dom";
@@ -93,7 +93,7 @@ const ConfigList = ({ navigate, setSelected }: Props) => {
               <ListItemText sx={{ pl: 2 }} primary={entry.name} />
               {!checkConfig(entry) ? (
                 <Tooltip title="Config needs setup">
-                  <GppMaybeIcon color="secondary" />
+                  <WarningIcon color="secondary" />
                 </Tooltip>
               ) : (
                 <Tooltip title="Config good">
@@ -101,7 +101,7 @@ const ConfigList = ({ navigate, setSelected }: Props) => {
                 </Tooltip>
               )}
             </Box>
-            {config === entry.name ? <Chip sx={{ ml: 10 }} label="Current config" variant="outlined" /> : null}
+            {config === entry.name ? <Chip sx={{ ml: 10 }} label="Current" /> : null}
           </ListItem>
         ))}
       </List>
