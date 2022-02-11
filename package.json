@@ -1,68 +1,97 @@
 {
-    "name": "LabelPrinter",
-    "description": "Printing Plug-In for IFS",
-    "author": "Einar A. Aglen",
-    "version": "0.3.6",
-    "private": true,
-    "dependencies": {
-        "@electron/remote": "^1.2.1",
-        "@material-ui/core": "^4.12.3",
-        "@material-ui/icons": "^4.11.2",
-        "@testing-library/jest-dom": "^5.11.4",
-        "@testing-library/react": "^11.1.0",
-        "@testing-library/user-event": "^12.1.10",
-        "bootstrap": "^5.1.0",
-        "builder": "^5.0.0",
-        "concurrently": "^6.2.0",
-        "core-js": "^2.5.7",
-        "dymojs": "^1.2.0",
-        "electron-is-dev": "^2.0.0",
-        "electron-store": "^8.0.0",
-        "fast-xml-parser": "^3.19.0",
-        "material-auto-rotating-carousel": "^3.0.2",
-        "react": "^17.0.2",
-        "react-collapse": "^5.1.0",
-        "react-dom": "^17.0.2",
-        "react-material-ui-carousel": "^2.2.7",
-        "react-router-dom": "^5.2.0",
-        "react-scripts": "^4.0.3",
-        "react-swipeable-views": "^0.14.0",
-        "reactstrap": "^8.9.0",
-        "wait-on": "^6.0.0",
-        "web-vitals": "^1.0.1",
-        "yarn": "^1.22.11"
+  "name": "label-printer",
+  "version": "0.3.3",
+  "author": "Einar A. Aglen",
+  "private": true,
+  "homepage": ".",
+  "main": "build/electron/main.js",
+  "build": {
+    "appId": "com.ntnu.einaragl.label-printer",
+    "productName": "LabelPrinter+",
+    "copyright": "Copyright © 2022 Einar A. Aglen",
+    "win": {
+      "icon": "./public/icons/labelprinter.png"
     },
-    "main": "public/electron.js",
-    "homepage": "./",
-    "scripts": {
-        "start": "react-scripts start",
-        "build": "react-scripts build",
-        "test": "react-scripts test",
-        "eject": "react-scripts eject",
-        "electron-react": "concurrently \"npm start\" \"wait-on http://localhost:3000 && electron .\"",
-        "electron:build": "yarn build && electron-builder"
-    },
-    "build": {
-        "appId": "com.seaonics.label-printer"
-    },
-    "eslintConfig": {
-        "extends": [
-            "react-app",
-            "react-app/jest"
-        ]
-    },
-    "browserslist": {
-        "production": [
-            ">0.2%",
-            "not op_mini all"
-        ],
-        "development": [
-            "last 1 chrome version",
-            "last 1 firefox version",
-            "last 1 safari version"
-        ]
-    },
-    "devDependencies": {
-        "electron": "^13.2.1"
-    }
+    "asar": true,
+    "extends": null,
+    "files": [
+      "build/**/*",
+      "./public/**/*"
+    ],
+    "directories": { "output": "release/" }
+  },
+  "dependencies": {
+    "@emotion/react": "^11.7.1",
+    "@emotion/styled": "^11.6.0",
+    "@mui/icons-material": "^5.3.1",
+    "@mui/material": "^5.4.0",
+    "@reduxjs/toolkit": "^1.7.2",
+    "@testing-library/jest-dom": "^5.16.2",
+    "@testing-library/react": "^12.1.2",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/electron-devtools-installer": "^2.2.1",
+    "@types/jest": "^27.4.0",
+    "@types/node": "^16.11.22",
+    "@types/react": "^17.0.39",
+    "@types/react-dom": "^17.0.11",
+    "axios": "^0.25.0",
+    "dymojs": "^1.2.0",
+    "electron-devtools-installer": "^3.2.0",
+    "electron-is-dev": "^2.0.0",
+    "electron-reload": "^2.0.0-alpha.1",
+    "electron-store": "^8.0.1",
+    "fast-xml-parser": "^4.0.2",
+    "history": "^5.2.0",
+    "http-codes": "^1.0.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-helmet": "^6.1.0",
+    "react-material-ui-carousel": "^3.1.1",
+    "react-redux": "^7.2.6",
+    "react-router-dom": "^6.2.1",
+    "react-scripts": "5.0.0",
+    "react-swipeable-views": "^0.14.0",
+    "redux": "^4.1.2",
+    "redux-starter-kit": "^2.0.0",
+    "redux-thunk": "^2.4.1",
+    "typescript": "^4.5.5",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "postinstall": "electron-builder install-app-deps",
+    "electron:dev": "concurrently \"cross-env BROWSER=none yarn start\" \"wait-on http://localhost:3000 && tsc -p electron -w\" \"wait-on http://localhost:3000 && tsc -p electron && electron .\"",
+    "electron:build": "yarn build && tsc -p electron && electron-builder",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@types/http-codes": "^1.0.2",
+    "@types/react-helmet": "^6.1.5",
+    "@types/react-swipeable-views": "^0.13.1",
+    "concurrently": "^7.0.0",
+    "cross-env": "^7.0.3",
+    "electron": "^17.0.0",
+    "electron-builder": "^22.14.5",
+    "wait-on": "^6.0.0"
+  }
 }
