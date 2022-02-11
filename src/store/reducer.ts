@@ -11,6 +11,7 @@ const initialState: ReduxState = {
     isDYMO: false,
     isPrinter: false
   },
+  printer: null,
   filepath: null,
   template: null,
   templates: [],
@@ -55,6 +56,9 @@ const reducer = createReducer(initialState, {
   [actionTypes.UPDATE_CONFIG]: (state: ReduxState, action: UpdateConfigAction) => {
     handleUpdateConfig(state.configs, action.payload.name, action.payload.payload)
   },
+  [actionTypes.UPDATE_CONFIGKEY]: (state: ReduxState, action: UpdateConfigKeyAction) => {
+    handleUpdateConfigKey(state.configs, action.payload.name, action.payload.payload)
+  },
   [actionTypes.ADD_CONFIG]: (state: ReduxState, action: AddConfigAction) => {
     state.configs.push(action.payload)
   },
@@ -70,9 +74,18 @@ const reducer = createReducer(initialState, {
   [actionTypes.UPDATE_ADJUSTMENT]: (state: ReduxState, action: UpdateAdjustmentAction) => {
     handleUpdateAdjustment(state.adjustments, action.payload.name, action.payload.value)
   },
+  [actionTypes.SET_PRINTER]: (state: ReduxState, action: SetPrinterAction) => {
+    state.printer = action.payload;
+  },
 });
 
-const handleUpdateConfig = (configs: Config[], name: string, payload: any) => {
+const handleUpdateConfig= (configs: Config[], name: string, payload: Config) => {
+  let configindex = configs.findIndex((entry: Config) => entry.name === name);
+  if (configindex === -1) return;
+  configs[configindex] = { ...payload };
+}
+
+const handleUpdateConfigKey = (configs: Config[], name: string, payload: any) => {
   let configindex = configs.findIndex((entry: Config) => entry.name === name);
   if (configindex === -1) return;
   let config = configs[configindex];

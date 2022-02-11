@@ -4,14 +4,16 @@ import * as isDev from "electron-is-dev";
 import installExtension, { REACT_DEVELOPER_TOOLS } from "electron-devtools-installer";
 import { IPC } from "./handletypes";
 import { formatFailure, handleIPC } from "./hardwarehandler";
-import { handleResponse, StatusType } from "./responsehandler";
+import { handleResponse } from "./responsehandler";
 
 const devEnv = /electron/.test(process.argv[0]);
+const codes = require("http-codes");
+const url = require("url");
 
 let window: BrowserWindow | null = null;
 
 //check if already open
-/*const gotTheLock = app.requestSingleInstanceLock();
+const gotTheLock = app.requestSingleInstanceLock();
 if (!gotTheLock) {
   app.quit();
 } else {
@@ -22,7 +24,7 @@ if (!gotTheLock) {
       window.focus();
     }
   });
-}*/
+}
 
 //build our renderer
 const createWindow = () => {
@@ -30,12 +32,13 @@ const createWindow = () => {
     width: 550,
     height: 320,
     fullscreenable: false,
+    icon: __dirname + "/icons/favicon.ico",
     //frame: false,
     resizable: false,
     transparent: false,
     webPreferences: {
+      webSecurity: false,
       nodeIntegration: true,
-      //enableRemoteModule: true,
       contextIsolation: false,
       nodeIntegrationInWorker: true,
       nodeIntegrationInSubFrames: true,
@@ -48,7 +51,14 @@ const createWindow = () => {
     window = null;
   });
 
-  window.loadURL(isDev ? "http://localhost:3000" : `file://${path.join(__dirname, "../build/index.html")}`);
+  window.loadURL(isDev ? "http://localhost:3000" : `file://${path.join(__dirname, "../index.html")}`);
+  /*window.loadURL(
+    url.format({
+      pathname: path.join(__dirname, "index.html"),
+      protocol: "file:",
+      slashes: true,
+    })
+  );*/
 
   // DevTools
   installExtension(REACT_DEVELOPER_TOOLS)
@@ -56,7 +66,7 @@ const createWindow = () => {
     .catch((err) => console.log("An error occurred: ", err));
 
   if (isDev) {
-    window.webContents.openDevTools();
+  window.webContents.openDevTools();
   }
 };
 
@@ -92,7 +102,7 @@ app.whenReady().then(() => {
   } else {
     //opened default method
     ipcMain.handle(IPC.GET_FILE, (event, arg) => {
-      return handleResponse({ type: StatusType.Missing, message: formatFailure("fetching FilePath", "No file found on-open") });
+      return handleResponse({ status: codes.NOT_FOUND, message: formatFailure("fetching FilePath", "No file found on-open") });
     });
   }
 

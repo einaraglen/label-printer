@@ -1,6 +1,7 @@
 declare interface ProgramLog {
     created: string;
     type: LogType;
+    name: string;
     message: string;
 }
 
@@ -39,10 +40,21 @@ declare interface ReduxState {
     filepath: string | null,
     template: string | null;
     templates: Template[];
+    printer: string | null;
     config: string | null;
     configs: Config[];
     logs: ProgramLog[];
     adjustments: Adjustment[]
+}
+
+declare interface DYMOPrinter {
+    LabelWriterPrinter: {
+        IsConnected: string;
+        IsLocal: string;
+        IsTwinTurbo: string;
+        ModelName: string;
+        Name: string
+    }
 }
 
 declare interface LabelResponse {

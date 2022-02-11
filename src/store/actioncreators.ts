@@ -80,6 +80,16 @@ export const _updateConfig = (payload: any) => {
   };
 };
 
+export const _updateConfigKey = (payload: any) => {
+  const action: UpdateConfigKeyAction = {
+    type: actionTypes.UPDATE_CONFIGKEY,
+    payload,
+  };
+  return (dispatch: DispatchType) => {
+    dispatch(action);
+  };
+};
+
 export const _addTemplate = (payload: any) => {
   const action: AddTemplateAction = {
     type: actionTypes.ADD_TEMPLATE,
@@ -113,6 +123,16 @@ export const _setTemplate = (payload: any) => {
 export const _updateAdjustment = (payload: any) => {
   const action: UpdateAdjustmentAction = {
     type: actionTypes.UPDATE_ADJUSTMENT,
+    payload,
+  };
+  return (dispatch: DispatchType) => {
+    dispatch(action);
+  };
+};
+
+export const _setPrinter = (payload: any) => {
+  const action: SetPrinterAction = {
+    type: actionTypes.SET_PRINTER,
     payload,
   };
   return (dispatch: DispatchType) => {

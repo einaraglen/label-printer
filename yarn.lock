@@ -2098,6 +2098,11 @@
   "resolved" "https://registry.npmjs.org/@types/html-minifier-terser/-/html-minifier-terser-6.1.0.tgz"
   "version" "6.1.0"
 
+"@types/http-codes@^1.0.2":
+  "integrity" "sha512-1x8JmYIhFzfOkksDaT0CANyxbp7rTLr9CPHh8SHiI9EcesDe3eS4M+5gjyYsVfi9uPmzgCAt0aNaquyQTNZXog=="
+  "resolved" "https://registry.npmjs.org/@types/http-codes/-/http-codes-1.0.2.tgz"
+  "version" "1.0.2"
+
 "@types/http-proxy@^1.17.8":
   "integrity" "sha512-5kPLG5BKpWYkw/LVOGWpiq3nEVqxiN32rTgI53Sk12/xHFQ2rG3ehI9IO+O3W2QoKeyB92dJkoka8SUm6BX1pA=="
   "resolved" "https://registry.npmjs.org/@types/http-proxy/-/http-proxy-1.17.8.tgz"
@@ -5789,6 +5794,11 @@
   "integrity" "sha512-carPklcUh7ROWRK7Cv27RPtdhYhUsela/ue5/jKzjegVvXDqM2ILE9Q2BGn9JZJh1g87cp56su/FgQSzcWS8cQ=="
   "resolved" "https://registry.npmjs.org/http-cache-semantics/-/http-cache-semantics-4.1.0.tgz"
   "version" "4.1.0"
+
+"http-codes@^1.0.0":
+  "integrity" "sha1-Wd1G88yzA33R4lSqZEqw+L4V8ng="
+  "resolved" "https://registry.npmjs.org/http-codes/-/http-codes-1.0.0.tgz"
+  "version" "1.0.0"
 
 "http-deceiver@^1.2.7":
   "integrity" "sha1-+nFolEq5pRnTN8sL7HKE3D5yPYc="

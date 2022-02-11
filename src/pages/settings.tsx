@@ -41,7 +41,7 @@ const SettingsPage = () => {
   }, [configkey]);
 
   useEffect(() => {
-    if (filepath) setIFS(parseIFSPage(filepath) ?? "No File Found");
+    setIFS(parseIFSPage(filepath) ?? "No File Found");
   }, [filepath]);
 
   return (

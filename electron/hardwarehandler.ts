@@ -1,6 +1,6 @@
 import { IPC } from "./handletypes";
-import { handleResponse, StatusType } from "./responsehandler";
-import Dymo from "./lib/dymojs";
+import { handleResponse } from "./responsehandler";
+import Dymo from "./lib/dymo";
 
 const dymo = new Dymo();
 const { dialog } = require("electron");
@@ -10,6 +10,7 @@ const Store = require("electron-store");
 const store = new Store();
 const { XMLParser } = require("fast-xml-parser");
 const parser = new XMLParser();
+const codes = require("http-codes")
 
 enum StoreKey {
   Printer = "lable.printer",
@@ -61,13 +62,13 @@ const handleExportConfig = (event: any, args: any): Promise<LabelResponse> => {
     filters: [{ name: "json", extensions: ["json"] }],
   };
   return dialog.showSaveDialog(null as any, options).then(({ filePath }) => {
-    if (!filePath) return handleResponse({ type: StatusType.Missing, message: formatFailure("exporting Config File", "Missing filepath") });
-    if (filePath.length === 0) return handleResponse({ type: StatusType.Error, message: formatFailure("exporting Config File", "filepath length cannot be 0") });
+    if (!filePath) return handleResponse({ status: codes.NOT_FOUND, message: formatFailure("exporting Config File", "Missing filepath") });
+    if (filePath.length === 0) return handleResponse({ status: codes.NOT_FOUND, message: formatFailure("exporting Config File", "filepath length cannot be 0") });
     try {
       fs.writeFileSync(filePath, args, "utf-8");
       return handleResponse({ payload: { filePath } });
     } catch (err: any) {
-      return handleResponse({ type: StatusType.Error, message: formatFailure("exporting Config File", err) });
+      return handleResponse({ status: codes.INTERNAL_SERVER_ERROR, message: formatFailure("exporting Config File", err) });
     }
   });
 };
@@ -76,60 +77,14 @@ const handleDYMOStatus = async (event: any, args: any): Promise<LabelResponse> =
   let result = await dymo.getStatus();
   if (checkStatus(result.status)) return handleResponse({ payload: result.data });
   let message = result.data || "No message";
-  return handleResponse({ type: StatusType.Error, message: formatFailure("checking DYMO status", message) });
+  return handleResponse({ status: result.status, message: formatFailure("checking DYMO status", message) });
 };
-
-var labelXml = `<?xml version="1.0" encoding="utf-8"?>
-<DieCutLabel Version="8.0" Units="twips">
-  <PaperOrientation>Landscape</PaperOrientation>
-  <Id>LargeShipping</Id>
-  <PaperName>30256 Shipping</PaperName>
-  <DrawCommands>
-    <RoundRectangle X="0" Y="0" Width="3331" Height="5715" Rx="270" Ry="270"/>
-  </DrawCommands>
-  <ObjectInfo>
-    <TextObject>
-      <Name>TEXT</Name>
-      <ForeColor Alpha="255" Red="0" Green="0" Blue="0"/>
-      <BackColor Alpha="0" Red="255" Green="255" Blue="255"/>
-      <LinkedObjectName></LinkedObjectName>
-      <Rotation>Rotation0</Rotation>
-      <IsMirrored>False</IsMirrored>
-      <IsVariable>False</IsVariable>
-      <HorizontalAlignment>Left</HorizontalAlignment>
-      <VerticalAlignment>Middle</VerticalAlignment>
-      <TextFitMode>AlwaysFit</TextFitMode>
-      <UseFullFontHeight>True</UseFullFontHeight>
-      <Verticalized>False</Verticalized>
-      <StyledText>
-        <Element>
-          <String>T</String>
-          <Attributes>
-            <Font Family="Helvetica" Size="13" 
-            	Bold="False" Italic="False" Underline="False" Strikeout="False"/>
-            <ForeColor Alpha="255" Red="0" Green="0" Blue="0"/>
-          </Attributes>
-        </Element>
-        <Element>
-          <String>EST123</String>
-          <Attributes>
-            <Font Family="Helvetica" Size="13" 
-            	Bold="False" Italic="False" Underline="False" Strikeout="False"/>
-            <ForeColor Alpha="255" Red="0" Green="0" Blue="0"/>
-          </Attributes>
-        </Element>
-      </StyledText>
-    </TextObject>
-    <Bounds X="335.9998" Y="57.6001" Width="5337.6" Height="3192"/>
-  </ObjectInfo>
-</DieCutLabel>
-`;
 
 const handleImagePreview = async (event: any, args: any): Promise<LabelResponse> => {
   let result = await dymo.renderLabel(args);
   if (checkStatus(result.status)) return handleResponse({ payload: { image: result.data } });
   let message = result.data || "No message";
-  return handleResponse({ type: StatusType.Error, message: formatFailure("fetching Image Preview", message) });
+  return handleResponse({ status: result.status, message: formatFailure("fetching Image Preview", message) });
 };
 
 const handleOpenBrowser = async (event: any, args: any): Promise<LabelResponse> => {
@@ -137,46 +92,46 @@ const handleOpenBrowser = async (event: any, args: any): Promise<LabelResponse> 
     shell.openExternal(args);
     return handleResponse({});
   } catch (err: any) {
-    return handleResponse({ type: StatusType.Error, message: formatFailure("opening browser", err) });
+    return handleResponse({ status: codes.INTERNAL_SERVER_ERROR, message: formatFailure("opening browser", err) });
   }
 };
 
 const handlePrintLabel = async (event: any, args: any): Promise<LabelResponse> => {
   let printer = store.get(StoreKey.Printer);
-  if (!printer) return handleResponse({ type: StatusType.Missing, message: formatFailure("printing", "Missing printer") });
+  if (!printer) return handleResponse({ status: codes.NOT_FOUND, message: formatFailure("printing", "Missing printer") });
   let result = await dymo.print(printer, args);
   if (checkStatus(result.status)) return handleResponse({});
   let message = result.data || "No message";
-  return handleResponse({ type: StatusType.Error, message: formatFailure("printing", message) });
+  return handleResponse({ status: result.status, message: formatFailure("printing", message) });
 };
 
 const handleGetTemplate = async (event: any, args: any): Promise<LabelResponse> => {
   let template = store.get(StoreKey.Template);
-  if (!template) return handleResponse({ type: StatusType.Missing, message: formatFailure("fetching template", "Could not find template") });
+  if (!template) return handleResponse({ status: codes.NOT_FOUND, message: formatFailure("fetching template", "Could not find template") });
   return handleResponse({ payload: { template } });
 };
 
 const handleSetTemplate = async (event: any, args: any): Promise<LabelResponse> => {
-  if (!args) return handleResponse({ type: StatusType.Missing, message: formatFailure("fetching template", "Could not find template") });
+  if (!args) return handleResponse({ status: codes.NOT_FOUND, message: formatFailure("fetching template", "Could not find template") });
   store.set(StoreKey.Template, args);
   return handleResponse({ payload: { template: args } });
 };
 
 const handleGetTemplates = async (event: any, args: any): Promise<LabelResponse> => {
   let templates = store.get(StoreKey.Templates);
-  if (!templates) return handleResponse({ type: StatusType.Missing, message: formatFailure("fetching templates", "Could not find templates") });
+  if (!templates) return handleResponse({ status: codes.NOT_FOUND, message: formatFailure("fetching templates", "Could not find templates") });
   return handleResponse({ payload: { templates } });
 };
 
 const handleSetTemplates = async (event: any, args: any): Promise<LabelResponse> => {
-  if (!args) return handleResponse({ type: StatusType.Missing, message: formatFailure("fetching templates", "Could not find templates") });
+  if (!args) return handleResponse({ status: codes.NOT_FOUND, message: formatFailure("fetching templates", "Could not find templates") });
   store.set(StoreKey.Templates, args);
   return handleResponse({ payload: { templates: args } });
 };
 
 const handleGetConfigs = async (event: any, args: any): Promise<LabelResponse> => {
   let configs = store.get(StoreKey.Configs, args);
-  if (!configs) return handleResponse({ type: StatusType.Missing, message: formatFailure("fetching config", "Could not find config") });
+  if (!configs) return handleResponse({ status: codes.NOT_FOUND, message: formatFailure("fetching config", "Could not find config") });
   return handleResponse({ payload: { configs } });
 };
 
@@ -191,18 +146,23 @@ const handleGetPrinters = async (event: any, args: any): Promise<LabelResponse> 
   //new way, we get all printers recognized by DYMO Software
   let result = await dymo.getPrinters();
   if (checkStatus(result.status)) {
-    let printers = parser.parse(result).Printers;
-    if (!printers) printers = [];
-    if (printers === "" || printers.length === 0) printers = [];
-    return handleResponse({ payload: { printers } });
+    let data = parser.parse(result.data);
+    if ("Printers" in data) {
+      let printers: any[] = [];
+      if (data.Printers) {
+        printers = !data.Printers.length ? [data.Printers] : [...data.Printers];
+      }
+      return handleResponse({ payload: { printers } });
+    }
+    return handleResponse({ status: codes.NOT_FOUND, message: formatFailure("fetching printers", "Error while accessing Printers") });
   }
   let message = result.data || "No message";
-  return handleResponse({ type: StatusType.Error, message: formatFailure("fetching printers", message) });
+  return handleResponse({ status: result.status, message: formatFailure("fetching printers", message) });
 };
 
 const handleGetPrinter = async (event: any, args: any): Promise<LabelResponse> => {
   let _printer = store.get(StoreKey.Printer);
-  if (!_printer) return handleResponse({ type: StatusType.Missing, message: formatFailure("fetching printer", "Could not find printer") });
+  if (!_printer) return handleResponse({ status: codes.NOT_FOUND, message: formatFailure("fetching printer", "Could not find printer") });
   return handleResponse({ payload: { printer: _printer } });
 };
 

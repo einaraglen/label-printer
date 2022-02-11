@@ -22,10 +22,17 @@ interface AddConfigAction extends IAction {
   payload: Config
 }
 
-interface UpdateConfigAction extends IAction {
+interface UpdateConfigKeyAction extends IAction {
   payload: {
     name: string;
     payload: any
+  }
+}
+
+interface UpdateConfigAction extends IAction {
+  payload: {
+    name: string;
+    payload: Config
   }
 }
 
@@ -50,6 +57,10 @@ interface UpdateAdjustmentAction extends IAction {
     name: string;
     value: any
   }
+}
+
+interface SetPrinterAction extends IAction {
+  payload: string
 }
 
 interface StatusAction extends IAction {

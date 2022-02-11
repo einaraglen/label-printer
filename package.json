@@ -6,13 +6,19 @@
   "homepage": ".",
   "main": "build/electron/main.js",
   "build": {
+    "appId": "com.ntnu.einaragl.label-printer",
+    "productName": "LabelPrinter+",
+    "copyright": "Copyright © 2022 Einar A. Aglen",
+    "win": {
+      "icon": "./public/icons/labelprinter.png"
+    },
+    "asar": true,
     "extends": null,
     "files": [
-      "build/**/*"
+      "build/**/*",
+      "./public/**/*"
     ],
-    "directories": {
-      "buildResources": "assets"
-    }
+    "directories": { "output": "release/" }
   },
   "dependencies": {
     "@emotion/react": "^11.7.1",
@@ -36,6 +42,7 @@
     "electron-store": "^8.0.1",
     "fast-xml-parser": "^4.0.2",
     "history": "^5.2.0",
+    "http-codes": "^1.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-helmet": "^6.1.0",
@@ -78,6 +85,7 @@
     ]
   },
   "devDependencies": {
+    "@types/http-codes": "^1.0.2",
     "@types/react-helmet": "^6.1.5",
     "@types/react-swipeable-views": "^0.13.1",
     "concurrently": "^7.0.0",

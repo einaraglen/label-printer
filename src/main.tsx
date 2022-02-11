@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import MuiTheme from "./theme/mui.theme";
-import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
+import { Route, Routes, HashRouter as Router } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
 import PrintPage from "./pages/print";
 import SettingsPage from "./pages/settings";
@@ -15,6 +15,7 @@ import ReduxAccessor from "./store/accessor";
 import ConfigHandler from "./utils/handlers/confighandler";
 import { parseIFSPage } from "./utils/tools";
 import LinearWithValueLabel from "./components/progress";
+import Overlay from "./components/overlay";
 
 const App = () => {
   const { theme } = MuiTheme();
@@ -25,7 +26,7 @@ const App = () => {
   const [progress, setProgress] = useState<number>(10);
 
   useEffect((): any => {
-    const setup = async () => {
+    const load = async () => {
       await invoke(IPC.GET_FILE, {
         next: async (data: any) => {
           if (!data.filepath) return;
@@ -35,9 +36,6 @@ const App = () => {
       });
       await invoke(IPC.DYMO_STATUS, {
         next: (data: any) => setStatus({ key: "isDYMO", value: JSON.parse(data) }),
-      });
-      await invoke(IPC.GET_PRINTERS, {
-        next: (data: any) => console.log("printers", data),
       });
       await invoke(IPC.GET_TEMPLATES, {
         next: (data: any) => {
@@ -62,7 +60,7 @@ const App = () => {
       await new Promise((resolve) => setTimeout(resolve, 200));
       setState(ProgramState.Ready);
     };
-    setup();
+    load();
   }, []);
 
   useEffect(() => {
@@ -70,6 +68,7 @@ const App = () => {
     const config = async () => {
       let IFS = parseIFSPage(filepath);
       if (IFS) {
+        if (IFS === "No File Found") return;
         let { created, config } = await checkForExistingConfig(IFS);
         setStatus({ key: "isConfig", value: !created });
         setConfig(config.name);
@@ -82,12 +81,13 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Router>
-        {state === ProgramState.Loading ? ( 
-            <Box sx={{ height: "100vh", display: "flex" }}>
-              <LinearWithValueLabel progress={progress} />
-            </Box>
+        {state === ProgramState.Loading ? (
+          <Box sx={{ height: "100vh", display: "flex" }}>
+            <LinearWithValueLabel progress={progress} />
+          </Box>
         ) : (
           <Box sx={{ height: "100vh", display: "flex", px: 0, flexDirection: "column", overflowX: "hidden" }} bgcolor="dark">
+            <Overlay />
             <Container sx={{ flexGrow: 1, display: "flex", p: 0, overflowX: "hidden" }}>
               <Routes>
                 <Route path="/settings" element={<SettingsPage />} />

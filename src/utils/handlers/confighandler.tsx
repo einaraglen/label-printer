@@ -4,7 +4,7 @@ import { IPC } from "../enums";
 import InvokeHandler from "../invoke";
 
 const ConfigHandler = () => {
-  const { configs, setStatus, addConfig, updateConfig } = ReduxAccessor();
+  const { configs, setStatus, addConfig, updateConfigKey } = ReduxAccessor();
   const { invoke } = InvokeHandler();
 
   const checkForExistingConfig = async (name: string): Promise<{ created: boolean, config: Config }> => {
@@ -15,7 +15,7 @@ const ConfigHandler = () => {
   };
 
   const updateAccessorOfKey = async (name: string, payload: any) => {
-    updateConfig({ name, payload })
+    updateConfigKey({ name, payload })
   };
 
   const createNewConfig = async (name: string) => {

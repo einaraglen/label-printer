@@ -32,17 +32,22 @@ export const parseFilename = (filepath: string) => {
 
 export const parseIFSPage = (filePath: any) => {
   //get our capital letter words into an array ["Customer", "Order"]
-  let words = path
-    .parse(filePath)
-    .base.toString()
-    .match(/[A-Z][a-z]+/g);
-  if (!words) return null;
-  let configName = "";
-  //build the name
-  for (let i = 0; i < words.length; i++) {
-    configName += words[i];
+  try {
+    let words = path
+      .parse(filePath)
+      .base.toString()
+      .match(/[A-Z][a-z]+/g);
+    if (!words) return null;
+    let configName = "";
+    //build the name
+    for (let i = 0; i < words.length; i++) {
+      configName += words[i];
+    }
+    return configName;
+  } catch (err: any) {
+    console.warn(err);
+    return "No File Found";
   }
-  return configName;
 };
 
 export const clamp = (value: number, min: number = -Infinity, max: number = Infinity) => {

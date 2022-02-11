@@ -4,7 +4,7 @@ export default class Dymo {
   hostname: string;
   port: number;
   printername: string;
-  dymo_api: any
+  dymo_api: any;
 
   constructor(options?: { hostname: string; port: number; printername: string }) {
     let _options = options || { hostname: "", port: null, printername: "" };
@@ -17,10 +17,11 @@ export default class Dymo {
       baseURL: `https://${this.hostname}:${this.port}/DYMO/DLS/Printing`,
       withCredentials: false,
       headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
       },
-  });
+    });
   }
 
   get apiUrl() {
@@ -35,11 +36,7 @@ export default class Dymo {
     }
 
     return this.dymo_api
-      .post(`PrintLabel`, label, {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-      })
+      .post(`PrintLabel`, label)
       .then((response: any) => handleResponse(response))
       .catch((error: any) => handleErrorResponse(error));
   }
@@ -52,11 +49,7 @@ export default class Dymo {
     }
 
     return this.dymo_api
-      .post(`RenderLabel`, label, {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-      })
+      .post(`RenderLabel`, label)
       .then((response: any) => handleResponse(response))
       .catch((error: any) => handleErrorResponse(error));
   }
@@ -97,14 +90,17 @@ const handleResponse = (response: any): DymoResponse => {
 };
 
 export const handleErrorResponse = (error: any): DymoResponse => {
-  if (error.response) {
+  try {
+    //426 Upgrade Required / DYMO Web Service needs restart
+    if (!error.toJSON().code) return { data: "Restart DYMO Web Services", status: 426 };
+    if (error.toJSON()) return { data: error.toJSON().message, status: error.toJSON().status };
+    if (error.response) return { data: error.response.data, status: error.response.status };
     // Request made and server responded
-    return { data: error.response.data, status: error.response.status };
-  } else if (error.request) {
+    if (error.request) return { data: error.request, status: 500 };
     // The request was made but no response was received
-    return { data: error.request, status: 500 };
-  } else {
     // Something happened in setting up the request that triggered an Error
     return { data: error.message, status: 500 };
+  } catch (err: any) {
+    return { data: err, status: 500 };
   }
 };

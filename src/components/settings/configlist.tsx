@@ -1,13 +1,12 @@
 import { List, ListItem, ListItemText, IconButton, Chip, Box, Tooltip, Typography } from "@mui/material";
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
 import ReduxAccessor from "../../store/accessor";
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import GppMaybeIcon from '@mui/icons-material/GppMaybe';
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import GppMaybeIcon from "@mui/icons-material/GppMaybe";
 import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
 import TopBar from "./topbar";
 import { useNavigate } from "react-router-dom";
-import DownloadIcon from '@mui/icons-material/Download';
-import InvokeHandler from "../../utils/invoke";
+import DownloadIcon from "@mui/icons-material/Download";
 import { readFile } from "../../utils/tools";
 
 interface Props {
@@ -16,23 +15,31 @@ interface Props {
 }
 
 const ConfigList = ({ navigate, setSelected }: Props) => {
-  const { configs, config, setStatus, addConfig } = ReduxAccessor();
+  const { configs, config, setStatus, addConfig, updateConfig } = ReduxAccessor();
   const routerNavigate = useNavigate();
-  const { invoke } = InvokeHandler();
   const handleListClick = (entry: Config) => {
     setSelected(entry);
     navigate(1);
   };
 
+  const configExists = (_config: Config) => {
+    let match = configs.find((c: Config) => c.name === _config.name);
+    if (match) return true;
+    return false;
+  };
+
   const handleInputChange = async (e: any) => {
     if (!e.target.value) return;
     try {
-      let raw_config = await readFile(e.target.files[0].path)
-      let _config = JSON.parse(raw_config)
-      let isConfig = checkConfig(_config)
-      if (isConfig) addConfig(_config)
+      let raw_config = await readFile(e.target.files[0].path);
+      let _config = JSON.parse(raw_config);
+      let isConfig = checkConfig(_config);
+      if (isConfig) {
+        if (configExists(_config)) return updateConfig({ name: _config.name, payload: _config });
+        addConfig(_config);
+      }
     } catch (err: any) {
-      console.warn(err)
+      console.warn(err);
     }
   };
 
@@ -60,15 +67,14 @@ const ConfigList = ({ navigate, setSelected }: Props) => {
           </Typography>
         </Box>
         <Box>
-        <input id="file-button" style={{ display: "none" }} accept={".json"} type="file" name="upload_file" onChange={handleInputChange} />
+          <input id="file-button" style={{ display: "none" }} accept={".json"} type="file" name="upload_file" onChange={handleInputChange} />
           <label htmlFor="file-button">
-          <Tooltip title="Import">
-            <IconButton size="large" component="span">
-              <DownloadIcon fontSize="medium" />
-            </IconButton>
-          </Tooltip>
+            <Tooltip title="Import">
+              <IconButton size="large" component="span">
+                <DownloadIcon fontSize="medium" />
+              </IconButton>
+            </Tooltip>
           </label>
-        
         </Box>
       </TopBar>
       <List component="nav" sx={{ maxHeight: "13rem", overflowY: "scroll" }}>
@@ -81,9 +87,7 @@ const ConfigList = ({ navigate, setSelected }: Props) => {
             }}
             button
             aria-controls="config-menu"
-            secondaryAction={
-                <ArrowForwardIosRoundedIcon fontSize="small"/>
-            }
+            secondaryAction={<ArrowForwardIosRoundedIcon fontSize="small" />}
           >
             <Box sx={{ display: "flex", width: "15rem", justifyContent: "space-between" }}>
               <ListItemText sx={{ pl: 2 }} primary={entry.name} />

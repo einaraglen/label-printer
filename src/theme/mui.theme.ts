@@ -43,11 +43,13 @@ const MuiTheme = () => {
             width: "100%",
             backgroundColor: "hsl(215, 28%, 16%)",
             boxShadow: "none",
+            "&:before": {
+              backgroundColor: "transparent",
+              display: "none",
+
+            },
             "&:not(:last-child)": {
               borderBottom: 0,
-            },
-            "&:before": {
-              display: "none",
             },
             "&$expanded": {
               margin: "auto",

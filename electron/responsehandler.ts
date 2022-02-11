@@ -1,18 +1,12 @@
-export enum StatusType {
-  Success = 200,
-  Created = 201,
-  Error = 400,
-  Missing = 404,
-  Conflict = 409,
-}
+const codes = require("http-codes")
 
 interface Params {
-  type?: StatusType;
+  status?: number;
   message?: string;
   payload?: any;
 }
 
-export const handleResponse = ({ type = StatusType.Success, message = "Success", payload }: Params): LabelResponse => {
-  if (payload) return { statuscode: type, message, payload };
-  return { statuscode: type, message };
+export const handleResponse = ({ status = codes.OK, message = "Success", payload }: Params): LabelResponse => {
+  if (payload) return { statuscode: status, message, payload };
+  return { statuscode: status, message };
 };
