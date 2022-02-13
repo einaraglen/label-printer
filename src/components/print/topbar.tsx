@@ -10,13 +10,25 @@ import { Tooltip, Select, MenuItem, FormControl, Badge, Typography, Box } from "
 import ReduxAccessor from "../../store/accessor";
 import { useState, useEffect } from "react";
 import InvokeHandler from "../../utils/invoke";
-import { IPC, ProgramState } from "../../utils/enums";
+import { IPC, LogType, ProgramState } from "../../utils/enums";
+import BarChartRoundedIcon from '@mui/icons-material/BarChartRounded';
 
-const TopBar = () => {
+interface Props {
+  setOpen: Function;
+}
+
+
+const TopBar = ({ setOpen }: Props) => {
   const [printers, setPrinters] = useState<DYMOPrinter[]>([]);
-  const { status, setStatus, state, printer, setPrinter } = ReduxAccessor();
+  const { status, setStatus, state, logs, printer, setPrinter } = ReduxAccessor();
   const navigate = useNavigate();
   const { invoke } = InvokeHandler();
+
+  const checkForBadDiagnostics = () => {
+    let match = logs.find((log: ProgramLog) => log.type === LogType.Error || log.type === LogType.Failure)
+    if (!match) return true;
+    return false;
+  }
 
   useEffect(() => {
     const printers = async () => {
@@ -35,21 +47,15 @@ const TopBar = () => {
     <AppBar position="sticky" color="transparent" sx={{ backdropFilter: "blur(5px)", zIndex: 10, borderBottomColor: "hsl(215, 28%, 14%)" }} elevation={4}>
       <Container>
         <Toolbar disableGutters sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Tooltip placement="right" title="Templates">
-            <IconButton onClick={() => navigate("/templates")} size="large" disabled={state === ProgramState.Printing}>
-              <Badge color="secondary" variant="dot" invisible={status.isTemplate}>
-                <FolderOpenIcon />
-              </Badge>
-            </IconButton>
-          </Tooltip>
+         
           <Box sx={{ display: "flex", justifyItems: "center" }}>
             {true ? null : (
               <Typography gutterBottom sx={{ my: "auto", fontSize: 14 }}>
                 Printer
               </Typography>
             )}
-            <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-              <Select value={printer || ""} size="small" onChange={(e: any) => setPrinter(e.target.value)}>
+            <FormControl variant="standard" sx={{ m: 1, width: 170 }}>
+              <Select value={printer || ""} size="small" onChange={(e: any) => setPrinter(e.target.value)} disabled={state === ProgramState.Printing}>
                 {printers.length === 0 ? <MenuItem value="">No Printers found</MenuItem> : null}
                 {printers.map((printer: DYMOPrinter, idx: number) => (
                   <MenuItem key={idx} value={printer.LabelWriterPrinter.Name}>{printer.LabelWriterPrinter.Name}</MenuItem>
@@ -57,9 +63,23 @@ const TopBar = () => {
               </Select>
             </FormControl>
           </Box>
-          <Tooltip placement="left" title="Settings">
+          <Tooltip title="Templates">
+            <IconButton onClick={() => navigate("/templates")} size="large" disabled={state === ProgramState.Printing}>
+              <Badge color="warning" variant="dot" invisible={status.isTemplate}>
+                <FolderOpenIcon />
+              </Badge>
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Diagnostics">
+            <IconButton onClick={() => setOpen(true)} size="large" disabled={state === ProgramState.Printing}>
+              <Badge color="warning" variant="dot" invisible={checkForBadDiagnostics()}>
+                <BarChartRoundedIcon />
+              </Badge>
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Settings">
             <IconButton onClick={() => navigate("/settings")} size="large" disabled={state === ProgramState.Printing}>
-              <Badge color="secondary" variant="dot" invisible={status.isConfig}>
+              <Badge color="warning" variant="dot" invisible={status.isConfig}>
                 <SettingsIcon />
               </Badge>
             </IconButton>

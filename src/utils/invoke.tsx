@@ -92,7 +92,7 @@ const InvokeHandler = () => {
     return {
       statuscode: 200,
       message: "Success",
-      payload: { filepath: `src/examples/${testPaths[1]}` },
+      payload: { filepath: `src/examples/${testPaths[0]}` },
     };
   };
 

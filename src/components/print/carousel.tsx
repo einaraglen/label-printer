@@ -13,6 +13,7 @@ const LabelCarousel = ({ images, index }: Props) => {
       autoPlay={false}
       animation="slide"
       index={index}
+      swipe={false}
       navButtonsAlwaysVisible
       indicatorContainerProps={{
         style: {

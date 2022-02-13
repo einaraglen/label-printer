@@ -93,7 +93,7 @@ const ConfigList = ({ navigate, setSelected }: Props) => {
               <ListItemText sx={{ pl: 2 }} primary={entry.name} />
               {!checkConfig(entry) ? (
                 <Tooltip title="Config needs setup">
-                  <WarningIcon color="secondary" />
+                  <WarningIcon color="warning" />
                 </Tooltip>
               ) : (
                 <Tooltip title="Config good">

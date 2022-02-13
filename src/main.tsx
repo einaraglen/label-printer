@@ -25,6 +25,7 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isConfigSet, setIsConfigSet] = useState<boolean>(false);
   const [progress, setProgress] = useState<number>(10);
+  const [open, setOpen] = useState(false);
 
   useEffect((): any => {
     const load = async () => {
@@ -89,12 +90,12 @@ const App = () => {
             <LinearWithValueLabel progress={progress} />
           </Box> : null}
           {state !== ProgramState.Loading ? <Box sx={{ height: "100vh", display: "flex", px: 0, flexDirection: "column", overflowX: "hidden" }} bgcolor="dark">
-            <Overlay />
+            <Overlay {...{ open, setOpen }} />
             <Container sx={{ flexGrow: 1, display: "flex", p: 0, overflowX: "hidden" }}>
               <Routes>
                 <Route path="/settings" element={<SettingsPage />} />
                 <Route path="/templates" element={<Templates />} />
-                <Route path="/" element={<PrintPage />} />
+                <Route path="/" element={<PrintPage {...{ open, setOpen }} />} />
               </Routes>
             </Container>
             <Footer />

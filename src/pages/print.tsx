@@ -11,7 +11,12 @@ import LabelHandler from "../utils/handlers/labelhandler";
 import InvokeHandler from "../utils/invoke";
 import { IPC, ProgramState } from "../utils/enums";
 
-const PrintPage = () => {
+interface Props {
+  open: boolean;
+  setOpen: Function;
+}
+
+const PrintPage = ({ open, setOpen }: Props) => {
   const [IFS, setIFS] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const { filepath, adjustments, status, printer, setState } = ReduxAccessor();
@@ -19,6 +24,7 @@ const PrintPage = () => {
   const [images, setImages] = useState<string[]>([]);
   const { getAdjustments, buildLabels, buildPreview } = LabelHandler();
   const [index, setIndex] = useState<number>(0);
+  const [progress, setProgress] = useState(0);
   const { invoke } = InvokeHandler();
 
   const handlePrint = async () => {
@@ -28,15 +34,25 @@ const PrintPage = () => {
     while (i  < labels.length) {
       await invoke(IPC.PRINT_LABEL, {
         args: { printer, labels: cleanXMLString(labels[index]) },
-        error: (data: any) => console.warn(data),
+        // eslint-disable-next-line no-loop-func
+        next: (data: any) => {
+          if (!data) i = labels.length;
+        },
+        // eslint-disable-next-line no-loop-func
+        error: (data: any) => {
+          i = labels.length;
+          console.warn(data)
+        },
       });
       await new Promise((resolve) => setTimeout(resolve, 1000));
       i++;
+      setProgress((100 / labels.length) * i)
       setIndex(i)
     }
     setIndex(0)
     await new Promise((resolve) => setTimeout(resolve, 1000));
     setState(ProgramState.Ready)
+    setProgress(0)
   };
 
   useEffect(() => {
@@ -60,12 +76,12 @@ const PrintPage = () => {
       <Helmet>
         <title>{`LabelPrinter+ | ${IFS ?? "Loading ..."} | Print`}</title>
       </Helmet>
-      <TopBar />
+      <TopBar {...{ setOpen }} />
       {status.isFile ? (
         <>
           <Box sx={{ height: "9.3rem", mt: 2, display: "flex" }}>{isLoading ? <CircularProgress sx={{ mx: "auto", my: "auto" }} /> : <LabelCarousel {...{ images, index }} />}</Box>
           <Box sx={{ height: "2.9rem", display: "flex" }}>
-            <Controls {...{ handlePrint }} />
+            <Controls {...{ handlePrint, progress }} />
           </Box>
         </>
       ) : null}

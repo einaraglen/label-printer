@@ -18,10 +18,6 @@ const ConfigEditor = ({ selected, navigate, setConfigkey }: Props) => {
   const handleExportClick = async () => {
     await invoke(IPC.EXPORT_CONFIG, {
       args: JSON.stringify(selected),
-      next: (data: any) => {
-        console.log(data)
-      },
-      error: (err: string) => console.log(err),
     });
   }
 

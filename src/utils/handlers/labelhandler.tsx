@@ -74,7 +74,6 @@ const LabelHandler = () => {
           let image = data.image.replace(/"/g, "");
           images.push(image);
         },
-        error: (err: string) => console.log(err),
       });
     }
     return images;
