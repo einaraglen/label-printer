@@ -62,6 +62,9 @@ const reducer = createReducer(initialState, {
   [actionTypes.ADD_CONFIG]: (state: ReduxState, action: AddConfigAction) => {
     state.configs.push(action.payload)
   },
+  [actionTypes.REMOVE_CONFIG]: (state: ReduxState, action: RemoveConfigAction) => {
+    state.configs = state.configs.filter((c: Config) => c.name !== action.payload.name)
+  },
   [actionTypes.SET_TEMPLATES]: (state: ReduxState, action: SetTemplatesAction) => {
     state.templates = action.payload;
   },

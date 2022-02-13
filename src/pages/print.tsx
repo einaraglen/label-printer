@@ -16,7 +16,7 @@ interface Props {
   setOpen: Function;
 }
 
-const PrintPage = ({ open, setOpen }: Props) => {
+const Print = ({ open, setOpen }: Props) => {
   const [IFS, setIFS] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const { filepath, adjustments, status, printer, setState } = ReduxAccessor();
@@ -89,4 +89,4 @@ const PrintPage = ({ open, setOpen }: Props) => {
   );
 };
 
-export default PrintPage;
+export default Print;

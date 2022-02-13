@@ -70,6 +70,16 @@ export const _addConfig = (payload: any) => {
   };
 };
 
+export const _removeConfig = (payload: any) => {
+  const action: RemoveConfigAction = {
+    type: actionTypes.REMOVE_CONFIG,
+    payload,
+  };
+  return (dispatch: DispatchType) => {
+    dispatch(action);
+  };
+};
+
 export const _updateConfig = (payload: any) => {
   const action: UpdateConfigAction = {
     type: actionTypes.UPDATE_CONFIG,

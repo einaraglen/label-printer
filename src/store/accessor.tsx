@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { Dispatch } from "redux";
 import { LogType, ProgramState } from "../utils/enums";
-import { _log, _addConfig, _setConfig, _setConfigs, _setFilePath, _setState, _setStatus, _addTemplate, _setTemplates, _setTemplate, _updateConfigKey, _updateAdjustment, _setPrinter, _updateConfig } from "./actioncreators";
+import { _log, _addConfig, _setConfig, _setConfigs, _setFilePath, _setState, _setStatus, _addTemplate, _setTemplates, _setTemplate, _updateConfigKey, _updateAdjustment, _setPrinter, _updateConfig, _removeConfig } from "./actioncreators";
 
 const ReduxAccessor = () => {
   const dispatch: Dispatch<any> = useDispatch();
@@ -12,6 +12,7 @@ const ReduxAccessor = () => {
   const setStatus = useCallback((status: { key: string; value: boolean }) => dispatch(_setStatus(status)), [dispatch]);
   const setFilePath = useCallback((filePath: string) => dispatch(_setFilePath(filePath)), [dispatch]);
   const addConfig = useCallback((config: Config) => dispatch(_addConfig(config)), [dispatch]);
+  const removeConfig = useCallback((config: Config) => dispatch(_removeConfig(config)), [dispatch]);
   const updateConfigKey = useCallback(({ name, payload }: { name: string, payload: any }) => dispatch(_updateConfigKey({ name, payload })), [dispatch]);
   const updateConfig = useCallback(({ name, payload }: { name: string, payload: Config }) => dispatch(_updateConfig({ name, payload })), [dispatch]);
   const setConfig = useCallback((config: string) => dispatch(_setConfig(config)), [dispatch]);
@@ -44,7 +45,7 @@ const ReduxAccessor = () => {
     push_log(entry);
   };
 
-  return { log, setState, setStatus, setFilePath, addConfig, updateConfigKey, updateConfig, setConfig, setConfigs, addTemplate, setTemplates, setTemplate, updateAdjustment, setPrinter, state, status, filepath, config, configs, logs, templates, template, adjustments, printer };
+  return { log, setState, setStatus, setFilePath, addConfig, updateConfigKey, updateConfig, setConfig, setConfigs, addTemplate, setTemplates, setTemplate, updateAdjustment, setPrinter, removeConfig, state, status, filepath, config, configs, logs, templates, template, adjustments, printer };
 };
 
 export default ReduxAccessor;

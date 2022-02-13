@@ -22,6 +22,10 @@ interface AddConfigAction extends IAction {
   payload: Config
 }
 
+interface RemoveConfigAction extends IAction {
+  payload: Config
+}
+
 interface UpdateConfigKeyAction extends IAction {
   payload: {
     name: string;

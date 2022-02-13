@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import MuiTheme from "./theme/mui.theme";
 import { Route, Routes, HashRouter as Router } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
-import PrintPage from "./pages/print";
-import SettingsPage from "./pages/settings";
+import Print from "./pages/print";
+import Settings from "./pages/settings";
 import "./main.css";
 import { Box, Container } from "@mui/material";
 import Footer from "./components/footer";
@@ -26,6 +26,14 @@ const App = () => {
   const [isConfigSet, setIsConfigSet] = useState<boolean>(false);
   const [progress, setProgress] = useState<number>(10);
   const [open, setOpen] = useState(false);
+
+  const checkConfig = (_config: Config) => {
+    let flag = false;
+    _config.keys.forEach((key: ConfigKey) => {
+      if (key.value === "") flag = true;
+    });
+    return !flag;
+  };
 
   useEffect((): any => {
     const load = async () => {
@@ -62,7 +70,7 @@ const App = () => {
       await new Promise((resolve) => setTimeout(resolve, 500));
       setState(ProgramState.Ready);
       await new Promise((resolve) => setTimeout(resolve, 300));
-      setIsLoading(false)
+      setIsLoading(false);
     };
     load();
   }, []);
@@ -74,7 +82,8 @@ const App = () => {
       if (IFS) {
         if (IFS === "No File Found") return;
         let { created, config } = await checkForExistingConfig(IFS);
-        setStatus({ key: "isConfig", value: !created });
+        if (created) setStatus({ key: "isConfig", value: false });
+        setStatus({ key: "isConfig", value: checkConfig(config) });
         setConfig(config.name);
       }
     };
@@ -85,21 +94,24 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Router>
-        {isLoading ? 
+        {isLoading ? (
           <Box sx={{ position: "absolute", top: 0, bottom: 0, left: 0, right: 0, display: "flex", bgcolor: "hsl(215, 28%, 14%)", zIndex: 40 }}>
             <LinearWithValueLabel progress={progress} />
-          </Box> : null}
-          {state !== ProgramState.Loading ? <Box sx={{ height: "100vh", display: "flex", px: 0, flexDirection: "column", overflowX: "hidden" }} bgcolor="dark">
+          </Box>
+        ) : null}
+        {state !== ProgramState.Loading ? (
+          <Box sx={{ height: "100vh", display: "flex", px: 0, flexDirection: "column", overflowX: "hidden" }} bgcolor="dark">
             <Overlay {...{ open, setOpen }} />
             <Container sx={{ flexGrow: 1, display: "flex", p: 0, overflowX: "hidden" }}>
               <Routes>
-                <Route path="/settings" element={<SettingsPage />} />
+                <Route path="/settings" element={<Settings />} />
                 <Route path="/templates" element={<Templates />} />
-                <Route path="/" element={<PrintPage {...{ open, setOpen }} />} />
+                <Route path="/" element={<Print {...{ open, setOpen }} />} />
               </Routes>
             </Container>
             <Footer />
-          </Box> : null}
+          </Box>
+        ) : null}
       </Router>
     </ThemeProvider>
   );

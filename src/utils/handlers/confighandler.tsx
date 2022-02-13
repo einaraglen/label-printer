@@ -18,39 +18,18 @@ const ConfigHandler = () => {
     updateConfigKey({ name, payload })
   };
 
+  const resetConfig = (name: string) => {
+    let _config = clean(name);
+    for (let i = 0; i < _config.keys.length; i++) {
+      updateAccessorOfKey(name, _config.keys[i])
+    }
+    return _config;
+  }
+
   const createNewConfig = async (name: string) => {
-    let config: Config = {
-      name,
-      keys: [
-        {
-          name:"Number",
-          key: "_Number",
-          multiple: false,
-          value: "",
-        },
-        {
-          name:"Description",
-          key: "_Description",
-          multiple: false,
-          value: "",
-        },
-        {
-          name:"Info",
-          key: "_Info",
-          multiple: false,
-          value: "",
-        },
-        {
-          name:"Quantity",
-          key: "_Quantity",
-          multiple: false,
-          value: "",
-        },
-      ]
-    };
     setStatus({ key: "isConfig", value: false });
-    addConfig(config)
-    return config;
+    addConfig(clean(name))
+    return clean(name);
   };
 
   //listen to the state change, and persist data
@@ -64,7 +43,37 @@ const ConfigHandler = () => {
     apply()
   }, [configs])
 
-  return { checkForExistingConfig, updateAccessorOfKey };
+  const clean = (name: string): Config => ({
+    name,
+    keys: [
+      {
+        name:"Number",
+        key: "_Number",
+        multiple: false,
+        value: "",
+      },
+      {
+        name:"Description",
+        key: "_Description",
+        multiple: false,
+        value: "",
+      },
+      {
+        name:"Info",
+        key: "_Info",
+        multiple: false,
+        value: "",
+      },
+      {
+        name:"Quantity",
+        key: "_Quantity",
+        multiple: false,
+        value: "",
+      },
+    ]
+  });
+
+  return { checkForExistingConfig, updateAccessorOfKey, resetConfig };
 };
 
 export default ConfigHandler;

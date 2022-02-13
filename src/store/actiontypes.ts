@@ -7,6 +7,7 @@ export const SET_CONFIGS = "SET_CONFIGS";
 export const UPDATE_CONFIGKEY = "UPDATE_CONFIGKEY";
 export const UPDATE_CONFIG= "UPDATE_CONFIG";
 export const ADD_CONFIG = "ADD_CONFIG";
+export const REMOVE_CONFIG = "REMOVE_CONFIG";
 export const ADD_TEMPLATE = "ADD_TEMPLATE";
 export const SET_TEMPLATES = "SET_TEMPLATES";
 export const SET_TEMPLATE = "SET_TEMPLATE";

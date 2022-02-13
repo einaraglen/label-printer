@@ -74,7 +74,7 @@ const Overlay = ({ open, setOpen }: Props) => {
                     <Typography sx={{ ml: 2 }}>{getTime(l.created)}</Typography>
                   </Box>
                 </AccordionSummary>
-                <AccordionDetails sx={{ bgcolor: "transparent", ml: 5.7, py: 0.5 }}>
+                <AccordionDetails sx={{ bgcolor: "rgba(26, 34, 46, 0.3)", ml: 5.7, py: 0.5 }}>
                   <Typography>{l.message}</Typography>
                 </AccordionDetails>
               </Accordion>
