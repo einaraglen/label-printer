@@ -52,6 +52,10 @@ interface SetTemplateAction extends IAction {
   payload: string
 }
 
+interface SetUpdateAction extends IAction {
+  payload: Update
+}
+
 interface AddTemplateAction extends IAction {
   payload: string
 }

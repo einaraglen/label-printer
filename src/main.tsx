@@ -16,6 +16,7 @@ import ConfigHandler from "./utils/handlers/confighandler";
 import { parseIFSPage } from "./utils/tools";
 import LinearWithValueLabel from "./components/progress";
 import Overlay from "./components/overlay";
+import Updater from "./components/updater";
 
 const App = () => {
   const { theme } = MuiTheme();
@@ -93,6 +94,7 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
+      <Updater />
       <Router>
         {isLoading ? (
           <Box sx={{ position: "absolute", top: 0, bottom: 0, left: 0, right: 0, display: "flex", bgcolor: "hsl(215, 28%, 14%)", zIndex: 40 }}>

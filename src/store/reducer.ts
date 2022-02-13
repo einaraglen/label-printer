@@ -14,6 +14,7 @@ const initialState: ReduxState = {
   printer: null,
   filepath: null,
   template: null,
+  update: null,
   templates: [],
   config: null,
   configs: [],
@@ -79,6 +80,9 @@ const reducer = createReducer(initialState, {
   },
   [actionTypes.SET_PRINTER]: (state: ReduxState, action: SetPrinterAction) => {
     state.printer = action.payload;
+  },
+  [actionTypes.SET_UPDATE]: (state: ReduxState, action: SetUpdateAction) => {
+    state.update = action.payload;
   },
 });
 

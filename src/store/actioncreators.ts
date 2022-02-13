@@ -120,6 +120,16 @@ export const _setTemplates = (payload: any) => {
   };
 };
 
+export const _setUpdate = (payload: any) => {
+  const action: SetUpdateAction = {
+    type: actionTypes.SET_UPDATE,
+    payload,
+  };
+  return (dispatch: DispatchType) => {
+    dispatch(action);
+  };
+};
+
 export const _setTemplate = (payload: any) => {
   const action: SetTemplateAction = {
     type: actionTypes.SET_TEMPLATE,
