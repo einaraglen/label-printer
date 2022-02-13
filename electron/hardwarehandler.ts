@@ -113,7 +113,7 @@ const handleCheckUpdate = async (event: any, args: any): Promise<LabelResponse> 
   }
   try {
     let current: Release = result.data;
-    if (versionToNumber(current.tag_name) < versionToNumber(args)) return handleResponse({ payload: null });
+    if (versionToNumber(current.tag_name) <= versionToNumber(args)) return handleResponse({ payload: null });
     let response: UpdateResponse = handleResponse({
       payload: {
         version: current.tag_name,
