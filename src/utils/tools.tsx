@@ -16,6 +16,7 @@ export const parseFile = async (filepath: string) => {
   }
 };
 
+
 //makes our file reading async and easy to use
 export const readFile = async (path: string) => {
   try {

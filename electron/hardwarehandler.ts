@@ -1,8 +1,10 @@
 import { IPC } from "./handletypes";
 import { handleResponse } from "./responsehandler";
 import Dymo from "./lib/dymo";
+import Update from "./lib/updatE";
 
 const dymo = new Dymo();
+const update = new Update();
 const { dialog } = require("electron");
 const fs = require("fs");
 const shell = require("electron").shell;
@@ -10,13 +12,24 @@ const Store = require("electron-store");
 const store = new Store();
 const { XMLParser } = require("fast-xml-parser");
 const parser = new XMLParser();
-const codes = require("http-codes")
+const codes = require("http-codes");
 
 enum StoreKey {
   Printer = "lable.printer",
   Template = "label.template",
   Templates = "label.templates",
   Configs = "label.configs",
+}
+
+interface Assets {
+  browser_download_url: string;
+}
+
+interface Release {
+  tag_name: string;
+  published_at: string;
+  body: string;
+  assets: Assets[];
 }
 
 export const handleIPC = (accessor: string, event: any, args: any) => {
@@ -49,6 +62,8 @@ export const handleIPC = (accessor: string, event: any, args: any) => {
       return handleGetPrinter(event, args);
     case IPC.SET_PRINTER:
       return handleSetPrinter(event, args);
+    case IPC.CHECK_UPDATE:
+      return handleCheckUpdate(event, args);
     case IPC.QUIT:
       return handleQuit(event, args);
   }
@@ -73,6 +88,45 @@ const handleExportConfig = (event: any, args: any): Promise<LabelResponse> => {
   });
 };
 
+const versionToNumber = (version: string): number => {
+  try {
+    let number = version.replace(/\./g, "");
+    return parseInt(number);
+  } catch (err: any) {
+    throw err;
+  }
+};
+
+const getURL = (release: Release): string | undefined => {
+  try {
+    return release.assets[0].browser_download_url;
+  } catch (err: any) {
+    throw err;
+  }
+};
+
+const handleCheckUpdate = async (event: any, args: any): Promise<LabelResponse> => {
+  let result = await update.getReleases();
+  if (!checkStatus(result.status)) {
+    let message = result.data || "No message";
+    return handleResponse({ status: result.status, message: formatFailure("checking for updates", message) });
+  }
+  try {
+    let current: Release = result.data;
+    if (versionToNumber(current.tag_name) < versionToNumber(args)) return handleResponse({ payload: null });
+    let response: UpdateResponse = handleResponse({
+      payload: {
+        version: current.tag_name,
+        published: current.published_at,
+        download_url: getURL(current),
+      },
+    });
+    return response;
+  } catch (err: any) {
+    return handleResponse({ status: result.status, message: formatFailure("checking for updates", err.message) });
+  }
+};
+
 const handleDYMOStatus = async (event: any, args: any): Promise<LabelResponse> => {
   let result = await dymo.getStatus();
   if (checkStatus(result.status)) return handleResponse({ payload: result.data });
@@ -92,15 +146,13 @@ const handleOpenBrowser = async (event: any, args: any): Promise<LabelResponse> 
     shell.openExternal(args);
     return handleResponse({});
   } catch (err: any) {
-    return handleResponse({ status: codes.INTERNAL_SERVER_ERROR, message: formatFailure("opening browser", err) });
+    return handleResponse({ status: codes.INTERNAL_SERVER_ERROR, message: formatFailure("opening browser", err.message) });
   }
 };
 
 const handlePrintLabel = async (event: any, args: any): Promise<LabelResponse> => {
-  let printer = store.get(StoreKey.Printer);
-  if (!printer) return handleResponse({ status: codes.NOT_FOUND, message: formatFailure("printing", "Missing printer") });
-  let result = await dymo.print(printer, args);
-  if (checkStatus(result.status)) return handleResponse({});
+  let result = await dymo.print(args.printer, args.labels);
+  if (checkStatus(result.status)) return handleResponse({ payload: result.data });
   let message = result.data || "No message";
   return handleResponse({ status: result.status, message: formatFailure("printing", message) });
 };

@@ -22,6 +22,10 @@ interface AddConfigAction extends IAction {
   payload: Config
 }
 
+interface RemoveConfigAction extends IAction {
+  payload: Config
+}
+
 interface UpdateConfigKeyAction extends IAction {
   payload: {
     name: string;
@@ -46,6 +50,10 @@ interface SetTemplatesAction extends IAction {
 
 interface SetTemplateAction extends IAction {
   payload: string
+}
+
+interface SetUpdateAction extends IAction {
+  payload: Update
 }
 
 interface AddTemplateAction extends IAction {

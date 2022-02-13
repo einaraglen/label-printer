@@ -28,7 +28,7 @@ export default class Dymo {
     return `https://${this.hostname}:${this.port}/DYMO/DLS/Printing`;
   }
 
-  print(printername: string, label_xml: string, label_set_xml = "") {
+  print(printername: string, label_xml: string, label_set_xml = ""): DymoResponse {
     let label = `printerName=${encodeURIComponent(printername)}&printParamsXml=&labelXml=${encodeURIComponent(label_xml)}&labelSetXml=${encodeURIComponent(label_set_xml)}`;
 
     if (typeof process !== "undefined" && process.env) {
@@ -41,7 +41,7 @@ export default class Dymo {
       .catch((error: any) => handleErrorResponse(error));
   }
 
-  renderLabel(label_xml: string) {
+  renderLabel(label_xml: string): DymoResponse {
     let label = `printerName=&renderParamsXml=&labelXml=${encodeURIComponent(label_xml)}&labelSetXml=`;
 
     if (typeof process !== "undefined" && process.env) {
@@ -54,7 +54,7 @@ export default class Dymo {
       .catch((error: any) => handleErrorResponse(error));
   }
 
-  getStatus() {
+  getStatus(): DymoResponse {
     if (typeof process !== "undefined" && process.env) {
       process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"; // TODO: Bundle the certificates.
     }
@@ -65,7 +65,7 @@ export default class Dymo {
       .catch((error: any) => handleErrorResponse(error));
   }
 
-  getPrinters() {
+  getPrinters(): DymoResponse {
     if (typeof process !== "undefined" && process.env) {
       process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"; // TODO: Bundle the certificates.
     }

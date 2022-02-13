@@ -32,6 +32,14 @@ declare interface TemplatesResponse extends LabelResponse {
     }
 }
 
+declare interface UpdateResponse extends LabelResponse {
+    payload?: {
+        version: string;
+        published: string;
+        download_url: string;
+    }
+}
+
 declare interface ConfigResponse extends LabelResponse {
     payload?: {
         configs: any

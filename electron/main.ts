@@ -89,6 +89,8 @@ ipcMain.handle(IPC.GET_PRINTERS, async (event: any, arg: any) => handleIPC(IPC.G
 ipcMain.handle(IPC.GET_PRINTER, async (event: any, arg: any) => handleIPC(IPC.GET_PRINTER, event, arg));
 ipcMain.handle(IPC.SET_PRINTER, async (event: any, arg: any) => handleIPC(IPC.SET_PRINTER, event, arg));
 
+ipcMain.handle(IPC.CHECK_UPDATE, async (event: any, arg: any) => handleIPC(IPC.CHECK_UPDATE, event, arg));
+
 ipcMain.handle(IPC.QUIT, async (event: any, arg: any) => handleIPC(IPC.QUIT, event, { app }));
 
 //when ready

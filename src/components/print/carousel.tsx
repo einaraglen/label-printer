@@ -3,15 +3,17 @@ import Carousel from "react-material-ui-carousel";
 
 interface Props {
   images: string[];
+  index: number;
 }
 
-const LabelCarousel = ({ images }: Props) => {
+const LabelCarousel = ({ images, index }: Props) => {
   return (
     <Carousel
     className="unselectable flexGrow"
       autoPlay={false}
       animation="slide"
-      index={0}
+      index={index}
+      swipe={false}
       navButtonsAlwaysVisible
       indicatorContainerProps={{
         style: {

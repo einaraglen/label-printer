@@ -14,6 +14,7 @@ const initialState: ReduxState = {
   printer: null,
   filepath: null,
   template: null,
+  update: null,
   templates: [],
   config: null,
   configs: [],
@@ -28,7 +29,7 @@ const initialState: ReduxState = {
     },
     {
       name: "Max length",
-      value: false
+      value: true
     },
   ],
   logs: []
@@ -62,6 +63,9 @@ const reducer = createReducer(initialState, {
   [actionTypes.ADD_CONFIG]: (state: ReduxState, action: AddConfigAction) => {
     state.configs.push(action.payload)
   },
+  [actionTypes.REMOVE_CONFIG]: (state: ReduxState, action: RemoveConfigAction) => {
+    state.configs = state.configs.filter((c: Config) => c.name !== action.payload.name)
+  },
   [actionTypes.SET_TEMPLATES]: (state: ReduxState, action: SetTemplatesAction) => {
     state.templates = action.payload;
   },
@@ -76,6 +80,9 @@ const reducer = createReducer(initialState, {
   },
   [actionTypes.SET_PRINTER]: (state: ReduxState, action: SetPrinterAction) => {
     state.printer = action.payload;
+  },
+  [actionTypes.SET_UPDATE]: (state: ReduxState, action: SetUpdateAction) => {
+    state.update = action.payload;
   },
 });
 

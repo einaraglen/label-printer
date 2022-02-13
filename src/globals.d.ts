@@ -34,12 +34,20 @@ declare interface Adjustment {
     name: string;
     value: any
 }
+
+declare interface Update {
+    version: string;
+    published: string;
+    download_url: string;
+}
+
 declare interface ReduxState {
     state: ProgramState;
     status: ProgramStatus
     filepath: string | null,
     template: string | null;
     templates: Template[];
+    update: Update | null;
     printer: string | null;
     config: string | null;
     configs: Config[];

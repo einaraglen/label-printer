@@ -34,7 +34,7 @@ const LabelHandler = () => {
     }
   };
 
-  const buildLabels = async (ifs_lines: any, singles: boolean) => {
+  const buildLabels = async (ifs_lines: any, singles: boolean, maxlength: boolean) => {
     let template_xml: XMLDocument | null = await ((await readFile(template || "")) as Promise<XMLDocument>);
     if (!template_xml || !config) return;
     let _config = getConfig(config);
@@ -51,7 +51,7 @@ const LabelHandler = () => {
           if (value) {
             if (configkey.name === "Quantity" && singles) value = 1;
             if (configkey.unit) value += ` ${configkey.unit}`;
-            if ((value || "").toString().length > 20) value = `${value.substring(0, 20)}..`;
+            if ((value || "").toString().length > 20 && maxlength) value = `${value.substring(0, 20)}..`;
             label_xml = label_xml.replace(regex(configkey.key), value);
           }
         }
@@ -74,7 +74,6 @@ const LabelHandler = () => {
           let image = data.image.replace(/"/g, "");
           images.push(image);
         },
-        error: (err: string) => console.log(err),
       });
     }
     return images;

@@ -27,8 +27,7 @@ const InvokeHandler = () => {
   const invoke = async (key: IPC, { args = null, next, error, setIsLoading }: InvokeParams) => {
     if (setIsLoading) setIsLoading(true);
     let response: LabelResponse = await ipcRenderer.invoke(key, args);
-    //if (key === IPC.GET_FILE && process.env.NODE_ENV === "development") response = developmentFile();
-    console.log(response.statuscode)
+    if (key === IPC.GET_FILE && process.env.NODE_ENV === "development") response = developmentFile();
     if (checkStatus(response.statuscode)) {
       handleSuccess(key, response);
       if (next) next(response.payload);
@@ -93,7 +92,7 @@ const InvokeHandler = () => {
     return {
       statuscode: 200,
       message: "Success",
-      payload: { filepath: `src/examples/${testPaths[1]}` },
+      payload: { filepath: `src/examples/${testPaths[0]}` },
     };
   };
 

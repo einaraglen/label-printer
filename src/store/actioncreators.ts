@@ -70,6 +70,16 @@ export const _addConfig = (payload: any) => {
   };
 };
 
+export const _removeConfig = (payload: any) => {
+  const action: RemoveConfigAction = {
+    type: actionTypes.REMOVE_CONFIG,
+    payload,
+  };
+  return (dispatch: DispatchType) => {
+    dispatch(action);
+  };
+};
+
 export const _updateConfig = (payload: any) => {
   const action: UpdateConfigAction = {
     type: actionTypes.UPDATE_CONFIG,
@@ -103,6 +113,16 @@ export const _addTemplate = (payload: any) => {
 export const _setTemplates = (payload: any) => {
   const action: SetTemplatesAction = {
     type: actionTypes.SET_TEMPLATES,
+    payload,
+  };
+  return (dispatch: DispatchType) => {
+    dispatch(action);
+  };
+};
+
+export const _setUpdate = (payload: any) => {
+  const action: SetUpdateAction = {
+    type: actionTypes.SET_UPDATE,
     payload,
   };
   return (dispatch: DispatchType) => {

@@ -23,7 +23,7 @@ const Adjustments = () => {
       </Box>
       <FormGroup>
         {adjustments.map((adjustment: Adjustment, idx: number) => (
-          <FormControlLabel key={idx} control={<Checkbox onClick={handleCheck} name={adjustment.name} checked={adjustment.value} />} label={adjustment.name} />
+          <FormControlLabel disabled={adjustment.name === "Groups"} key={idx} control={<Checkbox onClick={handleCheck} name={adjustment.name} checked={adjustment.value} />} label={adjustment.name} />
         ))}
       </FormGroup>
     </Box>

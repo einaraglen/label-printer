@@ -1,29 +1,49 @@
 import { Box, IconButton, Tooltip, Typography } from "@mui/material";
 import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
-import FileUploadIcon from '@mui/icons-material/FileUpload';
+import FileUploadIcon from "@mui/icons-material/FileUpload";
+import CachedIcon from "@mui/icons-material/Cached";
+import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import KeyList from "./keylist";
 import TopBar from "./topbar";
 import InvokeHandler from "../../utils/invoke";
 import { IPC } from "../../utils/enums";
+import ReduxAccessor from "../../store/accessor";
+import ConfigHandler from "../../utils/handlers/confighandler";
 
 interface Props {
   selected: Config | null;
   setConfigkey: Function;
   navigate: Function;
+  setSelected: Function;
 }
 
-const ConfigEditor = ({ selected, navigate, setConfigkey }: Props) => {
+const ConfigEditor = ({ selected, navigate, setConfigkey, setSelected }: Props) => {
   const { invoke } = InvokeHandler();
-  
+  const { removeConfig, config } = ReduxAccessor();
+  const { resetConfig } = ConfigHandler();
+
   const handleExportClick = async () => {
     await invoke(IPC.EXPORT_CONFIG, {
       args: JSON.stringify(selected),
-      next: (data: any) => {
-        console.log(data)
-      },
-      error: (err: string) => console.log(err),
     });
-  }
+  };
+  const handleDeleteClick = () => {
+    if (!selected) return;
+    removeConfig(selected);
+    navigate(0);
+  };
+
+  const handleReset = () => {
+    if (selected) {
+      let _config = resetConfig(selected.name);
+      setSelected(_config)
+    } 
+  };
+
+  const isDeletable = () => {
+    if (!selected || !config) return false;
+    return selected.name !== config;
+  };
 
   return (
     <Box sx={{ postition: "relative" }}>
@@ -41,10 +61,20 @@ const ConfigEditor = ({ selected, navigate, setConfigkey }: Props) => {
               </Typography>
             </Box>
             <Box sx={{ width: "25%", display: "flex", justifyContent: "end" }}>
-            <Tooltip title="Export">
-              <IconButton onClick={handleExportClick} size="large">
-                <FileUploadIcon fontSize="medium" />
-              </IconButton>
+              <Tooltip title="Delete">
+                <IconButton onClick={handleDeleteClick} disabled={!isDeletable()} size="large">
+                  <DeleteRoundedIcon fontSize="medium" />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Reset">
+                <IconButton onClick={handleReset} size="large">
+                  <CachedIcon fontSize="medium" />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Export">
+                <IconButton onClick={handleExportClick} size="large">
+                  <FileUploadIcon fontSize="medium" />
+                </IconButton>
               </Tooltip>
             </Box>
           </TopBar>
