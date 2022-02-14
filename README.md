@@ -29,6 +29,40 @@ Please make sure to update tests as appropriate.
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
 
+## Showcase
+
+New error handler / debugger
+
+![error](https://user-images.githubusercontent.com/29553899/153913552-5dee8786-a0b9-4844-95f3-f64becfdd59d.gif)
+
+User gets more control for handeling unusual behavior
+
+![error2](https://user-images.githubusercontent.com/29553899/153913565-f47d45d3-3a52-4bbb-992a-ebf94d0109d7.gif)
+
+Settings page now easier to navigate
+
+![settings1](https://user-images.githubusercontent.com/29553899/153913575-55729305-c8c9-4816-8016-0c1c22d9021f.gif)
+
+Search, Multiple and Units are working!
+
+![settings2](https://user-images.githubusercontent.com/29553899/153913583-d330aae0-bb11-4969-a9d2-70bfb35d4a45.gif)
+
+Adjustments are working as before, planning to add more features here!
+
+![singles](https://user-images.githubusercontent.com/29553899/153915219-b74d16bd-988a-4271-a27d-0793094270c0.gif)
+
+Swapping between templates is now possible
+
+![templates](https://user-images.githubusercontent.com/29553899/153913594-b6f783fc-5685-4dfe-923b-871f1c2f2df4.gif)
+
+New printing animation
+
+![printing](https://user-images.githubusercontent.com/29553899/153914553-effe6fff-33da-4d5f-9599-80f0f9f68fd8.gif)
+
+User can now check for new updates and download them directly from the program
+
+![updates](https://user-images.githubusercontent.com/29553899/153914560-a57f0a47-7a45-46b9-bf39-a80f31f5de78.gif)
+
 # Setup for User
 This guide will show how the program should be setup on a end-user's computer
 
