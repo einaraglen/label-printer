@@ -19,7 +19,6 @@ import Overlay from "./components/overlay";
 import Updater from "./components/updater";
 import { GoogleLogin } from "react-google-login";
 import { GoogleLogout } from "react-google-login";
-import FirebaseHandler from "./utils/handlers/firebaseHandler";
 
 const { ipcRenderer } = window.require("electron");
 
@@ -32,7 +31,6 @@ const App = () => {
   const [isConfigSet, setIsConfigSet] = useState<boolean>(false);
   const [progress, setProgress] = useState<number>(10);
   const [open, setOpen] = useState(false);
-  const { addArchive } = FirebaseHandler();
 
   const checkConfig = (_config: Config) => {
     let flag = false;
@@ -94,7 +92,6 @@ const App = () => {
 
   useEffect(() => {
     if (!isConfigSet) return;
-    addArchive()
     const config = async () => {
       let IFS = parseIFSPage(filepath);
       if (IFS) {

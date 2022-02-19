@@ -1,6 +1,5 @@
-import React from "react";
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, getDocs, setDoc } from "firebase/firestore/lite";
+import { getFirestore, addDoc, collection, Timestamp } from "firebase/firestore/lite";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_apiKey,
@@ -16,11 +15,14 @@ const FirebaseHandler = () => {
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
-  const addArchive = async () => {
-    const archive = collection(db, "archive");
-    const snapshot = await getDocs(archive);
-    const archive_list = snapshot.docs.map((doc) => doc.data());
-    console.log(archive_list);
+  const addArchive = async (user_email: string, ifs_page: string, label_count: number, label_images: string[]) => {
+    await addDoc(collection(db, "archive"), {
+        user_email,
+        ifs_page,
+        label_count,
+        label_images,
+        printed_at: Timestamp.fromDate(new Date())
+      });
   };
 
   return { addArchive };
