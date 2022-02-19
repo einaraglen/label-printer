@@ -17,10 +17,10 @@ import { parseIFSPage } from "./utils/tools";
 import LinearWithValueLabel from "./components/progress";
 import Overlay from "./components/overlay";
 import Updater from "./components/updater";
+import { GoogleLogin } from "react-google-login";
+import { GoogleLogout } from "react-google-login";
 
 const { ipcRenderer } = window.require("electron");
-
-
 
 const App = () => {
   const { theme } = MuiTheme();
@@ -44,8 +44,8 @@ const App = () => {
   useEffect(() => {
     ipcRenderer.on("open-with", (event: any, file: any) => {
       setIsConfigSet(false);
-      setFilePath(file)
-      log(LogType.Info, "New File", `LabelPrinter was re-opened with: ${file}`)
+      setFilePath(file);
+      log(LogType.Info, "New File", `LabelPrinter was re-opened with: ${file}`);
       setIsConfigSet(true);
     });
   }, []);
@@ -105,29 +105,52 @@ const App = () => {
     config();
   }, [isConfigSet]);
 
+  const responseGoogle = (response: any) => {
+    console.log(response);
+  };
+
+  const logout = () => {
+      console.log("LOGOUT")
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Updater />
       <Router>
-        {isLoading ? (
-          <Box sx={{ position: "absolute", top: 0, bottom: 0, left: 0, right: 0, display: "flex", bgcolor: "hsl(215, 28%, 14%)", zIndex: 40 }}>
-            <LinearWithValueLabel progress={progress} />
-          </Box>
-        ) : null}
-        {state !== ProgramState.Loading ? (
-          <Box sx={{ height: "100vh", display: "flex", px: 0, flexDirection: "column", overflowX: "hidden" }} bgcolor="dark">
-            <Overlay {...{ open, setOpen }} />
-            <Container sx={{ flexGrow: 1, display: "flex", p: 0, overflowX: "hidden" }}>
-              <Routes>
-                <Route path="/settings" element={<Settings />} />
-                <Route path="/templates" element={<Templates />} />
-                <Route path="/" element={<Print {...{ open, setOpen }} />} />
-              </Routes>
-            </Container>
-            <Footer />
-          </Box>
-        ) : null}
+        {false ? (
+          <>
+            <GoogleLogin
+              clientId="1057470976527-68p2joi35bdcj98oleeuru14fc308n4o.apps.googleusercontent.com"
+              buttonText="Login"
+              isSignedIn={true}
+              onSuccess={responseGoogle}
+              onFailure={responseGoogle}
+              cookiePolicy={"single_host_origin"}
+            />
+          </>
+        ) : (
+          <>
+            {isLoading ? (
+              <Box sx={{ position: "absolute", top: 0, bottom: 0, left: 0, right: 0, display: "flex", bgcolor: "hsl(215, 28%, 14%)", zIndex: 40 }}>
+                <LinearWithValueLabel progress={progress} />
+              </Box>
+            ) : null}
+            {state !== ProgramState.Loading ? (
+              <Box sx={{ height: "100vh", display: "flex", px: 0, flexDirection: "column", overflowX: "hidden" }} bgcolor="dark">
+                <Overlay {...{ open, setOpen }} />
+                <Container sx={{ flexGrow: 1, display: "flex", p: 0, overflowX: "hidden" }}>
+                  <Routes>
+                    <Route path="/settings" element={<Settings />} />
+                    <Route path="/templates" element={<Templates />} />
+                    <Route path="/" element={<Print {...{ open, setOpen }} />} />
+                  </Routes>
+                </Container>
+                <Footer />
+              </Box>
+            ) : null}
+          </>
+        )}
       </Router>
     </ThemeProvider>
   );

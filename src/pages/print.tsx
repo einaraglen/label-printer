@@ -10,6 +10,7 @@ import Controls from "../components/print/controls";
 import LabelHandler from "../utils/handlers/labelhandler";
 import InvokeHandler from "../utils/invoke";
 import { IPC, ProgramState } from "../utils/enums";
+import FirebaseHandler from "../utils/handlers/firebaseHandler";
 
 interface Props {
   open: boolean;
@@ -26,10 +27,12 @@ const Print = ({ open, setOpen }: Props) => {
   const [index, setIndex] = useState<number>(0);
   const [progress, setProgress] = useState(0);
   const { invoke } = InvokeHandler();
+  const { addArchive } = FirebaseHandler();
 
   const handlePrint = async () => {
     if (!labels) return;
     setState(ProgramState.Printing);
+    addArchive("einar.aglen99@gmail.com", IFS || "Missing IFS Page", images.length, images)
     let i = 0;
     while (i  < labels.length) {
       await invoke(IPC.PRINT_LABEL, {
