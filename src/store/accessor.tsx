@@ -37,7 +37,7 @@ const ReduxAccessor = () => {
   const addTemplate = useCallback((template: string) => dispatch(_addTemplate(template)), [dispatch]);
   const setTemplates = useCallback((templates: Template[]) => dispatch(_setTemplates(templates)), [dispatch]);
   const setTemplate = useCallback((_template: Template) => dispatch(_setTemplate(_template)), [dispatch]);
-  const updateAdjustment = useCallback((adjustment: Adjustment) => dispatch(_updateAdjustment(adjustment)), [dispatch]);
+  const updateAdjustment = useCallback((adjustment: { name: string, value: any }) => dispatch(_updateAdjustment(adjustment)), [dispatch]);
   const setPrinter = useCallback((_printer: string) => dispatch(_setPrinter(_printer)), [dispatch]);
   const setUpdate = useCallback((_update: Update) => dispatch(_setUpdate(_update)), [dispatch]);
 

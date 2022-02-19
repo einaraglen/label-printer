@@ -8,8 +8,8 @@ import { handleResponse } from "./responsehandler";
 
 const devEnv = /electron/.test(process.argv[0]);
 const codes = require("http-codes");
-const url = require("url");
 
+let filepath: any | undefined;
 let window: BrowserWindow | null = null;
 
 //check if already open
@@ -17,11 +17,18 @@ const gotTheLock = app.requestSingleInstanceLock();
 if (!gotTheLock) {
   app.quit();
 } else {
-  app.on("second-instance", (event, commandLine, workingDirectory) => {
+  app.on("second-instance", (event, paths, path, workingDirectory) => {
     // Someone tried to run a second instance, we should focus our window.
+    try {
+      if (!window || filepath === paths[2]) return;
+      filepath = paths[2];
+      window.webContents.send("open-with", filepath);
+    } catch (err: any) {
+      console.warn(err);
+    }
     if (window) {
       if (window.isMinimized()) window.restore();
-      window.focus();
+      //window.focus();
     }
   });
 }
@@ -52,13 +59,6 @@ const createWindow = () => {
   });
 
   window.loadURL(isDev ? "http://localhost:3000" : `file://${path.join(__dirname, "../index.html")}`);
-  /*window.loadURL(
-    url.format({
-      pathname: path.join(__dirname, "index.html"),
-      protocol: "file:",
-      slashes: true,
-    })
-  );*/
 
   // DevTools
   installExtension(REACT_DEVELOPER_TOOLS)
@@ -66,7 +66,7 @@ const createWindow = () => {
     .catch((err) => console.log("An error occurred: ", err));
 
   if (isDev) {
-  window.webContents.openDevTools();
+    window.webContents.openDevTools();
   }
 };
 
@@ -97,7 +97,7 @@ ipcMain.handle(IPC.QUIT, async (event: any, arg: any) => handleIPC(IPC.QUIT, eve
 app.whenReady().then(() => {
   if (process.platform.startsWith("win") && !devEnv && process.argv.length >= 2) {
     //if app is opened with file
-    const filepath = process.argv[1];
+    filepath = process.argv[1];
     ipcMain.handle(IPC.GET_FILE, (event, arg) => {
       return handleResponse({ payload: { filepath } });
     });
@@ -107,15 +107,8 @@ app.whenReady().then(() => {
       return handleResponse({ status: codes.NOT_FOUND, message: formatFailure("fetching FilePath", "No file found on-open") });
     });
   }
-
   createWindow();
-
-  app.on("activate", () => {
-    //if (BrowserWindow.getAllWindows().length === 0) createWindow();
-  });
 });
-
-//app.on("ready", createWindow);
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {

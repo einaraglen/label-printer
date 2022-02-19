@@ -57,6 +57,33 @@ const Overlay = ({ open, setOpen }: Props) => {
     setOpen(!status.isDYMO || !status.isFile || !status.isPrinter);
   }, [status]);
 
+  const getLogBundles = (_logs: ProgramLog[]) => {
+    let result: any = [];
+    for (let i = 0; i < logs.length; i++) {
+      let index = result.findIndex((_log: any) => _log.name === logs[i].name);
+      if (index > -1) {
+        let _log: any = result[index];
+        result[index] = { ..._log, type: logs[i].type, created: logs[i].created, messages: [..._log.messages, { message: logs[i].message, created: logs[i].created }], count: _log.count + 1 };
+      } else {
+        result.push({
+          ...logs[i],
+          messages: [{ message: logs[i].message, created: logs[i].created }],
+          count: 1,
+        });
+      }
+    }
+    return result;
+  };
+
+  const getMessages = (messages: any[]) => {
+    return messages.map((m: any) => (
+      <Box sx={{ display: "flex", justifyContent: "space-between", my: 1 }}>
+        <Typography>{m.message}</Typography>
+        <Typography>{getTime(m.created)}</Typography>
+      </Box>
+    ));
+  };
+
   return (
     <>
       {open ? (
@@ -65,17 +92,22 @@ const Overlay = ({ open, setOpen }: Props) => {
             <Typography gutterBottom sx={{ my: "auto", fontSize: 15, ml: 5.3, mb: 2 }}>
               Diagnostics
             </Typography>
-            {logs.map((l: ProgramLog, idx: number) => (
+            {getLogBundles(logs).map((l: any, idx: number) => (
               <Accordion key={idx} sx={{ bgcolor: "transparent" }} elevation={0}>
                 <AccordionSummary sx={{ bgcolor: "transparent", border: "0" }} expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header">
                   {getIcon(l.type)}
                   <Box sx={{ display: "flex", flexGrow: 1, justifyContent: "space-between" }}>
                     <Typography sx={{ ml: 2 }}>{l.name}</Typography>
-                    <Typography sx={{ ml: 2 }}>{getTime(l.created)}</Typography>
+                    <Box sx={{ display: "flex", width: "7rem", mr: 5, justifyContent: "space-between" }}>
+                      <Typography sx={{ height: "20px", width: "20px", textAlign: "center", bgcolor: "hsla(215, 28%, 14%, 0.5)", borderRadius: "10px" }}>{l.count}</Typography>
+
+                      <Typography sx={{ ml: 2 }}>{getTime(l.created)}</Typography>
+                    </Box>
                   </Box>
                 </AccordionSummary>
-                <AccordionDetails sx={{ bgcolor: "rgba(26, 34, 46, 0.3)", ml: 5.7, py: 0.5 }}>
-                  <Typography>{l.message}</Typography>
+                <AccordionDetails sx={{ bgcolor: "rgba(26, 34, 46, 0.3)", ml: 5.7, p: 1, maxHeight: "7rem", overflowY: "scroll" }}>
+                  {getMessages(l.messages)}
+                  <AlwaysScrollToBottom />
                 </AccordionDetails>
               </Accordion>
             ))}

@@ -10,6 +10,7 @@ import Controls from "../components/print/controls";
 import LabelHandler from "../utils/handlers/labelhandler";
 import InvokeHandler from "../utils/invoke";
 import { IPC, ProgramState } from "../utils/enums";
+import FirebaseHandler from "../utils/handlers/firebaseHandler";
 
 interface Props {
   open: boolean;
@@ -19,17 +20,19 @@ interface Props {
 const Print = ({ open, setOpen }: Props) => {
   const [IFS, setIFS] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const { filepath, adjustments, status, printer, setState } = ReduxAccessor();
+  const { filepath, adjustments, config, status, printer, setState } = ReduxAccessor();
   const [labels, setLabels] = useState<string[] | undefined>([]);
   const [images, setImages] = useState<string[]>([]);
   const { getAdjustments, buildLabels, buildPreview } = LabelHandler();
   const [index, setIndex] = useState<number>(0);
   const [progress, setProgress] = useState(0);
   const { invoke } = InvokeHandler();
+  const { addArchive } = FirebaseHandler();
 
   const handlePrint = async () => {
     if (!labels) return;
     setState(ProgramState.Printing);
+    addArchive("einar.aglen99@gmail.com", IFS || "Missing IFS Page", images.length, images)
     let i = 0;
     while (i  < labels.length) {
       await invoke(IPC.PRINT_LABEL, {
@@ -60,16 +63,16 @@ const Print = ({ open, setOpen }: Props) => {
     const parse = async () => {
       setIsLoading(true);
       if (!filepath) return;
-      let { singles, groups, maxlength } = getAdjustments(adjustments);
+      let { count, singles, groups, additional, maxlength } = getAdjustments(adjustments);
       let ifs_lines = await parseFile(filepath as string);
-      let _labels = await buildLabels(ifs_lines, singles, maxlength);
+      let _labels = await buildLabels(ifs_lines, count, singles, additional, maxlength);
       let _images = await buildPreview(_labels);
       setLabels(_labels);
       setImages(_images);
       setIsLoading(false);
     };
     parse();
-  }, [filepath, adjustments]);
+  }, [adjustments, filepath, config]);
 
   return (
     <Box sx={{ display: "flex", flexGrow: 1, flexDirection: "column" }}>

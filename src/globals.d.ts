@@ -31,6 +31,7 @@ declare interface Config {
 }
 
 declare interface Adjustment {
+    type: string;
     name: string;
     value: any
 }

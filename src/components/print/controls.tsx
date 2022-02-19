@@ -2,7 +2,7 @@ import { Box, Button, Drawer, Tooltip, IconButton, Badge } from "@mui/material";
 import React, { useState } from "react";
 import PrintIcon from "@mui/icons-material/Print";
 import BuildIcon from "@mui/icons-material/Build";
-import Adjustments from "./adjustments";
+import Adjustments from "./adjustments/adjustments";
 import ReduxAccessor from "../../store/accessor";
 import { ProgramState } from "../../utils/enums";
 import LinearProgress from "@mui/material/LinearProgress";
@@ -49,7 +49,7 @@ const Controls = ({ handlePrint, progress }: Props) => {
         </Tooltip>
         <UpdateModal open={updateOpen} setOpen={setUpdateOpen} />
       </Box>
-      <Drawer anchor="left" open={adjOpen} onClose={() => setAdjOpen(false)}>
+      <Drawer anchor="left" open={adjOpen} onClose={() => setAdjOpen(false)} sx={{ bgcolor: "hsl(215, 28%, 14%)" }}>
         <Adjustments />
       </Drawer>
     </Box>

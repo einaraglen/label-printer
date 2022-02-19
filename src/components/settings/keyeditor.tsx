@@ -44,7 +44,7 @@ const KeyEditor = ({ configkey, selected, navigate, handleUpdateAccessor, setCon
       name: _congfigkey.name,
       key: _congfigkey.key,
       multiple: true,
-      value: [_congfigkey.value],
+      value: _congfigkey.value === "" ? [] : [_congfigkey.value],
     };
   };
 
