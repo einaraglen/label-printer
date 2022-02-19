@@ -20,14 +20,27 @@ const initialState: ReduxState = {
   configs: [],
   adjustments: [
     {
+      type: "Quantity",
+      name: "Label Count",
+      value: 1
+    },
+    {
+      type: "Quantity",
       name: "Singles",
       value: false
     },
     {
+      type: "Quantity",
       name: "Groups",
       value: false
     },
     {
+      type: "Text",
+      name: "Additional Info",
+      value: ""
+    },
+    {
+      type: "Text",
       name: "Max length",
       value: true
     },
@@ -106,7 +119,8 @@ const handleUpdateConfigKey = (configs: Config[], name: string, payload: any) =>
 const handleUpdateAdjustment = (adjustments: Adjustment[], name: string, value: any) => {
   let adjustmentindex = adjustments.findIndex((adjustment: Adjustment) => adjustment.name === name);
   if (adjustmentindex === -1) return;
-  adjustments[adjustmentindex] = { name, value }
+  let _adjustment = adjustments[adjustmentindex];
+  adjustments[adjustmentindex] = { ..._adjustment, name, value }
 }
 
 export default reducer;

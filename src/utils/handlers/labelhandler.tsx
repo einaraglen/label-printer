@@ -16,7 +16,7 @@ const LabelHandler = () => {
     let result = "";
     for (let i = 0; i < value.length; i++) {
       let data = line[value[i]];
-      result += i === value.length - 1 ? data : `${data}, `;
+      result += i === value.length - 1 ? data : `${data} `;
     }
     return result;
   };
@@ -25,7 +25,8 @@ const LabelHandler = () => {
     let qty = _config.keys.find((key: ConfigKey) => key.name === "Quantity");
     if (!qty) return 1;
     try {
-      let line_qty = line[qty.value];
+      let key = Array.isArray(qty.value) ? qty.value[0] : qty.value;
+      let line_qty = line[key];
       let limit = parseInt(line_qty);
       return clamp(limit, 1, 10);
     } catch (err: any) {
@@ -34,7 +35,7 @@ const LabelHandler = () => {
     }
   };
 
-  const buildLabels = async (ifs_lines: any, singles: boolean, maxlength: boolean) => {
+  const buildLabels = async (ifs_lines: any, count: number, singles: boolean, additional: string, maxlength: boolean) => {
     let template_xml: XMLDocument | null = await ((await readFile(template || "")) as Promise<XMLDocument>);
     if (!template_xml || !config) return;
     let _config = getConfig(config);
@@ -43,13 +44,14 @@ const LabelHandler = () => {
     let _labels: string[] = [];
     for (let i = 0; i < ifs_lines.length; i++) {
       let line = ifs_lines[i];
-      let limit = !singles ? 1 : getLimit(line, _config);
+      let limit = !singles ? count : getLimit(line, _config);
       for (let q = 0; q < limit; q++) {
         for (let j = 0; j < _config.keys.length; j++) {
           let configkey: ConfigKey = _config.keys[j];
           let value = configkey.multiple ? handleMultiple(line, configkey.value) : line[configkey.value];
           if (value) {
             if (configkey.name === "Quantity" && singles) value = 1;
+            if (configkey.name === "Info" && additional) value = `${additional} - ${value}`;
             if (configkey.unit) value += ` ${configkey.unit}`;
             if ((value || "").toString().length > 20 && maxlength) value = `${value.substring(0, 20)}..`;
             label_xml = label_xml.replace(regex(configkey.key), value);
@@ -80,11 +82,13 @@ const LabelHandler = () => {
   };
 
   const getAdjustments = (_adjustments: Adjustment[]) => {
+    let count = _adjustments.find((a: Adjustment) => a.name === "Label Count");
     let singles = _adjustments.find((a: Adjustment) => a.name === "Singles");
     let groups = _adjustments.find((a: Adjustment) => a.name === "Singles");
-    let maxlength = _adjustments.find((a: Adjustment) => a.name === "Singles");
+    let additional = _adjustments.find((a: Adjustment) => a.name === "Additional Info");
+    let maxlength = _adjustments.find((a: Adjustment) => a.name === "Max Length");
 
-    return { singles: singles?.value, groups: groups?.value, maxlength: maxlength?.value };
+    return { count: count?.value, singles: singles?.value, groups: groups?.value, additional: additional?.value, maxlength: maxlength?.value };
   };
 
   return { getAdjustments, buildLabels, buildPreview }

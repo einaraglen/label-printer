@@ -60,9 +60,9 @@ const Print = ({ open, setOpen }: Props) => {
     const parse = async () => {
       setIsLoading(true);
       if (!filepath) return;
-      let { singles, groups, maxlength } = getAdjustments(adjustments);
+      let { count, singles, groups, additional, maxlength } = getAdjustments(adjustments);
       let ifs_lines = await parseFile(filepath as string);
-      let _labels = await buildLabels(ifs_lines, singles, maxlength);
+      let _labels = await buildLabels(ifs_lines, count, singles, additional, maxlength);
       let _images = await buildPreview(_labels);
       setLabels(_labels);
       setImages(_images);

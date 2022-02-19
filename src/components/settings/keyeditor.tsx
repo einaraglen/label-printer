@@ -24,6 +24,7 @@ const KeyEditor = ({ configkey, selected, navigate, handleUpdateAccessor, setCon
 
   const handleSwitch = () => {
     if (!configkey) return;
+    console.log(configkey)
     let _configkey = configkey.multiple ? convertToString(configkey) : convertToStringList(configkey);
     setConfigkey(_configkey);
     handleUpdateAccessor(_configkey);
@@ -44,7 +45,7 @@ const KeyEditor = ({ configkey, selected, navigate, handleUpdateAccessor, setCon
       name: _congfigkey.name,
       key: _congfigkey.key,
       multiple: true,
-      value: [_congfigkey.value],
+      value: _congfigkey.value === "" ? [] : [_congfigkey.value],
     };
   };
 

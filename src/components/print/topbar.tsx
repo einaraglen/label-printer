@@ -11,12 +11,11 @@ import ReduxAccessor from "../../store/accessor";
 import { useState, useEffect } from "react";
 import InvokeHandler from "../../utils/invoke";
 import { IPC, LogType, ProgramState } from "../../utils/enums";
-import BarChartRoundedIcon from '@mui/icons-material/BarChartRounded';
+import BarChartRoundedIcon from "@mui/icons-material/BarChartRounded";
 
 interface Props {
   setOpen: Function;
 }
-
 
 const TopBar = ({ setOpen }: Props) => {
   const [printers, setPrinters] = useState<DYMOPrinter[]>([]);
@@ -25,10 +24,10 @@ const TopBar = ({ setOpen }: Props) => {
   const { invoke } = InvokeHandler();
 
   const checkForBadDiagnostics = () => {
-    let match = logs.find((log: ProgramLog) => log.type === LogType.Error || log.type === LogType.Failure)
+    let match = logs.find((log: ProgramLog) => log.type === LogType.Error || log.type === LogType.Failure);
     if (!match) return true;
     return false;
-  }
+  };
 
   useEffect(() => {
     const printers = async () => {
@@ -47,7 +46,6 @@ const TopBar = ({ setOpen }: Props) => {
     <AppBar position="sticky" color="transparent" sx={{ backdropFilter: "blur(5px)", zIndex: 10, borderBottomColor: "hsl(215, 28%, 14%)" }} elevation={4}>
       <Container>
         <Toolbar disableGutters sx={{ display: "flex", justifyContent: "space-between" }}>
-         
           <Box sx={{ display: "flex", justifyItems: "center" }}>
             {true ? null : (
               <Typography gutterBottom sx={{ my: "auto", fontSize: 14 }}>
@@ -58,7 +56,9 @@ const TopBar = ({ setOpen }: Props) => {
               <Select value={printer || ""} size="small" onChange={(e: any) => setPrinter(e.target.value)} disabled={state === ProgramState.Printing}>
                 {printers.length === 0 ? <MenuItem value="">No Printers found</MenuItem> : null}
                 {printers.map((printer: DYMOPrinter, idx: number) => (
-                  <MenuItem key={idx} value={printer.LabelWriterPrinter.Name}>{printer.LabelWriterPrinter.Name}</MenuItem>
+                  <MenuItem key={idx} value={printer.LabelWriterPrinter.Name}>
+                    {printer.LabelWriterPrinter.Name}
+                  </MenuItem>
                 ))}
               </Select>
             </FormControl>
