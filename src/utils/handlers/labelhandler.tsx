@@ -53,7 +53,7 @@ const LabelHandler = () => {
             if (configkey.name === "Quantity" && singles) value = 1;
             if (configkey.name === "Info" && additional) value = `${additional} - ${value}`;
             if (configkey.unit) value += ` ${configkey.unit}`;
-            if ((value || "").toString().length > 20 && maxlength) value = `${value.substring(0, 20)}..`;
+            if (value.toString().length > 20 && maxlength) value = `${value.substring(0, 20)}..`;
             label_xml = label_xml.replace(regex(configkey.key), value);
           }
         }

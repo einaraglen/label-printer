@@ -41,7 +41,7 @@ const initialState: ReduxState = {
     },
     {
       type: "Text",
-      name: "Max length",
+      name: "Max Length",
       value: true
     },
   ],

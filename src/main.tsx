@@ -8,7 +8,7 @@ import "./main.css";
 import { Box, Container } from "@mui/material";
 import Footer from "./components/footer";
 import CssBaseline from "@mui/material/CssBaseline";
-import { IPC, ProgramState } from "./utils/enums";
+import { IPC, LogType, ProgramState } from "./utils/enums";
 import Templates from "./pages/templates";
 import InvokeHandler from "./utils/invoke";
 import ReduxAccessor from "./store/accessor";
@@ -18,9 +18,13 @@ import LinearWithValueLabel from "./components/progress";
 import Overlay from "./components/overlay";
 import Updater from "./components/updater";
 
+const { ipcRenderer } = window.require("electron");
+
+
+
 const App = () => {
   const { theme } = MuiTheme();
-  const { setState, state, setStatus, filepath, setFilePath, setConfigs, setConfig, setTemplates, setTemplate } = ReduxAccessor();
+  const { setState, state, setStatus, filepath, setFilePath, setConfigs, setConfig, setTemplates, setTemplate, log } = ReduxAccessor();
   const { invoke } = InvokeHandler();
   const { checkForExistingConfig } = ConfigHandler();
   const [isLoading, setIsLoading] = useState(true);
@@ -35,6 +39,16 @@ const App = () => {
     });
     return !flag;
   };
+
+  //Handle cases where user opens new print file with program already running
+  useEffect(() => {
+    ipcRenderer.on("open-with", (event: any, file: any) => {
+      setIsConfigSet(false);
+      setFilePath(file)
+      log(LogType.Info, "New File", `LabelPrinter was re-opened with: ${file}`)
+      setIsConfigSet(true);
+    });
+  }, []);
 
   useEffect((): any => {
     const load = async () => {

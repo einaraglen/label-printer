@@ -19,7 +19,7 @@ interface Props {
 const Print = ({ open, setOpen }: Props) => {
   const [IFS, setIFS] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const { filepath, adjustments, status, printer, setState } = ReduxAccessor();
+  const { filepath, adjustments, config, status, printer, setState } = ReduxAccessor();
   const [labels, setLabels] = useState<string[] | undefined>([]);
   const [images, setImages] = useState<string[]>([]);
   const { getAdjustments, buildLabels, buildPreview } = LabelHandler();
@@ -69,7 +69,7 @@ const Print = ({ open, setOpen }: Props) => {
       setIsLoading(false);
     };
     parse();
-  }, [filepath, adjustments]);
+  }, [adjustments, filepath, config]);
 
   return (
     <Box sx={{ display: "flex", flexGrow: 1, flexDirection: "column" }}>

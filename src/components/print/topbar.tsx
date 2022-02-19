@@ -53,7 +53,7 @@ const TopBar = ({ setOpen }: Props) => {
               </Typography>
             )}
             <FormControl variant="standard" sx={{ m: 1, width: 170 }}>
-              <Select value={printer || ""} size="small" onChange={(e: any) => setPrinter(e.target.value)} disabled={state === ProgramState.Printing}>
+              <Select value={printers.length === 0 ? "" : printer ?? ""} size="small" onChange={(e: any) => setPrinter(e.target.value)} disabled={state === ProgramState.Printing}>
                 {printers.length === 0 ? <MenuItem value="">No Printers found</MenuItem> : null}
                 {printers.map((printer: DYMOPrinter, idx: number) => (
                   <MenuItem key={idx} value={printer.LabelWriterPrinter.Name}>
