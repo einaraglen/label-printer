@@ -37,10 +37,10 @@ const Print = ({ open, setOpen }: Props) => {
       username: username || "USER_MISSING",
       ifs_page: IFS || "IFS_PAGE_MISSING",
       label_count: labels.length,
-      label_images: images
-    })
+      label_images: images,
+    });
     let i = 0;
-    while (i  < labels.length) {
+    while (i < labels.length) {
       await invoke(IPC.PRINT_LABEL, {
         args: { printer, labels: cleanXMLString(labels[index]) },
         // eslint-disable-next-line no-loop-func
@@ -50,18 +50,18 @@ const Print = ({ open, setOpen }: Props) => {
         // eslint-disable-next-line no-loop-func
         error: (data: any) => {
           i = labels.length;
-          console.warn(data)
+          console.warn(data);
         },
       });
       await new Promise((resolve) => setTimeout(resolve, 1000));
       i++;
-      setProgress((100 / labels.length) * i)
-      setIndex(i)
+      setProgress((100 / labels.length) * i);
+      setIndex(i);
     }
-    setIndex(0)
+    setIndex(0);
     await new Promise((resolve) => setTimeout(resolve, 1000));
-    setState(ProgramState.Ready)
-    setProgress(0)
+    setState(ProgramState.Ready);
+    setProgress(0);
   };
 
   useEffect(() => {
@@ -87,14 +87,17 @@ const Print = ({ open, setOpen }: Props) => {
       </Helmet>
       <TopBar {...{ setOpen }} />
       {status.isFile ? (
-        <>
-          <Box sx={{ height: "9.3rem", mt: 2, display: "flex" }}>{isLoading ? <CircularProgress sx={{ mx: "auto", my: "auto" }} /> : <LabelCarousel {...{ images, index }} />}</Box>
-          <Box sx={{ height: "2.9rem", display: "flex" }}>
-            <Controls {...{ handlePrint, progress }} />
+        <Box sx={{ height: "9.3rem", mt: 2, display: "flex" }}>{isLoading ? <CircularProgress sx={{ mx: "auto", my: "auto" }} /> : <LabelCarousel {...{ images, index }} />}</Box>
+      ) : (
+        <Box sx={{ height: "9.3rem", display: "flex", mt: 2,}}>
+        <Typography sx={{ fontSize: 15, fontWeight: 500, mx: "auto", my: "auto", opacity: 0.5 }}>No File Found</Typography>
+
           </Box>
-        </>
-      ) : <Typography sx={{ fontSize: 15, fontWeight: 500, mx: "auto", my: "auto", opacity: 0.5 }}>No File Found</Typography>}
-    <UsernameModal open={!status.isUsername} />
+      )}
+      <Box sx={{ height: "2.9rem", display: "flex" }}>
+        <Controls {...{ handlePrint, progress }} />
+      </Box>
+      <UsernameModal open={!status.isUsername} />
     </Box>
   );
 };

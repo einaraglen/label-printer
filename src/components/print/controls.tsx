@@ -17,19 +17,19 @@ interface Props {
 const Controls = ({ handlePrint, progress }: Props) => {
   const [adjOpen, setAdjOpen] = useState(false);
   const [updateOpen, setUpdateOpen] = useState(false);
-  const { state, update } = ReduxAccessor();
+  const { state, update, status } = ReduxAccessor();
 
   return (
     <Box sx={{ display: "flex", justifyContent: "space-between", flexGrow: 1, px: 2 }}>
       <Box sx={{ display: "flex", width: "25%" }}>
         <Tooltip title="Adjustments">
-          <IconButton onClick={() => setAdjOpen(true)} size="large" sx={{ my: "auto" }} disabled={state === ProgramState.Printing}>
+          <IconButton onClick={() => setAdjOpen(true)} size="large" sx={{ my: "auto" }} disabled={state === ProgramState.Printing || !status.isFile}>
             <BuildIcon fontSize="small" />
           </IconButton>
         </Tooltip>
       </Box>
       <Box sx={{ display: "flex", width: "50%" }}>
-        <Button variant="contained" onClick={handlePrint} sx={{ my: "auto", flexGrow: 1, color: "black" }} endIcon={<PrintIcon />} disabled={state === ProgramState.Printing}>
+        <Button variant="contained" onClick={handlePrint} sx={{ my: "auto", flexGrow: 1, color: "black" }} endIcon={<PrintIcon />} disabled={state === ProgramState.Printing || !status.isFile}>
           {state === ProgramState.Printing ? (
             <Box sx={{ width: "100%" }}>
               <LinearProgress variant="determinate" color="success" value={progress} />

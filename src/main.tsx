@@ -43,6 +43,7 @@ const App = () => {
     ipcRenderer.on("open-with", (event: any, file: any) => {
       setIsConfigSet(false);
       setFilePath(file);
+      setStatus({ key: "isFile", value: true });
       log(LogType.Info, "New File", `LabelPrinter was re-opened with: ${file}`);
       setIsConfigSet(true);
     });
@@ -56,6 +57,7 @@ const App = () => {
           setStatus({ key: "isFile", value: true });
           setFilePath(data.filepath);
         },
+        error: () => setStatus({ key: "isConfig", value: true })
       });
       await invoke(IPC.DYMO_STATUS, {
         next: (data: any) => setStatus({ key: "isDYMO", value: JSON.parse(data) }),
