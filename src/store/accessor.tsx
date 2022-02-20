@@ -19,6 +19,7 @@ import {
   _updateConfig,
   _removeConfig,
   _setUpdate,
+  _setUsername,
 } from "./actioncreators";
 
 const ReduxAccessor = () => {
@@ -40,6 +41,7 @@ const ReduxAccessor = () => {
   const updateAdjustment = useCallback((adjustment: { name: string, value: any }) => dispatch(_updateAdjustment(adjustment)), [dispatch]);
   const setPrinter = useCallback((_printer: string) => dispatch(_setPrinter(_printer)), [dispatch]);
   const setUpdate = useCallback((_update: Update) => dispatch(_setUpdate(_update)), [dispatch]);
+  const setUsername = useCallback((_username: string) => dispatch(_setUsername(_username)), [dispatch]);
 
   const state: ProgramState = useSelector((state: ReduxState) => state.state, shallowEqual);
   const status: ProgramStatus = useSelector((state: ReduxState) => state.status, shallowEqual);
@@ -52,6 +54,7 @@ const ReduxAccessor = () => {
   const adjustments: Adjustment[] = useSelector((state: ReduxState) => state.adjustments, shallowEqual);
   const printer: string | null = useSelector((state: ReduxState) => state.printer, shallowEqual);
   const update: Update | null = useSelector((state: ReduxState) => state.update, shallowEqual);
+  const username: string | null = useSelector((state: ReduxState) => state.username, shallowEqual);
 
   const log = (type: LogType, name: string, message: string) => {
     let now = new Date();
@@ -81,6 +84,7 @@ const ReduxAccessor = () => {
     setPrinter,
     removeConfig,
     setUpdate,
+    setUsername,
     state,
     status,
     filepath,
@@ -92,6 +96,7 @@ const ReduxAccessor = () => {
     adjustments,
     printer,
     update,
+    username,
   };
 };
 

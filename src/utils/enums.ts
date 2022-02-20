@@ -15,7 +15,9 @@ export enum IPC {
     SET_PRINTER = "SET_PRINTER",
     CHECK_UPDATE = "CHECK_UPDATE",
     QUIT = "QUIT",
-    GET_FILE = "GET_FILE"
+    GET_FILE = "GET_FILE",
+    SET_USERNAME = "SET_USERNAME",
+    GET_USERNAME = "GET_USERNAME"
 }
 
 export enum ProgramState {

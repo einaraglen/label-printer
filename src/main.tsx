@@ -17,14 +17,12 @@ import { parseIFSPage } from "./utils/tools";
 import LinearWithValueLabel from "./components/progress";
 import Overlay from "./components/overlay";
 import Updater from "./components/updater";
-import { GoogleLogin } from "react-google-login";
-import { GoogleLogout } from "react-google-login";
 
 const { ipcRenderer } = window.require("electron");
 
 const App = () => {
   const { theme } = MuiTheme();
-  const { setState, state, setStatus, filepath, setFilePath, setConfigs, setConfig, setTemplates, setTemplate, log } = ReduxAccessor();
+  const { setState, state, setStatus, filepath, setFilePath, setConfigs, setConfig, setTemplates, setTemplate, setUsername, log } = ReduxAccessor();
   const { invoke } = InvokeHandler();
   const { checkForExistingConfig } = ConfigHandler();
   const [isLoading, setIsLoading] = useState(true);
@@ -67,6 +65,12 @@ const App = () => {
           setTemplates(JSON.parse(data.templates));
         },
       });
+      await invoke(IPC.GET_USERNAME, {
+        next: (data: any) => {
+          setStatus({ key: "isUsername", value: data.username !== "" });
+          setUsername(data.username);
+        },
+      });
       setProgress(65);
       await invoke(IPC.GET_TEMPLATE, {
         next: (data: any) => {
@@ -105,32 +109,11 @@ const App = () => {
     config();
   }, [isConfigSet]);
 
-  const responseGoogle = (response: any) => {
-    console.log(response);
-  };
-
-  const logout = () => {
-      console.log("LOGOUT")
-  }
-
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Updater />
       <Router>
-        {false ? (
-          <>
-            <GoogleLogin
-              clientId="1057470976527-68p2joi35bdcj98oleeuru14fc308n4o.apps.googleusercontent.com"
-              buttonText="Login"
-              isSignedIn={true}
-              onSuccess={responseGoogle}
-              onFailure={responseGoogle}
-              cookiePolicy={"single_host_origin"}
-            />
-          </>
-        ) : (
-          <>
             {isLoading ? (
               <Box sx={{ position: "absolute", top: 0, bottom: 0, left: 0, right: 0, display: "flex", bgcolor: "hsl(215, 28%, 14%)", zIndex: 40 }}>
                 <LinearWithValueLabel progress={progress} />
@@ -149,8 +132,6 @@ const App = () => {
                 <Footer />
               </Box>
             ) : null}
-          </>
-        )}
       </Router>
     </ThemeProvider>
   );

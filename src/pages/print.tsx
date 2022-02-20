@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import React, { useEffect, useState } from "react";
 import ReduxAccessor from "../store/accessor";
@@ -11,6 +11,7 @@ import LabelHandler from "../utils/handlers/labelhandler";
 import InvokeHandler from "../utils/invoke";
 import { IPC, ProgramState } from "../utils/enums";
 import FirebaseHandler from "../utils/handlers/firebaseHandler";
+import UsernameModal from "../components/username";
 
 interface Props {
   open: boolean;
@@ -20,7 +21,7 @@ interface Props {
 const Print = ({ open, setOpen }: Props) => {
   const [IFS, setIFS] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const { filepath, adjustments, config, status, printer, setState } = ReduxAccessor();
+  const { filepath, adjustments, config, status, printer, setState, username } = ReduxAccessor();
   const [labels, setLabels] = useState<string[] | undefined>([]);
   const [images, setImages] = useState<string[]>([]);
   const { getAdjustments, buildLabels, buildPreview } = LabelHandler();
@@ -32,7 +33,12 @@ const Print = ({ open, setOpen }: Props) => {
   const handlePrint = async () => {
     if (!labels) return;
     setState(ProgramState.Printing);
-    addArchive("einar.aglen99@gmail.com", IFS || "Missing IFS Page", images.length, images)
+    addArchive({
+      username: username || "USER_MISSING",
+      ifs_page: IFS || "IFS_PAGE_MISSING",
+      label_count: labels.length,
+      label_images: images
+    })
     let i = 0;
     while (i  < labels.length) {
       await invoke(IPC.PRINT_LABEL, {
@@ -87,7 +93,8 @@ const Print = ({ open, setOpen }: Props) => {
             <Controls {...{ handlePrint, progress }} />
           </Box>
         </>
-      ) : null}
+      ) : <Typography sx={{ fontSize: 15, fontWeight: 500, mx: "auto", my: "auto", opacity: 0.5 }}>No File Found</Typography>}
+    <UsernameModal open={!status.isUsername} />
     </Box>
   );
 };

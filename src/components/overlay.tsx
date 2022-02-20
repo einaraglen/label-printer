@@ -76,8 +76,8 @@ const Overlay = ({ open, setOpen }: Props) => {
   };
 
   const getMessages = (messages: any[]) => {
-    return messages.map((m: any) => (
-      <Box sx={{ display: "flex", justifyContent: "space-between", my: 1 }}>
+    return messages.map((m: any, idx: number) => (
+      <Box key={idx} sx={{ display: "flex", justifyContent: "space-between", my: 1 }}>
         <Typography>{m.message}</Typography>
         <Typography>{getTime(m.created)}</Typography>
       </Box>

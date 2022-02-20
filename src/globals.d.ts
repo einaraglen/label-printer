@@ -10,7 +10,8 @@ declare interface ProgramStatus {
     isTemplate: boolean;
     isConfig: boolean;
     isDYMO: boolean;
-    isPrinter: boolean
+    isPrinter: boolean;
+    isUsername: boolean;
 }
 
 declare interface Template {
@@ -50,6 +51,7 @@ declare interface ReduxState {
     templates: Template[];
     update: Update | null;
     printer: string | null;
+    username: string | null;
     config: string | null;
     configs: Config[];
     logs: ProgramLog[];
