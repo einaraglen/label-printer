@@ -54,7 +54,7 @@ const Overlay = ({ open, setOpen }: Props) => {
   };
 
   useEffect(() => {
-    setOpen(!status.isDYMO || !status.isPrinter);
+    setOpen(!status.isDYMO);
   }, [status]);
 
   const getLogBundles = (_logs: ProgramLog[]) => {

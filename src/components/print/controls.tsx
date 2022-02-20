@@ -17,7 +17,17 @@ interface Props {
 const Controls = ({ handlePrint, progress }: Props) => {
   const [adjOpen, setAdjOpen] = useState(false);
   const [updateOpen, setUpdateOpen] = useState(false);
-  const { state, update, status } = ReduxAccessor();
+  const { state, update, status, printer } = ReduxAccessor();
+
+  const isDisabled = () => {
+    return state === ProgramState.Printing || !status.isFile || !printer;
+  }
+
+  const getButtonTip = () => {
+    if (!status.isFile) return "Open program with file to print"
+    if (!printer) return "Select printer to print labels"
+    return ""
+  }
 
   return (
     <Box sx={{ display: "flex", justifyContent: "space-between", flexGrow: 1, px: 2 }}>
@@ -29,7 +39,9 @@ const Controls = ({ handlePrint, progress }: Props) => {
         </Tooltip>
       </Box>
       <Box sx={{ display: "flex", width: "50%" }}>
-        <Button variant="contained" onClick={handlePrint} sx={{ my: "auto", flexGrow: 1, color: "black" }} endIcon={<PrintIcon />} disabled={state === ProgramState.Printing || !status.isFile}>
+      <Tooltip  title={getButtonTip()}>
+        <span style={{ width: "100%", marginTop: "auto", marginBottom: "auto"}}>
+        <Button variant="contained" onClick={handlePrint} sx={{ my: "auto", flexGrow: 1, color: "black", width: "100%" }} endIcon={<PrintIcon />} disabled={isDisabled()}>
           {state === ProgramState.Printing ? (
             <Box sx={{ width: "100%" }}>
               <LinearProgress variant="determinate" color="success" value={progress} />
@@ -38,6 +50,9 @@ const Controls = ({ handlePrint, progress }: Props) => {
             "Print"
           )}
         </Button>
+        </span>
+      
+      </Tooltip>
       </Box>
       <Box sx={{ display: "flex", width: "25%", justifyContent: "end" }}>
         <Tooltip title={update ? "Update ready!" : "Up to Date"}>
