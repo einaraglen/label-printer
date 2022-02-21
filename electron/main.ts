@@ -28,7 +28,7 @@ if (!gotTheLock) {
     }
     if (window) {
       if (window.isMinimized()) window.restore();
-      //window.focus();
+      window.focus();
     }
   });
 }
@@ -88,6 +88,9 @@ ipcMain.handle(IPC.SET_CONFIGS, async (event: any, arg: any) => handleIPC(IPC.SE
 ipcMain.handle(IPC.GET_PRINTERS, async (event: any, arg: any) => handleIPC(IPC.GET_PRINTERS, event, arg));
 ipcMain.handle(IPC.GET_PRINTER, async (event: any, arg: any) => handleIPC(IPC.GET_PRINTER, event, arg));
 ipcMain.handle(IPC.SET_PRINTER, async (event: any, arg: any) => handleIPC(IPC.SET_PRINTER, event, arg));
+
+ipcMain.handle(IPC.GET_USERNAME, async (event: any, arg: any) => handleIPC(IPC.GET_USERNAME, event, arg));
+ipcMain.handle(IPC.SET_USERNAME, async (event: any, arg: any) => handleIPC(IPC.SET_USERNAME, event, arg));
 
 ipcMain.handle(IPC.CHECK_UPDATE, async (event: any, arg: any) => handleIPC(IPC.CHECK_UPDATE, event, arg));
 

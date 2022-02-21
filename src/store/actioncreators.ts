@@ -140,6 +140,16 @@ export const _setTemplate = (payload: any) => {
   };
 };
 
+export const _setUsername = (payload: any) => {
+  const action: SetUsernameAction = {
+    type: actionTypes.SET_USERNAME,
+    payload,
+  };
+  return (dispatch: DispatchType) => {
+    dispatch(action);
+  };
+};
+
 export const _updateAdjustment = (payload: any) => {
   const action: UpdateAdjustmentAction = {
     type: actionTypes.UPDATE_ADJUSTMENT,

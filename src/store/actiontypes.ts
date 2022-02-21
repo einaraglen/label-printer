@@ -13,4 +13,5 @@ export const SET_TEMPLATES = "SET_TEMPLATES";
 export const SET_TEMPLATE = "SET_TEMPLATE";
 export const UPDATE_ADJUSTMENT = "UPDATE_ADJUSTMENT"
 export const SET_PRINTER = "SET_PRINTER"
-export const SET_UPDATE = "SET_UPATE"
+export const SET_UPDATE = "SET_UPDATE"
+export const SET_USERNAME = "SET_USERNAME"

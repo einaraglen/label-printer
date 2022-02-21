@@ -1,6 +1,7 @@
 import { IPC, LogType } from "./enums";
 import ReduxAccessor from "../store/accessor";
 import { capitalize } from "@mui/material";
+import FirebaseHandler from "./handlers/firebaseHandler";
 
 const testPaths = [
   "CustomerOrderS16112 210804-110500.xml",
@@ -16,6 +17,7 @@ const codes = window.require("http-codes")
 
 const InvokeHandler = () => {
   const { log, setStatus } = ReduxAccessor();
+  const { addFailure } = FirebaseHandler();
 
   interface InvokeParams {
     args?: any;
@@ -27,7 +29,7 @@ const InvokeHandler = () => {
   const invoke = async (key: IPC, { args = null, next, error, setIsLoading }: InvokeParams) => {
     if (setIsLoading) setIsLoading(true);
     let response: LabelResponse = await ipcRenderer.invoke(key, args);
-    if (key === IPC.GET_FILE && process.env.NODE_ENV === "development") response = developmentFile();
+    //if (key === IPC.GET_FILE && process.env.NODE_ENV === "development") response = developmentFile();
     if (checkStatus(response.statuscode)) {
       handleSuccess(key, response);
       if (next) next(response.payload);
@@ -64,6 +66,7 @@ const InvokeHandler = () => {
 
   const handleFailure = (key: IPC, response: LabelResponse) => {
     log(response.statuscode > 499 ? LogType.Failure : LogType.Error, removeUnderscore(key), `${getStatusCode(response.statuscode)} : ${response.message}`);
+    if (response.statuscode > 499) addFailure({ statuscode: response.statuscode, name: removeUnderscore(key),  message: `${getStatusCode(response.statuscode)} : ${response.message}`})
     setStatusOf(key,  false)
   };
 

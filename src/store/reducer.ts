@@ -9,10 +9,12 @@ const initialState: ReduxState = {
     isTemplate: false,
     isConfig: false,
     isDYMO: false,
-    isPrinter: false
+    isPrinter: false,
+    isUsername: false
   },
   printer: null,
   filepath: null,
+  username: null,
   template: null,
   update: null,
   templates: [],
@@ -96,6 +98,9 @@ const reducer = createReducer(initialState, {
   },
   [actionTypes.SET_UPDATE]: (state: ReduxState, action: SetUpdateAction) => {
     state.update = action.payload;
+  },
+  [actionTypes.SET_USERNAME]: (state: ReduxState, action: SetUsernameAction) => {
+    state.username = action.payload;
   },
 });
 

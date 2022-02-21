@@ -35,6 +35,14 @@ const LabelHandler = () => {
     }
   };
 
+  const handleValue = (value: any, configkey: ConfigKey, singles: boolean, additional: string, maxlength: boolean) => {
+    if (configkey.name === "Quantity" && singles) value = 1;
+    if (configkey.name === "Info" && additional) value = `${additional} - ${value}`;
+    if (configkey.unit) value += ` ${configkey.unit}`;
+    if (value.toString().length > 20 && maxlength) value = `${value.substring(0, 20)}..`;
+    return value;
+  }
+
   const buildLabels = async (ifs_lines: any, count: number, singles: boolean, additional: string, maxlength: boolean) => {
     let template_xml: XMLDocument | null = await ((await readFile(template || "")) as Promise<XMLDocument>);
     if (!template_xml || !config) return;
@@ -49,13 +57,7 @@ const LabelHandler = () => {
         for (let j = 0; j < _config.keys.length; j++) {
           let configkey: ConfigKey = _config.keys[j];
           let value = configkey.multiple ? handleMultiple(line, configkey.value) : line[configkey.value];
-          if (value) {
-            if (configkey.name === "Quantity" && singles) value = 1;
-            if (configkey.name === "Info" && additional) value = `${additional} - ${value}`;
-            if (configkey.unit) value += ` ${configkey.unit}`;
-            if (value.toString().length > 20 && maxlength) value = `${value.substring(0, 20)}..`;
-            label_xml = label_xml.replace(regex(configkey.key), value);
-          }
+          if (value) label_xml = label_xml.replace(regex(configkey.key), handleValue(value, configkey, singles, additional, maxlength));
         }
         _labels.push(label_xml);
         label_xml = template_xml.toString();

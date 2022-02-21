@@ -19,6 +19,7 @@ enum StoreKey {
   Template = "label.template",
   Templates = "label.templates",
   Configs = "label.configs",
+  Username = "label.username"
 }
 
 interface Assets {
@@ -66,6 +67,10 @@ export const handleIPC = (accessor: string, event: any, args: any) => {
       return handleCheckUpdate(event, args);
     case IPC.QUIT:
       return handleQuit(event, args);
+      case IPC.SET_USERNAME:
+      return handleSetUsername(event, args);
+      case IPC.GET_USERNAME:
+      return handleGetUsername(event, args);
   }
 };
 
@@ -222,6 +227,17 @@ const handleSetPrinter = async (event: any, args: any): Promise<LabelResponse> =
   store.set(StoreKey.Printer, args);
   return handleResponse({ payload: { printer: args } });
 };
+
+const handleGetUsername = async (event: any, args: any): Promise<LabelResponse> => {
+  let _username = store.get(StoreKey.Username);
+  if (!_username) return handleResponse({ status: codes.NOT_FOUND, message: formatFailure("fetching username", "Could not find username") });
+  return handleResponse({ payload: { username: _username } });
+};
+
+const handleSetUsername = async (event: any, args: any): Promise<LabelResponse> => {
+  store.set(StoreKey.Username, args);
+  return handleResponse({ payload: { username: args } });
+}
 
 const handleQuit = async (event: any, args: any): Promise<LabelResponse> => {
   args.app.quit();

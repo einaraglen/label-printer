@@ -33,9 +33,12 @@ const TopBar = ({ setOpen }: Props) => {
     const printers = async () => {
       await invoke(IPC.GET_PRINTERS, {
         next: (data: { printers: DYMOPrinter[] }) => {
-          setPrinters(data.printers);
-          if (!printer && data.printers.length > 0) setPrinter(data.printers[0].LabelWriterPrinter.Name);
-          setStatus({ key: "isPrinter", value: true });
+          let _printers = data.printers
+          setPrinters(_printers);
+          if (!printer && _printers.length > 0) {
+            setPrinter(_printers[0].LabelWriterPrinter.Name);
+            setStatus({ key: "isPrinter", value: true });
+          }
         },
       });
     };
@@ -56,7 +59,7 @@ const TopBar = ({ setOpen }: Props) => {
               <Select value={printers.length === 0 ? "" : printer ?? ""} size="small" onChange={(e: any) => setPrinter(e.target.value)} disabled={state === ProgramState.Printing}>
                 {printers.length === 0 ? <MenuItem value="">No Printers found</MenuItem> : null}
                 {printers.map((printer: DYMOPrinter, idx: number) => (
-                  <MenuItem key={idx} value={printer.LabelWriterPrinter.Name}>
+                  <MenuItem key={idx} value={printer.LabelWriterPrinter.Name} sx={{ display: "flex"}}>
                     {printer.LabelWriterPrinter.Name}
                   </MenuItem>
                 ))}
