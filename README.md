@@ -72,7 +72,7 @@ This guide will show how the program should be setup on a end-user's computer
 - DYMO Connect / DYMO Connect Web Services
 
 ## Download Setup files
-Go to the following link and donwload the  [latest](https://github.com/einaraglen/label-printer/releases/tag/0.3.6) release of LabelPrinter+
+Go to the following link and donwload the  [latest](https://github.com/einaraglen/label-printer/releases/latest) release of LabelPrinter+
 
 ## Installation
 After downloading the setup files, you can run the setup.exe file that can be found in the .zip folder retrived from the download.
