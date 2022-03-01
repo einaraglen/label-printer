@@ -65,7 +65,7 @@ const Controls = ({ handlePrint, progress }: Props) => {
         <UpdateModal open={updateOpen} setOpen={setUpdateOpen} />
       </Box>
       <Drawer anchor="left" open={adjOpen} onClose={() => setAdjOpen(false)} sx={{ bgcolor: "hsl(215, 28%, 14%)" }}>
-        <Adjustments />
+        <Adjustments setAdjOpen={setAdjOpen} />
       </Drawer>
     </Box>
   );

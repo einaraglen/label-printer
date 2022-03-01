@@ -24,7 +24,7 @@ const Print = ({ open, setOpen }: Props) => {
   const { filepath, adjustments, config, status, printer, setState, username } = ReduxAccessor();
   const [labels, setLabels] = useState<string[] | undefined>([]);
   const [images, setImages] = useState<string[]>([]);
-  const { getAdjustments, buildLabels, buildPreview } = LabelHandler();
+  const { getAdjustments, buildLabels, buildPreview, buildData } = LabelHandler();
   const [index, setIndex] = useState<number>(0);
   const [progress, setProgress] = useState(0);
   const { invoke } = InvokeHandler();
@@ -77,12 +77,18 @@ const Print = ({ open, setOpen }: Props) => {
     const parse = async () => {
       setIsLoading(true);
       if (!filepath) return;
-      let { count, singles, groups, additional, maxlength } = getAdjustments(adjustments);
-      let ifs_lines = await parseFile(filepath as string);
-      let _labels = await buildLabels(ifs_lines, count, singles, additional, maxlength);
-      let _images = await buildPreview(_labels);
-      setLabels(_labels);
-      setImages(_images);
+      let _labels, _images;
+      try {
+        let { count, singles, additional, maxlength, bundle, merge } = getAdjustments(adjustments);
+        let ifs_lines = await parseFile(filepath as string);
+        let _data: any = await buildData(ifs_lines, count, singles, additional, maxlength, bundle, merge);
+        _labels = await buildLabels(_data, singles, additional, maxlength);
+        _images = await buildPreview(_labels);
+      } catch (err: any) {
+        console.warn(err)
+      }
+      setLabels(_labels || []);
+      setImages(_images || []);
       setIsLoading(false);
     };
     parse();

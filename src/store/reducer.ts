@@ -32,9 +32,14 @@ const initialState: ReduxState = {
       value: false
     },
     {
-      type: "Quantity",
-      name: "Groups",
+      type: "Group",
+      name: "Bundle",
       value: false
+    },
+    {
+      type: "Group",
+      name: "Merge Qty",
+      value: true
     },
     {
       type: "Text",

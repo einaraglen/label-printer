@@ -2,7 +2,7 @@ import { Box, IconButton, Tooltip, TextField, Switch, Typography } from "@mui/ma
 import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
 import AbcIcon from "@mui/icons-material/Abc";
 import AccessorList from "./accessorlist";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TopBar from "./topbar";
 import UnitModal from "./unitmodal";
 
@@ -17,6 +17,10 @@ interface Props {
 const KeyEditor = ({ configkey, selected, navigate, handleUpdateAccessor, setConfigkey }: Props) => {
   const [searchkey, setSearchkey] = useState("");
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    setSearchkey("")
+  }, [navigate])
 
   const handleChange = (e: any) => {
     setSearchkey(e.target.value);

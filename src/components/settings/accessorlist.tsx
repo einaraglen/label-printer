@@ -42,8 +42,9 @@ const AccessorList = ({ searchkey, configkey, selected, handleUpdateAccessor, se
   };
 
   const handledAccessors = () => {
-    if (searchkey === "") return accessors.sort((a, b) => a.localeCompare(b));
-    return accessors.filter((accessor: string) => accessor.toLowerCase().includes(searchkey));
+    let options = ["Empty", ...accessors]
+    if (searchkey === "") return options.sort((a, b) => a.localeCompare(b));
+    return options.filter((accessor: string) => accessor.toLowerCase().includes(searchkey));
   };
 
   const isChecked = (value: string) => {
@@ -79,7 +80,7 @@ const AccessorList = ({ searchkey, configkey, selected, handleUpdateAccessor, se
             button
           >
             {configkey?.multiple ? <Checkbox checked={isChecked(value)} onClick={() => changeValue(value)} /> : <Radio value={value} />}
-            <ListItemText primary={value} />
+            <ListItemText primary={value} secondary={value === "Empty" && "Special Accessor"} />
           </ListItem>
         ))}
       </List>
