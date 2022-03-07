@@ -70,6 +70,12 @@ const ConfigHandler = () => {
         multiple: false,
         value: "",
       },
+      {
+        name:"Extra",
+        key: "_Extra",
+        multiple: false,
+        value: "",
+      },
     ]
   });
 

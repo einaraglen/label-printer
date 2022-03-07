@@ -61,11 +61,13 @@ const ConfigEditor = ({ selected, navigate, setConfigkey, setSelected }: Props) 
               </Typography>
             </Box>
             <Box sx={{ width: "25%", display: "flex", justifyContent: "end" }}>
-              <Tooltip title="Delete">
                 <IconButton onClick={handleDeleteClick} disabled={!isDeletable()} size="large">
+              <Tooltip title="Delete">
+
                   <DeleteRoundedIcon fontSize="medium" />
-                </IconButton>
               </Tooltip>
+
+                </IconButton>
               <Tooltip title="Reset">
                 <IconButton onClick={handleReset} size="large">
                   <CachedIcon fontSize="medium" />
