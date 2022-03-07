@@ -44,7 +44,7 @@ const AccessorList = ({ searchkey, configkey, selected, handleUpdateAccessor, se
   const handledAccessors = () => {
     let options = ["Empty", ...accessors]
     if (searchkey === "") return options.sort((a, b) => a.localeCompare(b));
-    return options.filter((accessor: string) => accessor.toLowerCase().includes(searchkey));
+    return options.filter((accessor: string) => accessor.toLowerCase().includes(searchkey.toLowerCase().trim()));
   };
 
   const isChecked = (value: string) => {

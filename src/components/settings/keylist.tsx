@@ -1,4 +1,4 @@
-import { List, ListItem, ListItemText, IconButton } from "@mui/material";
+import { List, ListItem, ListItemText } from "@mui/material";
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
 import ReduxAccessor from "../../store/accessor";
 
@@ -10,13 +10,15 @@ interface Props {
 
 const KeyList = ({ selected, setConfigkey, navigate }: Props) => {
   const { config } = ReduxAccessor();
+  const regex = (key: string) => new RegExp(key, "g");
+
   const handleListClick = (key: ConfigKey) => {
     setConfigkey(key);
     navigate(2);
   };
 
   const getSecondaryText = (key: ConfigKey) => {
-    if (key.multiple) return key.value.toString();
+    if (key.multiple) return key.value.toString().replace(regex(","), ", ");
     return key.value;
   }
 

@@ -19,6 +19,7 @@ const KeyEditor = ({ configkey, selected, navigate, handleUpdateAccessor, setCon
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
+    //TODO: WHY THE FUCK DOES THIS GET TRIGGERED WHEN CLICK ON ITEM??
     setSearchkey("")
   }, [navigate])
 

@@ -65,7 +65,7 @@ const LabelHandler = () => {
     return _labels;
   };
 
-  const buildData = async (ifs_lines: any, count: number, singles: boolean, additional: string, maxlength: boolean, bundle: boolean, merge: boolean) => {
+  const buildData = async (ifs_lines: any, count: number, singles: boolean, bundle: boolean, merge: boolean) => {
     if (!config) return;
     let _config = getConfig(config);
     if (!_config) return;
@@ -126,25 +126,25 @@ const LabelHandler = () => {
   };
 
   const handleQuantities = (qty1: any, qty2: any, merge: boolean) => {
-    if (!merge) return (qty1 += " " + qty2.toString());
+    if (!merge) return (qty1 += ", " + qty2.toString());
 
     if (typeof qty1 === "string" || typeof qty2 === "string") {
       let temp = qty1.toString().split(" ");
       temp.pop();
-      let result = temp.toString().replace(regex(","), " ");
-      return `${result} ${qty2}`;
+      let result = temp.toString().replace(regex(","), ", ");
+      return `${result}, ${qty2}`;
     }
 
     if (Number.isInteger(qty1) && Number.isInteger(qty2)) {
       return qty1 + qty2;
     }
 
-    return `${qty1} ${qty2}`;
+    return `${qty1}, ${qty2}`;
   };
 
   const sliceInfo = (info: any, from: number, to: number) => {
     let _info = info.toString().split(" ");
-    if (_info.length < 2) return info;
+    if (_info.length < 2) return ""//info;
     let temp = _info.slice(from, to);
     return temp.toString().replace(regex(","), " ");
   };

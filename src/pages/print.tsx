@@ -28,7 +28,7 @@ const Print = ({ open, setOpen }: Props) => {
   const [index, setIndex] = useState<number>(0);
   const [progress, setProgress] = useState(0);
   const { invoke } = InvokeHandler();
-  const { addArchive } = FirebaseHandler();
+  const { addArchive, addFailure } = FirebaseHandler();
 
   const resetPrintState = () => {
     setIndex(0);
@@ -38,36 +38,38 @@ const Print = ({ open, setOpen }: Props) => {
 
   const handlePrint = async () => {
     if (!labels) return;
-    setState(ProgramState.Printing);
-    let flag = false;
-    let i = 0;
-    while (i < labels.length) {
-      await invoke(IPC.PRINT_LABEL, {
-        args: { printer, labels: cleanXMLString(labels[index]) },
-        // eslint-disable-next-line no-loop-func
-        next: (data: any) => {
-          console.log(data);
-          if (!data) i = labels.length;
-        },
-        // eslint-disable-next-line no-loop-func
-        error: (data: any) => {
-          flag = true;
-          i = labels.length;
-          console.warn(data);
-        },
-      });
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      i++;
-      setProgress((100 / labels.length) * i);
-      setIndex(i);
+    try {
+      setState(ProgramState.Printing);
+      let flag = false;
+      let i = 0;
+      while (i < labels.length) {
+        await invoke(IPC.PRINT_LABEL, {
+          args: { printer, labels: cleanXMLString(labels[i]) },
+          // eslint-disable-next-line no-loop-func
+          next: (data: any) => {
+            if (!data) i = labels.length;
+          },
+          // eslint-disable-next-line no-loop-func
+          error: (data: any) => {
+            flag = true;
+            i = labels.length;
+          },
+        });
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        i++;
+        setProgress((100 / labels.length) * i);
+        setIndex(i);
+      }
+      if (!flag)
+        addArchive({
+          username: username || "USER_MISSING",
+          ifs_page: IFS || "IFS_PAGE_MISSING",
+          label_count: labels.length,
+          label_images: images,
+        });
+    } catch (err: any) {
+      addFailure({ statuscode: 500, name: "Print Loop",  message: err.toString() })
     }
-    if (!flag)
-      addArchive({
-        username: username || "USER_MISSING",
-        ifs_page: IFS || "IFS_PAGE_MISSING",
-        label_count: labels.length,
-        label_images: images,
-      });
     await new Promise((resolve) => setTimeout(resolve, 1000));
     resetPrintState();
   };
@@ -81,11 +83,12 @@ const Print = ({ open, setOpen }: Props) => {
       try {
         let { count, singles, additional, maxlength, bundle, merge } = getAdjustments(adjustments);
         let ifs_lines = await parseFile(filepath as string);
-        let _data: any = await buildData(ifs_lines, count, singles, additional, maxlength, bundle, merge);
+        let _data: any = await buildData(ifs_lines, count, singles, bundle, merge);
         _labels = await buildLabels(_data, singles, additional, maxlength);
         _images = await buildPreview(_labels);
       } catch (err: any) {
-        console.warn(err)
+        //console.warn(err);
+        addFailure({ statuscode: 500, name: "Build Labels",  message: err.toString() })
       }
       setLabels(_labels || []);
       setImages(_images || []);
