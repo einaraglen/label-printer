@@ -10,7 +10,7 @@ import { Tooltip, Select, MenuItem, FormControl, Badge, Typography, Box } from "
 import ReduxAccessor from "../../store/accessor";
 import { useState, useEffect } from "react";
 import InvokeHandler from "../../utils/invoke";
-import { IPC, LogType, ProgramState } from "../../utils/enums";
+import { IPC, ProgramState } from "../../utils/enums";
 import BarChartRoundedIcon from "@mui/icons-material/BarChartRounded";
 
 interface Props {
@@ -22,12 +22,6 @@ const TopBar = ({ setOpen }: Props) => {
   const { status, setStatus, state, logs, printer, setPrinter } = ReduxAccessor();
   const navigate = useNavigate();
   const { invoke } = InvokeHandler();
-
-  const checkForBadDiagnostics = () => {
-    let match = logs.find((log: ProgramLog) => log.type === LogType.Error || log.type === LogType.Failure);
-    if (!match) return true;
-    return false;
-  };
 
   useEffect(() => {
     const printers = async () => {
@@ -75,9 +69,7 @@ const TopBar = ({ setOpen }: Props) => {
           </Tooltip>
           <Tooltip title="Diagnostics">
             <IconButton onClick={() => setOpen(true)} size="large" disabled={state === ProgramState.Printing}>
-              <Badge color="warning" variant="dot" invisible={checkForBadDiagnostics()}>
                 <BarChartRoundedIcon />
-              </Badge>
             </IconButton>
           </Tooltip>
           <Tooltip title="Settings">
