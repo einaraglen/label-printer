@@ -4,6 +4,7 @@
   "author": "Einar A. Aglen",
   "private": true,
   "homepage": ".",
+  "description": "Light-weight printing app",
   "main": "build/electron/main.js",
   "build": {
     "appId": "com.ntnu.einaragl.label-printer",
