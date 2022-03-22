@@ -1,12 +1,13 @@
-import { Box, Accordion, AccordionSummary, Typography, AccordionDetails, Button } from "@mui/material";
+import { Box, Accordion, AccordionSummary, Typography, AccordionDetails, Button, Tooltip, getNativeSelectUtilityClasses } from "@mui/material";
 import React, { useEffect } from "react";
 import ReduxAccessor from "../store/accessor";
-import { LogType } from "../utils/enums";
+import { IPC, LogType } from "../utils/enums";
 import WarningIcon from "@mui/icons-material/Warning";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import InfoIcon from "@mui/icons-material/Info";
 import ErrorIcon from "@mui/icons-material/Error";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import InvokeHandler from "../utils/invoke";
 
 //purely for functioning as an anchor
 const AlwaysScrollToBottom = () => {
@@ -25,6 +26,7 @@ interface Props {
 
 const Overlay = ({ open, setOpen }: Props) => {
   const { status, logs } = ReduxAccessor();
+  const { invoke } = InvokeHandler(); 
 
   const getIcon = (type: LogType) => {
     switch (type) {
@@ -84,6 +86,10 @@ const Overlay = ({ open, setOpen }: Props) => {
     ));
   };
 
+  const handleWipeAndQuit = async () => {
+    await invoke(IPC.WIPE_STORAGE, {});
+  }
+
   return (
     <>
       {open ? (
@@ -100,7 +106,6 @@ const Overlay = ({ open, setOpen }: Props) => {
                     <Typography sx={{ ml: 2 }}>{l.name}</Typography>
                     <Box sx={{ display: "flex", width: "7rem", mr: 5, justifyContent: "space-between" }}>
                       <Typography sx={{ height: "20px", width: "20px", textAlign: "center", bgcolor: "hsla(215, 28%, 14%, 0.5)", borderRadius: "10px" }}>{l.count}</Typography>
-
                       <Typography sx={{ ml: 2 }}>{getTime(l.created)}</Typography>
                     </Box>
                   </Box>
@@ -112,8 +117,13 @@ const Overlay = ({ open, setOpen }: Props) => {
               </Accordion>
             ))}
             <AlwaysScrollToBottom />
+            <Tooltip title="This will wipe all Templates and Configs!">
+            <Button sx={{ mt: 2, color: "pink" }} onClick={handleWipeAndQuit}>
+              Wipe and Quit
+            </Button>
+            </Tooltip>
             <Button sx={{ float: "right", mt: 2 }} onClick={handleClose}>
-              Close
+              Go to Print
             </Button>
           </Box>
         </Box>

@@ -94,6 +94,7 @@ ipcMain.handle(IPC.SET_USERNAME, async (event: any, arg: any) => handleIPC(IPC.S
 
 ipcMain.handle(IPC.CHECK_UPDATE, async (event: any, arg: any) => handleIPC(IPC.CHECK_UPDATE, event, arg));
 
+ipcMain.handle(IPC.WIPE_STORAGE, async (event: any, arg: any) => handleIPC(IPC.WIPE_STORAGE, event, { app }));
 ipcMain.handle(IPC.QUIT, async (event: any, arg: any) => handleIPC(IPC.QUIT, event, { app }));
 
 //when ready

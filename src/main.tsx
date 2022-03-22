@@ -30,6 +30,7 @@ const App = () => {
   const [progress, setProgress] = useState<number>(10);
   const [open, setOpen] = useState(false);
 
+
   const checkConfig = (_config: Config) => {
     let flag = false;
     _config.keys.forEach((key: ConfigKey) => {
