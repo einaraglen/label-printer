@@ -19,7 +19,7 @@ enum StoreKey {
   Template = "label.template",
   Templates = "label.templates",
   Configs = "label.configs",
-  Username = "label.username"
+  Username = "label.username",
 }
 
 interface Assets {
@@ -67,10 +67,27 @@ export const handleIPC = (accessor: string, event: any, args: any) => {
       return handleCheckUpdate(event, args);
     case IPC.QUIT:
       return handleQuit(event, args);
-      case IPC.SET_USERNAME:
+    case IPC.SET_USERNAME:
       return handleSetUsername(event, args);
-      case IPC.GET_USERNAME:
+    case IPC.GET_USERNAME:
       return handleGetUsername(event, args);
+      case IPC.WIPE_STORAGE:
+      return handleWipeElectronStore(event, args);
+  }
+};
+
+const handleWipeElectronStore = (event: any, args: any) => {
+  try {
+    Object.keys(StoreKey).forEach((key: string) => {
+      if (isNaN(parseInt(key)) && key !=="Username") {
+        let storage_key = (StoreKey as any)[key];
+        store.delete(storage_key);
+      }
+    });
+    args.app.quit();
+    return handleResponse({});
+  } catch (err: any) {
+    return handleResponse({ status: codes.INTERNAL_SERVER_ERROR, message: formatFailure("exporting Config File", err.message) });
   }
 };
 
@@ -88,7 +105,7 @@ const handleExportConfig = (event: any, args: any): Promise<LabelResponse> => {
       fs.writeFileSync(filePath, args, "utf-8");
       return handleResponse({ payload: { filePath } });
     } catch (err: any) {
-      return handleResponse({ status: codes.INTERNAL_SERVER_ERROR, message: formatFailure("exporting Config File", err) });
+      return handleResponse({ status: codes.INTERNAL_SERVER_ERROR, message: formatFailure("exporting Config File", err.message) });
     }
   });
 };
@@ -194,7 +211,7 @@ const handleGetConfigs = async (event: any, args: any): Promise<LabelResponse> =
 
 const handleSetConfigs = async (event: any, args: any): Promise<LabelResponse> => {
   store.set(StoreKey.Configs, args);
-  return handleResponse({ payload: { confisg: args } });
+  return handleResponse({ payload: { configs: args } });
 };
 
 const handleGetPrinters = async (event: any, args: any): Promise<LabelResponse> => {
@@ -203,15 +220,18 @@ const handleGetPrinters = async (event: any, args: any): Promise<LabelResponse> 
   //new way, we get all printers recognized by DYMO Software
   let result = await dymo.getPrinters();
   if (checkStatus(result.status)) {
-    let data = parser.parse(result.data);
-    if ("Printers" in data) {
-      let printers: any[] = [];
-      if (data.Printers) {
-        printers = !data.Printers.length ? [data.Printers] : [...data.Printers];
+    try {
+      let data = parser.parse(result.data);
+      if ("Printers" in data) {
+        let printers: any[] = [];
+        if (data.Printers) printers = !data.Printers.length ? [data.Printers] : [...data.Printers];
+        let _message = `Found ${printers.length} printers!`;
+        return handleResponse({ payload: { printers }, message: _message });
       }
-      return handleResponse({ payload: { printers } });
+      return handleResponse({ status: codes.NOT_FOUND, message: formatFailure("fetching printers", "Error while accessing Printers") });
+    } catch (err: any) {
+      return handleResponse({ status: codes.INTERNAL_SERVER_ERROR, message: formatFailure("fetching printers", err.message) });
     }
-    return handleResponse({ status: codes.NOT_FOUND, message: formatFailure("fetching printers", "Error while accessing Printers") });
   }
   let message = result.data || "No message";
   return handleResponse({ status: result.status, message: formatFailure("fetching printers", message) });
@@ -237,7 +257,7 @@ const handleGetUsername = async (event: any, args: any): Promise<LabelResponse> 
 const handleSetUsername = async (event: any, args: any): Promise<LabelResponse> => {
   store.set(StoreKey.Username, args);
   return handleResponse({ payload: { username: args } });
-}
+};
 
 const handleQuit = async (event: any, args: any): Promise<LabelResponse> => {
   args.app.quit();

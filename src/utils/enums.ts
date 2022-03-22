@@ -17,7 +17,8 @@ export enum IPC {
     QUIT = "QUIT",
     GET_FILE = "GET_FILE",
     SET_USERNAME = "SET_USERNAME",
-    GET_USERNAME = "GET_USERNAME"
+    GET_USERNAME = "GET_USERNAME",
+    WIPE_STORAGE = "WIPE_STORAGE",
 }
 
 export enum ProgramState {

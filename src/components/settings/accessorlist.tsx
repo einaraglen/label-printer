@@ -21,8 +21,6 @@ const AccessorList = ({ searchkey, configkey, selected, handleUpdateAccessor, se
     if (!configkey) return;
     let _value = value;
     if (configkey.multiple) _value = handleStringList(value);
-    //TODO: set configkey
-    //setCurrent(_value)
     let _configkey: ConfigKey = {
       ...configkey,
       value: _value,
