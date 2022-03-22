@@ -33,8 +33,7 @@ const InvokeHandler = () => {
     if (checkStatus(response.statuscode)) {
       handleSuccess(key, response);
       if (next) next(response.payload);
-    }
-    if (!checkStatus(response.statuscode)) {
+    } else {
       handleFailure(key, response);
       if (error) error(response.message);
     }
