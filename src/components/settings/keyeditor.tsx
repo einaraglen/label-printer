@@ -12,16 +12,16 @@ interface Props {
   handleUpdateAccessor: Function;
   navigate: Function;
   setConfigkey: Function;
+  index: number;
 }
 
-const KeyEditor = ({ configkey, selected, navigate, handleUpdateAccessor, setConfigkey }: Props) => {
+const KeyEditor = ({ configkey, selected, navigate, handleUpdateAccessor, setConfigkey, index }: Props) => {
   const [searchkey, setSearchkey] = useState("");
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    //TODO: WHY THE FUCK DOES THIS GET TRIGGERED WHEN CLICK ON ITEM??
-    setSearchkey("")
-  }, [navigate])
+    if (index === 2) setSearchkey("")
+  }, [index])
 
   const handleChange = (e: any) => {
     setSearchkey(e.target.value);

@@ -52,7 +52,7 @@ const Settings = () => {
       <SwipeableViews axis={"x"} index={clamp(index, 0, 2)} threshold={2} onChangeIndex={handleChangeIndex}>
         <ConfigList {...{ navigate, setSelected }} />
         <ConfigEditor {...{ setConfigkey, navigate, selected, setSelected }} />
-        <KeyEditor {...{ configkey, selected, navigate, handleUpdateAccessor, setConfigkey }} />
+        <KeyEditor {...{ configkey, selected, navigate, handleUpdateAccessor, setConfigkey, index }} />
       </SwipeableViews>
     </Box>
   );

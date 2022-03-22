@@ -69,6 +69,7 @@ const Overlay = ({ open, setOpen }: Props) => {
       } else {
         result.push({
           ...logs[i],
+          type: logs[i].type,
           messages: [{ message: logs[i].message, created: logs[i].created }],
           count: 1,
         });
