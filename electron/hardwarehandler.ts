@@ -145,7 +145,7 @@ const handleCheckUpdate = async (event: any, args: any): Promise<LabelResponse> 
     });
     return response;
   } catch (err: any) {
-    return handleResponse({ status: result.status, message: formatFailure("checking for updates", err.message) });
+    return handleResponse({ status: codes.INTERNAL_SERVER_ERROR, message: formatFailure("checking for updates", err.message) });
   }
 };
 

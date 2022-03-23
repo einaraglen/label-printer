@@ -10,7 +10,7 @@ import { Tooltip, Select, MenuItem, FormControl, Badge, Typography, Box } from "
 import ReduxAccessor from "../../store/accessor";
 import { useState, useEffect } from "react";
 import InvokeHandler from "../../utils/invoke";
-import { IPC, ProgramState } from "../../utils/enums";
+import { IPC, LogType, ProgramState } from "../../utils/enums";
 import BarChartRoundedIcon from "@mui/icons-material/BarChartRounded";
 
 interface Props {
@@ -19,7 +19,7 @@ interface Props {
 
 const TopBar = ({ setOpen }: Props) => {
   const [printers, setPrinters] = useState<DYMOPrinter[]>([]);
-  const { status, setStatus, state, logs, printer, setPrinter } = ReduxAccessor();
+  const { status, setStatus, state, printer, setPrinter, log } = ReduxAccessor();
   const navigate = useNavigate();
   const { invoke } = InvokeHandler();
 
@@ -28,6 +28,7 @@ const TopBar = ({ setOpen }: Props) => {
       await invoke(IPC.GET_PRINTERS, {
         next: (data: { printers: DYMOPrinter[] }) => {
           let _printers = data.printers
+          log(LogType.Info, "Fetch Printers", data.toString())
           setPrinters(_printers);
           if (!printer && _printers.length > 0) {
             setPrinter(_printers[0].LabelWriterPrinter.Name);
@@ -50,8 +51,8 @@ const TopBar = ({ setOpen }: Props) => {
               </Typography>
             )}
             <FormControl variant="standard" sx={{ m: 1, width: 170 }}>
-              <Select value={printers.length === 0 ? "" : printer ?? ""} size="small" onChange={(e: any) => setPrinter(e.target.value)} disabled={state === ProgramState.Printing}>
-                {printers.length === 0 ? <MenuItem value="">No Printers found</MenuItem> : null}
+              <Select value={printers.length === 0 ? "Select" : printer ?? "Select"} size="small" onChange={(e: any) => setPrinter(e.target.value)} disabled={state === ProgramState.Printing}>
+                <MenuItem disabled={true} value="Select">Select</MenuItem>
                 {printers.map((printer: DYMOPrinter, idx: number) => (
                   <MenuItem key={idx} value={printer.LabelWriterPrinter.Name} sx={{ display: "flex"}}>
                     {printer.LabelWriterPrinter.Name}
