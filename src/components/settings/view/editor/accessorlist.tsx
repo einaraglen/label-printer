@@ -1,6 +1,6 @@
 import { List, ListItem, ListItemText, Radio, RadioGroup, Checkbox } from "@mui/material";
-import ReduxAccessor from "../../store/accessor";
-import { parseFile } from "../../utils/tools";
+import ReduxAccessor from "../../../../store/accessor";
+import { parseFile } from "../../../../utils/tools";
 import { useEffect, useState } from "react";
 interface Props {
   searchkey: string;

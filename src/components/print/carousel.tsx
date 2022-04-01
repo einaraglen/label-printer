@@ -43,7 +43,7 @@ const LabelCarousel = ({ images, index }: Props) => {
     >
       {images.map((image: string, idx: number) => (
         <Box key={idx} sx={{ display: "flex" }} className="unselectable" >
-          <img style={{ height: "8rem", margin: "auto" }} className="unselectable" alt="label preview" src={`data:image/png;base64,${image}`} />
+          <img style={{ height: "8rem", margin: "auto", borderRadius: "12px", boxShadow: "rgba(17, 17, 26, 0.1) 0px 0px 20px" }} className="unselectable" alt="label preview" src={`data:image/png;base64,${image}`} />
         </Box>
       ))}
     </Carousel>

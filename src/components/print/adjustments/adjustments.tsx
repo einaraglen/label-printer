@@ -1,5 +1,5 @@
 import { Box, Typography, FormGroup, IconButton } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import BuildIcon from "@mui/icons-material/Build";
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
 import ReduxAccessor from "../../../store/accessor";
@@ -29,7 +29,7 @@ const Adjustments = ({ setAdjOpen }: Props) => {
     <Box sx={{ width: "15rem", py: 2, px: 1, display: "flex", flexDirection: "column", bgcolor: "hsl(215, 28%, 14%)", minHeight: "100vh", overflowY: "scroll" }}>
       <Box sx={{ display: "flex", justifyItems: "center", justifyContent: "space-between" }}>
         <Box sx={{ display: "flex", justifyItems: "center" }}>
-          <Typography gutterBottom sx={{ fontSize: 15, fontWeight: 500 }}>
+          <Typography gutterBottom sx={{ ml: 1, fontSize: 15, fontWeight: 500 }}>
             Adjustments
           </Typography>
           <BuildIcon sx={{ ml: 1, mt: 0.1 }} fontSize="small" />

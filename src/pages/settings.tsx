@@ -2,11 +2,11 @@ import SwipeableViews from "react-swipeable-views";
 import React, { useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import ConfigList from "../components/settings/configlist";
-import ConfigEditor from "../components/settings/configeditor";
+import ConfigEditor from "../components/settings/view/configeditor";
 import { Helmet } from "react-helmet";
 import ReduxAccessor from "../store/accessor";
 import { clamp, parseIFSPage } from "../utils/tools";
-import KeyEditor from "../components/settings/keyeditor";
+import KeyEditor from "../components/settings/view/editor/keyeditor";
 import ConfigHandler from "../utils/handlers/confighandler";
 
 const Settings = () => {

@@ -1,6 +1,6 @@
 import { List, ListItem, ListItemText } from "@mui/material";
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
-import ReduxAccessor from "../../store/accessor";
+import ReduxAccessor from "../../../store/accessor";
 
 interface Props {
   selected: Config;

@@ -4,11 +4,11 @@ import FileUploadIcon from "@mui/icons-material/FileUpload";
 import CachedIcon from "@mui/icons-material/Cached";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import KeyList from "./keylist";
-import TopBar from "./topbar";
-import InvokeHandler from "../../utils/invoke";
-import { IPC } from "../../utils/enums";
-import ReduxAccessor from "../../store/accessor";
-import ConfigHandler from "../../utils/handlers/confighandler";
+import TopBar from "../topbar";
+import InvokeHandler from "../../../utils/invoke";
+import { IPC } from "../../../utils/enums";
+import ReduxAccessor from "../../../store/accessor";
+import ConfigHandler from "../../../utils/handlers/confighandler";
 
 interface Props {
   selected: Config | null;
@@ -27,6 +27,7 @@ const ConfigEditor = ({ selected, navigate, setConfigkey, setSelected }: Props) 
       args: JSON.stringify(selected),
     });
   };
+  
   const handleDeleteClick = () => {
     if (!selected) return;
     removeConfig(selected);
@@ -36,8 +37,8 @@ const ConfigEditor = ({ selected, navigate, setConfigkey, setSelected }: Props) 
   const handleReset = () => {
     if (selected) {
       let _config = resetConfig(selected.name);
-      setSelected(_config)
-    } 
+      setSelected(_config);
+    }
   };
 
   const isDeletable = () => {
@@ -61,13 +62,11 @@ const ConfigEditor = ({ selected, navigate, setConfigkey, setSelected }: Props) 
               </Typography>
             </Box>
             <Box sx={{ width: "25%", display: "flex", justifyContent: "end" }}>
-                <IconButton onClick={handleDeleteClick} disabled={!isDeletable()} size="large">
-              <Tooltip title="Delete">
-
+              <IconButton onClick={handleDeleteClick} disabled={!isDeletable()} size="large">
+                <Tooltip title="Delete">
                   <DeleteRoundedIcon fontSize="medium" />
-              </Tooltip>
-
-                </IconButton>
+                </Tooltip>
+              </IconButton>
               <Tooltip title="Reset">
                 <IconButton onClick={handleReset} size="large">
                   <CachedIcon fontSize="medium" />

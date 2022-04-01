@@ -30,7 +30,6 @@ const App = () => {
   const [progress, setProgress] = useState<number>(10);
   const [open, setOpen] = useState(false);
 
-
   const checkConfig = (_config: Config) => {
     let flag = false;
     _config.keys.forEach((key: ConfigKey) => {
@@ -58,7 +57,7 @@ const App = () => {
           setStatus({ key: "isFile", value: true });
           setFilePath(data.filepath);
         },
-        error: () => setStatus({ key: "isConfig", value: true })
+        error: () => setStatus({ key: "isConfig", value: true }),
       });
       await invoke(IPC.DYMO_STATUS, {
         next: (data: any) => setStatus({ key: "isDYMO", value: JSON.parse(data) }),
@@ -95,6 +94,7 @@ const App = () => {
       await new Promise((resolve) => setTimeout(resolve, 300));
       setIsLoading(false);
     };
+
     load();
   }, []);
 
@@ -118,24 +118,24 @@ const App = () => {
       <CssBaseline />
       <Updater />
       <Router>
-            {isLoading ? (
-              <Box sx={{ position: "absolute", top: 0, bottom: 0, left: 0, right: 0, display: "flex", bgcolor: "hsl(215, 28%, 14%)", zIndex: 40 }}>
-                <LinearWithValueLabel progress={progress} />
-              </Box>
-            ) : null}
-            {state !== ProgramState.Loading ? (
-              <Box sx={{ height: "100vh", display: "flex", px: 0, flexDirection: "column", overflowX: "hidden" }} bgcolor="dark">
-                <Overlay {...{ open, setOpen }} />
-                <Container sx={{ flexGrow: 1, display: "flex", p: 0, overflowX: "hidden" }}>
-                  <Routes>
-                    <Route path="/settings" element={<Settings />} />
-                    <Route path="/templates" element={<Templates />} />
-                    <Route path="/" element={<Print {...{ open, setOpen }} />} />
-                  </Routes>
-                </Container>
-                <Footer />
-              </Box>
-            ) : null}
+        {isLoading ? (
+          <Box sx={{ position: "absolute", top: 0, bottom: 0, left: 0, right: 0, display: "flex", bgcolor: "hsl(215, 28%, 14%)", zIndex: 40 }}>
+            <LinearWithValueLabel progress={progress} />
+          </Box>
+        ) : null}
+        {state !== ProgramState.Loading ? (
+          <Box sx={{ height: "100vh", display: "flex", px: 0, flexDirection: "column", overflowX: "hidden" }} bgcolor="dark">
+            <Overlay {...{ open, setOpen }} />
+            <Container sx={{ flexGrow: 1, display: "flex", p: 0, overflowX: "hidden" }}>
+              <Routes>
+                <Route path="/settings" element={<Settings />} />
+                <Route path="/templates" element={<Templates />} />
+                <Route path="/" element={<Print {...{ open, setOpen }} />} />
+              </Routes>
+            </Container>
+            <Footer />
+          </Box>
+        ) : null}
       </Router>
     </ThemeProvider>
   );

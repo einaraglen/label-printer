@@ -62,7 +62,6 @@ const Print = ({ open, setOpen }: Props) => {
       }
       if (!flag)
         addArchive({
-          username: username || "USER_MISSING",
           ifs_page: IFS || "IFS_PAGE_MISSING",
           label_count: labels.length,
           label_images: images,
@@ -87,7 +86,7 @@ const Print = ({ open, setOpen }: Props) => {
         _labels = await buildLabels(_data, singles, additional, maxlength);
         _images = await buildPreview(_labels);
       } catch (err: any) {
-        //console.warn(err);
+        console.warn(err);
         addFailure({ statuscode: 500, name: "Build Labels",  message: err.toString() })
       }
       setLabels(_labels || []);

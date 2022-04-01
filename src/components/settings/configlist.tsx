@@ -1,4 +1,5 @@
 import { List, ListItem, ListItemText, IconButton, Chip, Box, Tooltip, Typography } from "@mui/material";
+import FileUploadIcon from "@mui/icons-material/FileUpload";
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
 import ReduxAccessor from "../../store/accessor";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
@@ -8,6 +9,8 @@ import TopBar from "./topbar";
 import { useNavigate } from "react-router-dom";
 import DownloadIcon from "@mui/icons-material/Download";
 import { readFile } from "../../utils/tools";
+import InvokeHandler from "../../utils/invoke";
+import { IPC } from "../../utils/enums";
 
 interface Props {
   navigate: Function;
@@ -16,6 +19,7 @@ interface Props {
 
 const ConfigList = ({ navigate, setSelected }: Props) => {
   const { configs, config, setStatus, addConfig, updateConfig } = ReduxAccessor();
+  const { invoke } = InvokeHandler();
   const routerNavigate = useNavigate();
   const handleListClick = (entry: Config) => {
     setSelected(entry);
@@ -28,16 +32,25 @@ const ConfigList = ({ navigate, setSelected }: Props) => {
     return false;
   };
 
+  const handleObject = (_config: Config) => {
+    let isConfig = checkConfig(_config);
+    if (isConfig) {
+      if (configExists(_config)) return updateConfig({ name: _config.name, payload: _config });
+      addConfig(_config);
+    }
+  }
+
+  const handleArray = (_configs: Config[]) => {
+    _configs.forEach((_config: Config) => handleObject(_config))
+  }
+
   const handleInputChange = async (e: any) => {
     if (!e.target.value) return;
     try {
       let raw_config = await readFile(e.target.files[0].path);
       let _config = JSON.parse(raw_config);
-      let isConfig = checkConfig(_config);
-      if (isConfig) {
-        if (configExists(_config)) return updateConfig({ name: _config.name, payload: _config });
-        addConfig(_config);
-      }
+      if (Array.isArray(_config)) return handleArray(_config)
+      handleObject(_config)
     } catch (err: any) {
       console.warn(err);
     }
@@ -51,6 +64,12 @@ const ConfigList = ({ navigate, setSelected }: Props) => {
     });
     if (_config.name === config) setStatus({ key: "isConfig", value: !flag });
     return !flag;
+  };
+
+  const handleExportClick = async () => {
+    await invoke(IPC.EXPORT_CONFIG, {
+       args: JSON.stringify(configs),
+    });
   };
 
   return (
@@ -67,6 +86,11 @@ const ConfigList = ({ navigate, setSelected }: Props) => {
           </Typography>
         </Box>
         <Box>
+          <Tooltip title="Export all Configs">
+            <IconButton onClick={handleExportClick} size="large">
+              <FileUploadIcon fontSize="medium" />
+            </IconButton>
+          </Tooltip>
           <input id="file-button" style={{ display: "none" }} accept={".json"} type="file" name="upload_file" onChange={handleInputChange} />
           <label htmlFor="file-button">
             <Tooltip title="Import">

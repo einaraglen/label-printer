@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { resourceLimits } from "worker_threads";
 import ReduxAccessor from "../../store/accessor";
 import { IPC } from "../enums";
 import InvokeHandler from "../invoke";
@@ -72,7 +73,7 @@ const LabelHandler = () => {
     let data = [];
     for (let i = 0; i < ifs_lines.length; i++) {
       let line = ifs_lines[i];
-      let limit = !singles || !bundle ? count : getLimit(line, _config);
+      let limit = singles ? getLimit(line, _config) : count;
       let entry: any = {};
       for (let q = 0; q < limit; q++) {
         for (let j = 0; j < _config.keys.length; j++) {

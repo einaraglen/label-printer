@@ -11,7 +11,7 @@ import ReduxAccessor from "../../store/accessor";
 import { useState, useEffect } from "react";
 import InvokeHandler from "../../utils/invoke";
 import { IPC, LogType, ProgramState } from "../../utils/enums";
-import BarChartRoundedIcon from "@mui/icons-material/BarChartRounded";
+import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
 
 interface Props {
   setOpen: Function;
@@ -27,12 +27,16 @@ const TopBar = ({ setOpen }: Props) => {
     const printers = async () => {
       await invoke(IPC.GET_PRINTERS, {
         next: (data: { printers: DYMOPrinter[] }) => {
-          let _printers = data.printers
-          log(LogType.Info, "Fetch Printers", data.toString())
+          let _printers = data.printers;
           setPrinters(_printers);
           if (!printer && _printers.length > 0) {
             setPrinter(_printers[0].LabelWriterPrinter.Name);
             setStatus({ key: "isPrinter", value: true });
+          }
+          if (_printers) {
+            log(LogType.Info, "Fetch Printers", `Fetched ${data.printers.length} printer`);
+          } else {
+            log(LogType.Error, "Fetch Printers", `printer data not supported`);
           }
         },
       });
@@ -52,12 +56,14 @@ const TopBar = ({ setOpen }: Props) => {
             )}
             <FormControl variant="standard" sx={{ m: 1, width: 170 }}>
               <Select value={printers.length === 0 ? "Select" : printer ?? "Select"} size="small" onChange={(e: any) => setPrinter(e.target.value)} disabled={state === ProgramState.Printing}>
-                <MenuItem disabled={true} value="Select">Select</MenuItem>
                 {printers.map((printer: DYMOPrinter, idx: number) => (
-                  <MenuItem key={idx} value={printer.LabelWriterPrinter.Name} sx={{ display: "flex"}}>
+                  <MenuItem key={idx} value={printer.LabelWriterPrinter.Name} sx={{ display: "flex" }}>
                     {printer.LabelWriterPrinter.Name}
                   </MenuItem>
                 ))}
+                <MenuItem disabled={true} value="Select">
+                  Select
+                </MenuItem>
               </Select>
             </FormControl>
           </Box>
@@ -70,7 +76,7 @@ const TopBar = ({ setOpen }: Props) => {
           </Tooltip>
           <Tooltip title="Diagnostics">
             <IconButton onClick={() => setOpen(true)} size="large" disabled={state === ProgramState.Printing}>
-                <BarChartRoundedIcon />
+              <PlaylistAddCheckIcon />
             </IconButton>
           </Tooltip>
           <Tooltip title="Settings">
