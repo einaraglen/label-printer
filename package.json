@@ -1,103 +1,63 @@
 {
   "name": "label-printer",
-  "version": "0.4.3",
-  "author": "Einar A. Aglen",
-  "private": true,
-  "homepage": ".",
-  "description": "Light-weight printing app",
-  "main": "build/electron/main.js",
-  "build": {
-    "appId": "com.ntnu.einaragl.label-printer",
-    "productName": "LabelPrinter+",
-    "copyright": "Copyright © 2022 Einar A. Aglen",
-    "win": {
-      "icon": "./public/icons/labelprinter.png"
-    },
-    "asar": true,
-    "extends": null,
-    "files": [
-      "build/**/*",
-      "./public/**/*"
-    ],
-    "directories": {
-      "output": "release/"
-    }
+  "version": "0.5.0",
+  "license": "MIT",
+  "main": "main/index.js",
+  "author": {
+    "name": "Einar Andreas Aglen"
   },
-  "dependencies": {
-    "@emotion/react": "^11.7.1",
-    "@emotion/styled": "^11.6.0",
-    "@firebase/app-types": "^0.7.0",
-    "@mui/icons-material": "^5.3.1",
-    "@mui/material": "^5.4.0",
-    "@reduxjs/toolkit": "^1.7.2",
-    "@testing-library/jest-dom": "^5.16.2",
-    "@testing-library/react": "^12.1.2",
-    "@testing-library/user-event": "^13.5.0",
-    "@types/electron-devtools-installer": "^2.2.1",
-    "@types/firebase": "^3.2.1",
-    "@types/jest": "^27.4.0",
-    "@types/node": "^16.11.22",
-    "@types/react": "^17.0.39",
-    "@types/react-dom": "^17.0.11",
-    "axios": "^0.25.0",
-    "dymojs": "^1.2.0",
-    "electron-devtools-installer": "^3.2.0",
-    "electron-is-dev": "^2.0.0",
-    "electron-reload": "^2.0.0-alpha.1",
-    "electron-store": "^8.0.1", 
-    "fast-xml-parser": "^4.0.2",
-    "firebase": "^9.6.7",
-    "history": "^5.2.0",
-    "http-codes": "^1.0.0",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-helmet": "^6.1.0",
-    "react-material-ui-carousel": "^3.1.1",
-    "react-redux": "^7.2.6",
-    "react-router-dom": "^6.2.1",
-    "react-scripts": "5.0.0",
-    "react-swipeable-views": "^0.14.0",
-    "redux": "^4.1.2",
-    "redux-starter-kit": "^2.0.0",
-    "redux-thunk": "^2.4.1",
-    "typescript": "^4.5.5",
-    "web-vitals": "^2.1.4"
+  "description": "Starter using Vite 2+ React +Typescript + Electron for fast prototyping.",
+  "keywords": [
+    "vite",
+    "react",
+    "electron",
+    "typescript"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/einaraglen/label-printer.git"
   },
   "scripts": {
-    "postinstall": "electron-builder install-app-deps",
-    "electron:dev": "concurrently \"cross-env BROWSER=none yarn start\" \"wait-on http://localhost:3000 && tsc -p electron -w\" \"wait-on http://localhost:3000 && tsc -p electron && electron .\"",
-    "electron:build": "yarn build && tsc -p electron && electron-builder",
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "dev": "concurrently \"yarn dev:vite\" \" yarn dev:electron\"",
+    "dev:vite": "vite",
+    "dev:electron": "npm run build:electron && electron .",
+    "build": "npm run build:vite && npm run build:electron",
+    "build:vite": "vite build",
+    "build:electron": "tsc -p electron",
+    "dist": "npm run build && electron-builder",
+    "pack": "npm run build && electron-builder --dir",
+    "clean": "rimraf dist main src/out",
+    "type-check": "tsc"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "dependencies": {
+    "@vitejs/plugin-react": "^1.2.0",
+    "electron-is-dev": "^2.0.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "vite": "^2.8.6"
   },
   "devDependencies": {
-    "@types/http-codes": "^1.0.2",
-    "@types/react-helmet": "^6.1.5",
-    "@types/react-swipeable-views": "^0.13.1",
+    "@types/node": "^17.0.22",
+    "@types/react": "^17.0.41",
+    "@types/react-dom": "^17.0.14",
+    "@typescript-eslint/eslint-plugin": "5.16.0",
+    "@typescript-eslint/parser": "5.16.0",
+    "autoprefixer": "^10.4.4",
     "concurrently": "^7.0.0",
-    "cross-env": "^7.0.3",
-    "electron": "^17.0.0",
-    "electron-builder": "^22.14.5",
-    "wait-on": "^6.0.0"
+    "electron": "^17.1.2",
+    "electron-builder": "^22.14.13",
+    "postcss": "^8.4.12",
+    "tailwindcss": "^3.0.23",
+    "typescript": "^4.6.2"
+  },
+  "build": {
+    "asar": true,
+    "files": [
+      "main",
+      "src/out"
+    ],
+    "directories": {
+      "buildResources": "resources"
+    }
   }
 }
