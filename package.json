@@ -7,12 +7,6 @@
     "name": "Einar Andreas Aglen"
   },
   "description": "Starter using Vite 2+ React +Typescript + Electron for fast prototyping.",
-  "keywords": [
-    "vite",
-    "react",
-    "electron",
-    "typescript"
-  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/einaraglen/label-printer.git"
