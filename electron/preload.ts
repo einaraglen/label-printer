@@ -1,21 +1,22 @@
 import { ipcRenderer, contextBridge } from 'electron';
+import { WindowEvent } from './events';
 
 declare global {
   interface Window {
-    ui: typeof api;
+    ui: typeof ui_api;
   }
 }
 
-const api = {
-  sendMessage: (message: string) => {
-    ipcRenderer.send('message', message);
-  },
+const ui_api = {
   Minimize: () => {
-    ipcRenderer.send('minimize');
+    ipcRenderer.send(WindowEvent.Minimize);
   },
   Close: () => {
-    ipcRenderer.send('close');
+    ipcRenderer.send(WindowEvent.Close);
   },
+  Printers: () => {
+    return "test" //ipcRenderer.send(WindowEvent.Printers)
+  }
 };
 
-contextBridge.exposeInMainWorld('ui', api);
+contextBridge.exposeInMainWorld('ui', ui_api);
