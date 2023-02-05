@@ -37,11 +37,7 @@ export default class Dymo {
   getStatus(): Promise<any> {
     return this.dymo_api.get(`StatusConnected`)
   }
-
-  getCheck(): Promise<any> {
-    return this.dymo_api.get(`/`)
-  }
-
+  
   getPrinters(): Promise<any> {
     return this.dymo_api.get(`GetPrinters`)
   }

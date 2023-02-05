@@ -18,17 +18,18 @@ interface Props {
 }
 
 const StatusProvider = ({ children }: Props) => {
-  const { setConnected } = useStatusContext()
+  const { connected, setConnected } = useStatusContext()
 
   const polling = (client: Dymo) => {
     return setInterval(() => {
-      client.getPrinters().then((res) => {
-        const parser = new XMLParser()
-        console.log(parser.parse(res.data))
-      })
       client.getStatus()
         .then(() => setConnected(true))
-        .catch(() => setConnected(false))
+        .catch(() => {
+          if (connected) {
+            window.ui.Start()
+          }
+          setConnected(false)
+        })
     }, 2000)
   }
 

@@ -3,5 +3,6 @@ export enum WindowEvent {
     Minimize = "minimize",
     Print = "print",
     File = "file",
-    Printers = "printers"
+    Printers = "printers",
+    DYMOWebServices = "dymo_web_services"
 }

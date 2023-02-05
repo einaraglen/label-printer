@@ -14,8 +14,8 @@ const ui_api = {
   Close: () => {
     ipcRenderer.send(WindowEvent.Close);
   },
-  Printers: () => {
-    return "test" //ipcRenderer.send(WindowEvent.Printers)
+  Start: () => {
+    ipcRenderer.send(WindowEvent.DYMOWebServices)
   }
 };
 

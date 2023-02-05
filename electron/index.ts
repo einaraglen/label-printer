@@ -4,6 +4,8 @@ import { WindowEvent } from './events'
 // Packages
 import { BrowserWindow, app, ipcMain, IpcMainEvent} from 'electron'
 import isDev from 'electron-is-dev'
+import { Printer } from './printer'
+import { startDYMOWebServices } from './startup'
 
 const height = 400
 const width = 600
@@ -39,7 +41,15 @@ function createWindow() {
   ipcMain.on(WindowEvent.Close, () => {
     window.close()
   })
+
+  ipcMain.on(WindowEvent.DYMOWebServices, () => {
+    startDYMOWebServices()
+  })
 }
+
+ipcMain.handle(WindowEvent.Printers, async () => {
+  return await Printer.list()
+})
 
 app.whenReady().then(() => {
   if (process.platform.startsWith('win') && process.argv.length >= 2) {
@@ -50,6 +60,7 @@ app.whenReady().then(() => {
   }
 
   createWindow()
+  startDYMOWebServices()
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
