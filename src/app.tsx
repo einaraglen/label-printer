@@ -8,11 +8,13 @@ import Config from './components/config/config'
 import Templates from './components/templates/templates'
 import Community from './components/community/community'
 import Settings from './components/settings/settings'
+import PrintProvider from './context/print'
 
 const App = () => {
   return (
     <HashRouter>
       <StatusProvider>
+        <PrintProvider>
         <div className="w-screen h-screen flex p-6">
           <div className="rounded-xl shadow-lg flex-grow bg-zinc-900/90 overflow-hidden relative">
             <Controls />
@@ -28,6 +30,7 @@ const App = () => {
             </Navigation>
           </div>
         </div>
+        </PrintProvider>
       </StatusProvider>
     </HashRouter>
   )

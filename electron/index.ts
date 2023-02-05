@@ -6,6 +6,8 @@ import { BrowserWindow, app, ipcMain, IpcMainEvent} from 'electron'
 import isDev from 'electron-is-dev'
 import { Printer } from './printer'
 import { startDYMOWebServices } from './startup'
+import { XMLParser } from 'fast-xml-parser'
+import fs from "fs"
 
 const height = 400
 const width = 600
@@ -51,16 +53,20 @@ ipcMain.handle(WindowEvent.Printers, async () => {
   return await Printer.list()
 })
 
+const test_path = "C:\\temp\\examples\\MaterialTransferRequisitions 210824-100806.xml"
+
 app.whenReady().then(() => {
+  createWindow()
+  startDYMOWebServices()
+
   if (process.platform.startsWith('win') && process.argv.length >= 2) {
-    const filepath = process.argv[1]
+    const file = fs.readFileSync(process.argv[1] !== "." ?  process.argv[1] : test_path)
     ipcMain.handle(WindowEvent.File, () => {
-      return filepath
+      return new XMLParser().parse(file.toString())
     })
   }
 
-  createWindow()
-  startDYMOWebServices()
+
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()

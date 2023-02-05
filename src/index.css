@@ -2,6 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  scroll-snap-type: y mandatory
+}
+
 .draggable {
-    -webkit-app-region: drag;
-  }
+  -webkit-app-region: drag;
+}
+
+::-webkit-scrollbar {
+  width: 14px;
+}
+
+::-webkit-scrollbar-thumb {
+  border: 4px solid transparent;
+  background-clip: padding-box;
+  border-radius: 9999px;
+  background-color: rgba(255, 255, 255, 0.1);
+}

@@ -4,5 +4,6 @@ export enum WindowEvent {
     Print = "print",
     File = "file",
     Printers = "printers",
-    DYMOWebServices = "dymo_web_services"
+    DYMOWebServices = "dymo_web_services",
+    FileOpen = "open-with"
 }

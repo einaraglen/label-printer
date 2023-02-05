@@ -1,7 +1,6 @@
 import React, { ReactNode, useEffect } from 'react'
 import Dymo from '../api/dymo'
 import { create } from 'zustand'
-import { XMLParser } from 'fast-xml-parser'
 
 export type StatusContext = {
   connected: boolean
@@ -20,22 +19,21 @@ interface Props {
 const StatusProvider = ({ children }: Props) => {
   const { connected, setConnected } = useStatusContext()
 
-  const polling = (client: Dymo) => {
-    return setInterval(() => {
+  const polling = () => {
+    const client = new Dymo()
       client.getStatus()
         .then(() => setConnected(true))
         .catch(() => {
           if (connected) {
-            window.ui.Start()
+            window.main.StartService()
           }
           setConnected(false)
         })
-    }, 2000)
   }
 
   useEffect(() => {
-    const client = new Dymo()
-    const interval = polling(client)
+     polling()
+     const interval = setInterval(polling, 7000)
     return () => clearInterval(interval)
   }, [])
 

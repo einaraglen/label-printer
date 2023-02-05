@@ -35,7 +35,7 @@ const Controls = () => {
   const { pathname } = useLocation()
 
   return (
-    <div className="h-8 absolute inset-x-0 top-0 bg-black/50 flex justify-between text-white/80 shadow-md">
+    <div className="h-8 absolute z-50 inset-x-0 top-0 bg-black/50 flex justify-between text-white/80 shadow-md">
       <div>
         <ControlButton className="hover:bg-zinc-800/60" icon={<Swap className="h-5 w-5" swap={open} first={{ data: HiOutlineBars3 }} second={{ data: HiOutlineArrowLongLeft }} />} onClick={toggle} />
       </div>
