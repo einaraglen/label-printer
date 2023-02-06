@@ -6,12 +6,10 @@ const variants: Variants = {
   hidden: { opacity: 0.2, scale: 0.7, transition: { duration: 0.4 } },
 }
 
-const items = [1, 2, 3, 4, 5, 6, 7]
-
-const Item = ({ root }: { root: RefObject<Element> }) => {
-  const item: any = useRef(null)
+const Item = ({ root, item }: { root: RefObject<Element>, item: string }) => {
+  const ref: any = useRef(null)
   const control = useAnimation()
-  const inView = useInView(item, { root })
+  const inView = useInView(ref, { root })
 
   useEffect(() => {
     control.start(inView ? 'visible' : 'hidden')
@@ -19,9 +17,9 @@ const Item = ({ root }: { root: RefObject<Element> }) => {
 
   return (
     <div className="h-full w-full py-6">
-      <motion.div className="bg-blue-700 h-full rounded-lg" ref={item} variants={variants} initial="hidden" animate={control}>
-        Test
-      </motion.div>
+      <motion.div  className="h-full relative flex justify-center" ref={ref} variants={variants} initial="hidden" animate={control}>
+        <img src={`data:image/png;base64,${item}`} className="object-contain rounded-2xl shadow-lg overflow-hidden" />
+        </motion.div>
     </div>
   )
 }
@@ -36,7 +34,7 @@ const Carousel = ({ items }: Props) => {
     <section ref={root} className="relative w-full h-full py-[60px] scrollbar-hide overflow-y-auto">
       <div className="fixed z-40 top-0 inset-x-0 bg-gradient-to-b from-zinc-800 h-16" />
       {(items || []).map((item, index) => (
-        <Item key={index} root={root} />
+        <Item key={index} root={root} item={item} />
       ))}
       <div className="fixed z-40 bottom-0 inset-x-0 bg-gradient-to-t from-zinc-800 h-16" />
     </section>

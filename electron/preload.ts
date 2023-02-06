@@ -1,7 +1,6 @@
 import { ipcRenderer, contextBridge } from 'electron';
 import { WindowEvent } from './events';
-import { XMLParser } from "fast-xml-parser"
-import fs from "fs"
+import { Parser } from './parser';
 
 declare global {
   interface Window {
@@ -23,13 +22,16 @@ const main_api = {
   GetFile: async () => {
     return await ipcRenderer.invoke(WindowEvent.File)
   },
+  GetTemplate: async () => {
+    return await ipcRenderer.invoke(WindowEvent.Template)
+  },
   StartService: () => {
     ipcRenderer.send(WindowEvent.DYMOWebServices)
   },
   on: {
     file: (callback: (data: any) => void) => {
       ipcRenderer.on(WindowEvent.FileOpen, (event: any, file: any) => {
-        callback(new XMLParser().parse(fs.readFileSync(file).toString()))
+        Parser.csv(file).then((res) => callback(res))
       })
     },
     error: (callback: (data: any) => void) => {

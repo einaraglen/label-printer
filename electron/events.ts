@@ -1,6 +1,7 @@
 export enum WindowEvent {
     Close = "close",
     Minimize = "minimize",
+    Template = "template",
     Print = "print",
     File = "file",
     Printers = "printers",

@@ -52,6 +52,10 @@ ipcMain.handle(WindowEvent.Printers, async () => {
   return await Printer.list()
 })
 
+ipcMain.handle(WindowEvent.Template, async () => {
+  return Parser.xml(".\\assets\\Part Label S0722400 LW 36x89mm.dymo")
+})
+
 const test_path = ".\\assets\\InventoryPartInStock 230206-111430.csv"
 
 app.whenReady().then(() => {
@@ -64,8 +68,6 @@ app.whenReady().then(() => {
       return Parser.csv(filepath)
     })
   }
-
-
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
