@@ -26,7 +26,8 @@ const PrintProvider = ({ children }: Props) => {
 
     const init = () => {
         window.main.GetFile().then((res) => {
-            set({ payload: res.Table.Row })
+            console.log(res)
+            set({ payload: null })
         })
     }
 

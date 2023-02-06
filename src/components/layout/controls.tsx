@@ -22,9 +22,9 @@ const ControlButton = ({ className, icon, onClick }: ButtonProps) => {
 
 const StatusIndicator = ({ connected }: { connected: boolean | null }) => {
   return (
-    <span className="flex h-2.5 w-2.5 relative">
+    <span className="flex h-2 w-2 relative">
       <span className={classNames(connected ? "opacity-100 animate-ping" : "opacity-0", "absolute inline-flex h-full w-full rounded-full bg-green-700 opacity-75 transition-all duration-300")}></span>
-      <span className={classNames(!connected ? "bg-gray-700" : "bg-green-700", "relative inline-flex rounded-full h-2.5 w-2.5 transition-all duration-300")}></span>
+      <span className={classNames(!connected ? "bg-gray-700" : "bg-green-700", "relative inline-flex rounded-full h-2 w-2 transition-all duration-300")}></span>
     </span>
   )
 }

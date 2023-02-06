@@ -12,7 +12,7 @@
     "url": "git+https://github.com/einaraglen/label-printer.git"
   },
   "scripts": {
-    "dev": "concurrently \"yarn dev:vite\" \" yarn dev:electron\"",
+    "dev": "concurrently \"npm run dev:vite\" \" npm run dev:electron\"",
     "dev:vite": "vite",
     "dev:electron": "npm run build:electron && electron .",
     "build": "npm run build:vite && npm run build:electron",
@@ -29,6 +29,7 @@
     "@vitejs/plugin-react": "^1.2.0",
     "axios": "^1.3.2",
     "electron-is-dev": "^2.0.0",
+    "fast-csv": "^4.3.6",
     "fast-xml-parser": "^4.1.1",
     "framer-motion": "^6.5.1",
     "react": "^17.0.2",

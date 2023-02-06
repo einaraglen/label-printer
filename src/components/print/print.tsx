@@ -4,9 +4,10 @@ import Carousel from './carousel'
 
 const Print = () => {
     const { payload } = usePrintContext()
+    
   return (
     <div className='w-full h-full flex items-center relative'>
-    <Carousel items={payload} />
+    <Carousel items={[1, 2 ,3 ]} />
     </div>
   )
 }

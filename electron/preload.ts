@@ -31,7 +31,11 @@ const main_api = {
       ipcRenderer.on(WindowEvent.FileOpen, (event: any, file: any) => {
         callback(new XMLParser().parse(fs.readFileSync(file).toString()))
       })
-      
+    },
+    error: (callback: (data: any) => void) => {
+      ipcRenderer.on(WindowEvent.Error, (event: any, err: any) => {
+        callback(err)
+      })
     }
   }
 }
