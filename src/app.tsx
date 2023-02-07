@@ -9,6 +9,8 @@ import Settings from "./components/settings/settings";
 import Providers from "./context/providers";
 
 const App = () => {
+ 
+
   return (
     <HashRouter>
       <Providers>
@@ -19,7 +21,7 @@ const App = () => {
               <Routes>
                 <Route path="/" element={<Navigate to="/print" />} />
                 <Route path="/print" element={<Print />} />
-                <Route path="/templates" element={<Templates />} />
+                <Route path="/templates/*" element={<Templates />} />
                 <Route path="/community" element={<Community />} />
                 <Route path="/settings" element={<Settings />} />
               </Routes>
