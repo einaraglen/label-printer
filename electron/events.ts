@@ -8,5 +8,19 @@ export enum WindowEvent {
     DYMOWebServices = "dymo_web_services",
     FileOpen = "open-with",
     Error = "main-error",
-    Ping = "ping"
+    Ping = "ping",
+    GetTemplates = "get-templates",
+    GetTemplate = "get-template",
+    AddTemplate = "add-template",
+    UpdateTemplate = "update-template",
+    DeleteTemplate = "delete-template",
+    GetConfigs = "get-configs",
+    GetConfig = "get-config",
+    AddConfig = "add-confg",
+    UpdateConfig = "update-config",
+    DeleteConfig = "delete-config",
+    GetVariants = "get-variants",
+    GetVariant = "get-variant",
+    AddVariant = "add-variant",
+    UpdateVariant = "update-variant"
 }
