@@ -25,7 +25,7 @@ const StatusProvider = ({ children }: Props) => {
         .then(() => setConnected(true))
         .catch(() => {
           if (connected) {
-            window.main.StartService()
+            // window.main.StartService()
           }
           setConnected(false)
         })

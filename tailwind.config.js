@@ -7,8 +7,8 @@ module.exports = {
     variants: {
       extend: {},
       fontFamily: {
-        sans: ['Inter', 'ui-sans-serif', 'system-ui']
-      }
+        'Raleway': ['"Raleway"', 'sans-serif'],
+      },
     },
     plugins: []
   };

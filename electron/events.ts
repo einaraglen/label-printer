@@ -7,5 +7,6 @@ export enum WindowEvent {
     Printers = "printers",
     DYMOWebServices = "dymo_web_services",
     FileOpen = "open-with",
-    Error = "main-error"
+    Error = "main-error",
+    Ping = "ping"
 }

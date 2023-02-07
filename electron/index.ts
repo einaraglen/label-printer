@@ -53,17 +53,17 @@ ipcMain.handle(WindowEvent.Printers, async () => {
 })
 
 ipcMain.handle(WindowEvent.Template, async () => {
-  return Parser.xml(".\\assets\\Part Label S0722400 LW 36x89mm.dymo")
+  return Parser.xml('.\\assets\\Part Label S0722400 LW 36x89mm.dymo')
 })
 
-const test_path = ".\\assets\\InventoryPartInStock 230206-111430.csv"
+const test_path = '.\\assets\\InventoryPartInStock 230206-111430.csv'
 
 app.whenReady().then(() => {
   createWindow()
-  startDYMOWebServices()
+  // startDYMOWebServices()
 
   if (process.platform.startsWith('win') && process.argv.length >= 2) {
-    const filepath = process.argv[1] !== "." ?  process.argv[1] : test_path
+    const filepath = process.argv[1] !== '.' ? process.argv[1] : test_path
     ipcMain.handle(WindowEvent.File, () => {
       return Parser.csv(filepath)
     })

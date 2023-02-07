@@ -32,7 +32,7 @@ const Navigation = ({ children }: Props) => {
     const { pathname } = useLocation()
 
   return (
-    <div className="absolute inset-x-0 top-8 bottom-0 text-white/60">
+    <nav className="absolute inset-x-0 top-8 bottom-0 text-white/60">
       <NavigationBackdrop open={open} />
       <div className={classNames(!open ? '-translate-x-full transition-all duration-75 delay-200' : 'w-36', 'absolute inset-y-0 w-36 z-30 flex px-3 pb-2 pt-4 flex-col space-y-2')}>
         <Link href="/print" selected={pathname === "/print"} onClick={toggle} open={open} label="Print" icon={{ data: HiOutlinePrinter }} delay="delay-[50ms]" />
@@ -43,7 +43,7 @@ const Navigation = ({ children }: Props) => {
       </div>
       {open && <button onClick={toggle} className="absolute inset-0 z-10 outline-none focus:outline-none focus:ring-0 ring-0"></button>}
       <div className={classNames(open ? 'translate-x-36 opacity-60 duration-300' : 'translate-x-0 opacity-100 duration-200', 'absolute inset-0 transition-all z-0 px-3')}>{children}</div>
-    </div>
+    </nav>
   )
 }
 
