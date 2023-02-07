@@ -27,6 +27,8 @@ export type PrintContext = {
   keys: string[];
   template: string | null;
   labels: string[],
+  isPrinting: boolean
+  type: "single" | "multiple"
   set: any;
 };
 
@@ -35,6 +37,8 @@ export const usePrintContext = create<PrintContext>((set: any) => ({
   keys: [],
   template: null,
   labels: [],
+  isPrinting: false,
+  type: "multiple",
   set,
 }));
 

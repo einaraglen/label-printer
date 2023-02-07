@@ -3,7 +3,7 @@ import { Transition } from '@headlessui/react'
 import { useControlsContext } from '../../context/controls'
 import { classNames } from '../../utils'
 import Link from './link'
-import { HiOutlineCog6Tooth, HiOutlinePrinter, HiOutlineWrenchScrewdriver, HiOutlineRectangleStack, HiOutlineUserGroup } from 'react-icons/hi2'
+import { HiOutlineCog6Tooth, HiOutlinePrinter, HiOutlineRectangleStack, HiOutlineUserGroup } from 'react-icons/hi2'
 import { useLocation } from 'react-router-dom'
 
 const NavigationBackdrop = ({ open }: { open: boolean }) => {
