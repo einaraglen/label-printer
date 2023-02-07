@@ -32,15 +32,14 @@ const StatusIndicator = ({ connected }: { connected: boolean | null }) => {
 const Controls = () => {
   const { open, toggle } = useControlsContext()
   const { connected } = useStatusContext()
-  const { pathname } = useLocation()
 
   return (
     <header className="h-8 absolute z-50 inset-x-0 top-0 bg-black/50 flex justify-between text-white/80 shadow-md">
       <div className="flex items-center">
         <ControlButton className="hover:bg-zinc-800" icon={<Swap className="h-5 w-5" swap={open} first={{ data: HiOutlineBars3 }} second={{ data: HiOutlineArrowLongLeft }} />} onClick={toggle} />
       </div>
-      <div className="draggable flex-grow flex items-center px-1 justify-between text-xs">
-        <span>{capitalize(pathname.split("/")[1])}</span>
+      <div className="px-2 draggable flex-grow flex items-center justify-between text-xs">
+        <span>LabelPrinter</span>
         <div className="flex items-center space-x-2">
           <span>Connected</span>
           <StatusIndicator connected={connected} />
