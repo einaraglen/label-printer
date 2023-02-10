@@ -2,7 +2,7 @@ import fs from "fs";
 import { parse } from "fast-csv";
 
 export class Parser {
-  public static csv(filepath: string) {
+  public static csv(filepath: string): Promise<any[]> {
     return new Promise((resolve, reject) => {
       const stream = fs.createReadStream(filepath);
       const lines: any[] = [];
@@ -14,7 +14,7 @@ export class Parser {
     });
   }
 
-  public static xml(filepath: string) {
+  public static xml(filepath: string): Promise<string> {
     return new Promise((resolve, reject) => {
       fs.readFile(filepath, (err, res) => {
         if (err) {

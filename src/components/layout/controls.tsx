@@ -1,9 +1,8 @@
 import React from 'react'
 import { HiOutlineMinus, HiXMark, HiOutlineBars3, HiOutlineArrowLongLeft } from 'react-icons/hi2'
-import { useLocation } from 'react-router-dom'
 import { useControlsContext } from '../../context/controls'
 import { useStatusContext } from '../../context/status'
-import { capitalize, classNames } from '../../utils'
+import { classNames } from '../../utils'
 import Swap from '../library/animations/swap'
 
 interface ButtonProps {
@@ -22,9 +21,9 @@ const ControlButton = ({ className, icon, onClick }: ButtonProps) => {
 
 const StatusIndicator = ({ connected }: { connected: boolean | null }) => {
   return (
-    <span className="flex h-2 w-2 relative">
+    <span className="flex h-3 w-3 relative">
       <span className={classNames(connected ? "opacity-100 animate-ping" : "opacity-0", "absolute inline-flex h-full w-full rounded-full bg-green-700 opacity-75 transition-all duration-300")}></span>
-      <span className={classNames(!connected ? "bg-gray-700" : "bg-green-700", "relative inline-flex rounded-full h-2 w-2 transition-all duration-300")}></span>
+      <span className={classNames(!connected ? "bg-gray-700" : "bg-green-700", "absolute top-0.5 left-0.5 rounded-full h-2 w-2 transition-all duration-300")}></span>
     </span>
   )
 }

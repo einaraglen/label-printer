@@ -6,10 +6,10 @@ const Selector = () => {
     return (
         <div className="w-full relative flex items-center">
             <Listbox value={null}>
-            <Listbox.Button className="bg-black/60 flex justify-start hover:bg-black/90 backdrop-blur-sm rounded-l-xl px-4 w-full py-1.5 transition-all duration-200">
+            <Listbox.Button className="bg-black/40 flex justify-start hover:bg-black/60 backdrop-blur-sm rounded-l-xl px-4 w-full py-1.5 transition-all duration-200">
             <span className="block truncate">Test</span>
           </Listbox.Button>
-          <button className="bg-black/60 flex hover:bg-black/90 backdrop-blur-sm rounded-r-xl pl-2 pr-3 py-2"><HiOutlinePencilSquare className="h-5 w-5 text-green-700" /></button>
+          <button className="bg-black/40 flex hover:bg-black/60 backdrop-blur-sm rounded-r-xl pl-2 pr-3 py-2"><HiOutlinePencilSquare className="h-5 w-5 text-green-700" /></button>
           <Transition
             as={Fragment}
             enter="transition ease-out duration-200"
@@ -19,7 +19,7 @@ const Selector = () => {
           leaveFrom="opacity-100 -translate-y-0"
           leaveTo="opacity-0 -translate-y-1"
           >
-            <Listbox.Options className="absolute origin-top-left mt-1 top-10 max-h-60 w-full overflow-auto rounded-xl bg-black/60 backdrop-blur-sm">
+            <Listbox.Options className="absolute origin-top-left mt-1 top-10 max-h-60 w-full overflow-auto rounded-xl bg-black/40 backdrop-blur-sm">
                 <Listbox.Option
                   value={"Test"}
                   className="hover:bg-black/20 flex justify-between px-3 py-2 transition-all duration-150 cursor-pointer"

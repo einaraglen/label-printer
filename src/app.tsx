@@ -1,15 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Controls from "./components/layout/controls";
 import Navigation from "./components/layout/navigation";
 import { HashRouter, Route, Routes, Navigate } from "react-router-dom";
 import Print from "./components/print/print";
-import Templates from "./components/templates/templates";
+import Templates from "./components/templates/routes";
 import Community from "./components/community/community";
 import Settings from "./components/settings/settings";
 import Providers from "./context/providers";
 
 const App = () => {
- 
+  
+  useEffect(() => {
+    window.store.GetVariants().then((res) => console.log(res))
+  }, [])
 
   return (
     <HashRouter>

@@ -25,7 +25,7 @@ const PrintButton = ({ children, onClick }: Props) => {
       </button>
       <Menu as="div" className="relative ">
         <div>
-          <Menu.Button className="py-2 bg-black/60 backdrop-blur-sm text-white overflow-hidden font-medium pl-2 pr-3 hover:bg-black/90 rounded-r-xl transition-all duration-200">
+          <Menu.Button className="py-2 bg-black/40 backdrop-blur-sm text-white overflow-hidden font-medium pl-2 pr-3 hover:bg-black/60 rounded-r-xl transition-all duration-200">
             <Swap className="text-green-700 h-5 w-5" swap={type === "single"} first={{ data: HiOutlineSquare2Stack }} second={{ data: HiOutlineStop }} />
           </Menu.Button>
         </div>
@@ -38,7 +38,7 @@ const PrintButton = ({ children, onClick }: Props) => {
           leaveFrom="opacity-100 translate-y-0"
           leaveTo="opacity-0 translate-y-1"
         >
-          <Menu.Items className="absolute right-0 flex text-sm font-normal flex-col bottom-10 mb-1 w-28 origin-bottom-right bg-black/60 rounded-xl overflow-hidden backdrop-blur-sm text-white">
+          <Menu.Items className="absolute right-0 flex text-sm font-normal flex-col bottom-10 mb-1 w-28 origin-bottom-right bg-black/40 rounded-xl overflow-hidden backdrop-blur-sm text-white">
             <Menu.Item>
               {({ active }) => (
                 <button onClick={() => set({ type: "single" })} className={classNames(active && "bg-black/20", "flex justify-between px-3 py-2 transition-all duration-150")}>

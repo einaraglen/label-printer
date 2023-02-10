@@ -54,7 +54,7 @@ const Carousel = ({ items }: Props) => {
         <div className="w-[30rem] flex space-x-2">
         <Selector />
           <Selector />
-          <button className="bg-black/60 hover:bg-black/90 rounded-xl px-3 transition-all duration-200"><HiOutlineAdjustmentsHorizontal className="text-green-700 h-5 w-5" /></button>
+          <button className="bg-black/40 hover:bg-black/60 rounded-xl px-3 transition-all duration-200"><HiOutlineAdjustmentsHorizontal className="text-green-700 h-5 w-5" /></button>
         </div>
       </div>
       {(items || []).map((item, index) => (
